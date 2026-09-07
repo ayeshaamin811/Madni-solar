@@ -18,6 +18,8 @@ import Career from './pages/CareerPage/Career';
 import BlogPage from './pages/BlogPage/Blog';
 import SolarPanelBrandPage from "./pages/SolarPanelBrandPage/SolarPanelBrandPage";
 import ProductDetailPage from "./pages/ProductDetailPage/ProductDetailPage";
+import CartPage from "./pages/CartPage/CartPage";
+import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 
 
 function App() {
@@ -44,6 +46,8 @@ function App() {
         <Route path="/solar-panels" element={<Navigate to="/solar-panels/yingli" replace />} />
         <Route path="/solar-panels/:brandSlug" element={<SolarPanelBrandPage />} />
         <Route path="/solar-panels/:brandSlug/:productSlug" element={<ProductDetailPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
     </Router>
   );

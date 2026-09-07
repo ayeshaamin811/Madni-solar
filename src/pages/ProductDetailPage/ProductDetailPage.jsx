@@ -4,6 +4,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
+import { useCart } from "../../context/CartContext";
 import solarPanelProducts from "../../data/solarProducts";
 import "./ProductDetailPage.css";
 
@@ -25,6 +26,9 @@ function ProductDetailPage() {
 
   // Product quantity (default 1)
   const [quantity, setQuantity] = useState(1);
+
+  // Global cart helper for adding the current product to the basket
+  const { addToBasket } = useCart();
 
   // Agar product na mile (galat slug), simple message dikhao
   if (!product) {
@@ -89,7 +93,11 @@ function ProductDetailPage() {
               </div>
 
               <div className="product-actions">
-                <button type="button" className="product-btn btn-basket">
+                <button
+                  type="button"
+                  className="product-btn btn-basket"
+                  onClick={() => addToBasket(product, quantity)}
+                >
                   Add to Basket
                 </button>
                 <Link

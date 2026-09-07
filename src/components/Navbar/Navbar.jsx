@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import logo from "../../assets/project-logo.png";
 import { Link } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 // Professional icon set from react-icons (install: npm i react-icons)
 import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaSun } from "react-icons/fa";
@@ -186,6 +187,12 @@ const Navbar = () => {
   // Holds the current search input value
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Tracks whether the mini-cart dropdown is open
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Global cart state (items, count, subtotal and action helpers)
+  const { cartItems, cartCount, subtotal, removeFromBasket } = useCart();
+
   // Listen to scroll position to hide/show the top bar.
   // Throttled via requestAnimationFrame and guarded with a small
   // hysteresis band so tiny thumb jitter near the top doesn't flicker.
@@ -369,11 +376,91 @@ const Navbar = () => {
               <FaSearch />
             </button>
             <button className="calculator-btn">CALCULATOR</button>
-            <button className="cart-btn">
-              <span className="cart-price">Rs0.00</span>
-              <span className="cart-badge">0</span>
-              <FaShoppingCart />
-            </button>
+            <div className="cart-wrap">
+              <button
+                className="cart-btn"
+                onClick={() => setIsCartOpen(!isCartOpen)}
+                aria-expanded={isCartOpen}
+                aria-label="Open shopping cart"
+              >
+                <span className="cart-price">Rs{subtotal.toLocaleString()}</span>
+                <span className="cart-badge">{cartCount}</span>
+                <FaShoppingCart />
+              </button>
+
+              {/* Mini-cart dropdown */}
+              {isCartOpen && (
+                <div className="mini-cart">
+                  <div className="mini-cart-header">
+                    <span>Shopping Cart</span>
+                    <button
+                      className="mini-cart-close"
+                      aria-label="Close cart"
+                      onClick={() => setIsCartOpen(false)}
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+
+                  {cartItems.length === 0 ? (
+                    <p className="mini-cart-empty">
+                      Your basket is empty.
+                    </p>
+                  ) : (
+                    <>
+                      <ul className="mini-cart-items">
+                        {cartItems.map((item) => (
+                          <li key={item.slug} className="mini-cart-item">
+                            <img 
+                              src={item.image}
+                              alt={item.name}
+                              className="mini-cart-item-img"
+                            />
+                            <div className="mini-cart-item-info">
+                              <span className="mini-cart-item-name">
+                                {item.name}
+                              </span>
+                              <span className="mini-cart-item-price">
+                                {item.quantity} × Rs{item.price.toLocaleString()}
+                              </span>
+                            </div>
+                            <button
+                              className="mini-cart-item-remove"
+                              aria-label={`Remove ${item.name}`}
+                              onClick={() => removeFromBasket(item.slug)}
+                            >
+                              ×
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mini-cart-subtotal">
+                        <span>Subtotal</span>
+                        <span>Rs{subtotal.toLocaleString()}</span>
+                      </div>
+
+                      <div className="mini-cart-actions">
+                        <Link
+                          to="/cart"
+                          className="mini-cart-btn mini-cart-btn-view"
+                          onClick={() => setIsCartOpen(false)}
+                        >
+                          View basket
+                        </Link>
+                        <Link
+                          to="/checkout"
+                          className="mini-cart-btn mini-cart-btn-checkout"
+                          onClick={() => setIsCartOpen(false)}
+                        >
+                          Checkout
+                        </Link>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Hamburger button - only shows on mobile */}
             <button
