@@ -808,6 +808,9 @@
   .mini-cart {
     width: 300px;
   }
+  .top-bar {
+    padding: 8px 0px;
+  }
   .top-bar-inner  {
     padding: 0;
   }
