@@ -17,6 +17,7 @@ import ProductsPage from './pages/ProductsPage/ProductsPage';
 import Career from './pages/CareerPage/Career';
 import BlogPage from './pages/BlogPage/Blog';
 import SolarPanelBrandPage from "./pages/SolarPanelBrandPage/SolarPanelBrandPage";
+import ProductDetailPage from "./pages/ProductDetailPage/ProductDetailPage";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         {/* Bare /solar-panels (no brand chosen) redirects to the first brand */}
         <Route path="/solar-panels" element={<Navigate to="/solar-panels/yingli" replace />} />
         <Route path="/solar-panels/:brandSlug" element={<SolarPanelBrandPage />} />
+        <Route path="/solar-panels/:brandSlug/:productSlug" element={<ProductDetailPage />} />
       </Routes>
     </Router>
   );
