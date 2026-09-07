@@ -803,3 +803,13 @@
     display: none;
   }
 }
+
+@media (max-width: 380px) {
+  .mini-cart {
+    width: 300px;
+  }
+  .top-bar-inner  {
+    padding: 0;
+  }
+
+}

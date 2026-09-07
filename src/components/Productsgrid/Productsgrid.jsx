@@ -73,44 +73,44 @@ const products = [
 // Simple Products Grid section component
 function ProductsGrid() {
   return (
-    <section className="products-section">
+    <section className="pg-section">
       {/* Top badge */}
-      <div className="badge-wrapper flex justify-center">
-        <span className="badge-tag">Madni Solar</span>
-        <span className="badge-label">Products</span>
+      <div className="pg-badge-wrapper flex justify-center">
+        <span className="pg-badge-tag">Madni Solar</span>
+        <span className="pg-badge-label">Products</span>
       </div>
 
       {/* Section heading */}
-      <h1 className="products-heading">
+      <h1 className="pg-heading">
         Power Your Future with the Best Solar Products
       </h1>
 
       {/* Products grid */}
-      <div className="products-grid grid">
+      <div className="pg-grid grid">
         {products.map((product) => {
           const Icon = product.icon;
           return (
-            <div className="product-card" key={product.id}>
+            <div className="pg-card" key={product.id}>
               {/* Product image */}
-              <div className="product-image-wrapper">
+              <div className="pg-image-wrapper">
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="product-image"
+                  className="pg-image"
                 />
-                <span className="product-icon">
+                <span className="pg-icon">
                   <Icon size={22} strokeWidth={2} />
                 </span>
               </div>
 
               {/* Product text content */}
-              <div className="product-content">
-                <h3 className="product-title">{product.title}</h3>
-                <p className="product-description">{product.description}</p>
+              <div className="pg-content">
+                <h3 className="pg-title">{product.title}</h3>
+                <p className="pg-description">{product.description}</p>
 
                 {/* Read More button */}
-                <button type="button" className="btn-read-more">
-                  Read More <span className="arrow">→</span>
+                <button type="button" className="pg-btn-read-more">
+                  Read More <span className="pg-arrow">→</span>
                 </button>
               </div>
             </div>

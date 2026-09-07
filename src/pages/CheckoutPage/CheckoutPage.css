@@ -96,6 +96,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
 }
 
 .checkout-form-title {
@@ -120,6 +121,7 @@
   color: #0f172a;
   outline: none;
   transition: border-color 0.2s ease;
+  box-sizing: border-box;
 }
 
 .checkout-input:focus {
@@ -156,6 +158,7 @@
   padding: 24px;
   position: sticky;
   top: 90px;
+  min-width: 0;
 }
 
 .checkout-summary-title {
@@ -186,6 +189,7 @@
   border: 1px solid #eee;
   border-radius: 4px;
   background: #fff;
+  flex-shrink: 0;
 }
 
 .checkout-summary-name {
@@ -202,12 +206,15 @@
 .checkout-summary-qty {
   color: #777;
   font-size: 13px;
+  flex-shrink: 0;
 }
 
 .checkout-summary-price {
   color: #e07b1a;
   font-size: 13px;
   font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .checkout-summary-total {
@@ -226,13 +233,92 @@
   margin: 0;
 }
 
-/* Responsive */
+/* ===== Responsive ===== */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .checkout-summary {
+    position: static;
+    top: auto;
+  }
+}
+
+/* Small tablets / large phones */
 @media (max-width: 800px) {
   .checkout-content {
     padding: 40px 16px;
   }
 
-  .checkout-grid {
-    grid-template-columns: 1fr;
+  .checkout-form,
+  .checkout-summary {
+    padding: 20px;
+  }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .checkout-content {
+    padding: 30px 12px;
+  }
+
+  .checkout-empty,
+  .checkout-success {
+    padding: 40px 16px;
+  }
+
+  .checkout-empty-title,
+  .checkout-success-title {
+    font-size: 21px;
+  }
+
+  .checkout-empty-text,
+  .checkout-success-text {
+    font-size: 14px;
+  }
+
+  .checkout-form,
+  .checkout-summary {
+    padding: 16px;
+  }
+
+  .checkout-form-title {
+    font-size: 18px;
+  }
+
+  .checkout-summary-item {
+    padding: 8px 4px;
+    gap: 8px;
+  }
+
+  .checkout-summary-img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .checkout-summary-name {
+    font-size: 12px;
+  }
+
+  .checkout-summary-total {
+    font-size: 16px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .checkout-summary-name {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .checkout-input {
+    font-size: 13px;
+    padding: 10px 12px;
   }
 }
