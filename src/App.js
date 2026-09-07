@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/home';
 import ContactPage from './pages/ContactPage/ContactPage';
 import FaqPage from './pages/FaqPage';
@@ -39,7 +39,10 @@ function App() {
         <Route path="/our-products" element={<ProductsPage />} />
         <Route path="/careers" element={<Career />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/solar-panels/:brandSlug" element={<SolarPanelBrandPage />} /> </Routes>
+        {/* Bare /solar-panels (no brand chosen) redirects to the first brand */}
+        <Route path="/solar-panels" element={<Navigate to="/solar-panels/yingli" replace />} />
+        <Route path="/solar-panels/:brandSlug" element={<SolarPanelBrandPage />} />
+      </Routes>
     </Router>
   );
 }

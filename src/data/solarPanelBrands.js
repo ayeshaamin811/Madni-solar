@@ -1,4 +1,6 @@
-
+// List of all Solar Panel brands.
+// Add real description/image later — this is just the data source.
+// Leave "image" empty to use the default banner set in SolarPanelBrandPage.jsx.
 const solarPanelBrands = [
   { name: "Yingli", slug: "yingli", description: "", image: "" },
   { name: "Astronergy", slug: "astronergy", description: "", image: "" },
