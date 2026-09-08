@@ -21,6 +21,10 @@ import ProductDetailPage from "./pages/ProductDetailPage/ProductDetailPage";
 import CartPage from "./pages/CartPage/CartPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import PolicyTrading from "./pages/PolicyTrading/PolicyTrading";
+import InvertersPage from "./pages/InvertersPage/InvertersPage";
+import InverterBrandPage from "./pages/InverterBrandPage/InverterBrandPage";
+import InverterDetailPage from "./pages/InverterDetailPage/InverterDetailPage";
+import BatteriesPage from "./pages/BatteriesPage/BatteriesPage";
 
 
 function App() {
@@ -43,6 +47,10 @@ function App() {
         <Route path="/our-products" element={<ProductsPage />} />
         <Route path="/careers" element={<Career />} />
         <Route path="/policy-trading" element={<PolicyTrading />} />
+        <Route path="/inverters" element={<InvertersPage />} />
+        <Route path="/inverters/:brandSlug" element={<InverterBrandPage />} />
+        <Route path="/inverters/:brandSlug/:productSlug" element={<InverterDetailPage />} />
+        <Route path="/batteries" element={<BatteriesPage />} />
         <Route path="/blog" element={<BlogPage />} />
         {/* Bare /solar-panels (no brand chosen) redirects to the first brand */}
         <Route path="/solar-panels" element={<Navigate to="/solar-panels/yingli" replace />} />

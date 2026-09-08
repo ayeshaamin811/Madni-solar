@@ -70,7 +70,7 @@ function HeroBanner() {
 
         {/* Buttons */}
         <div className="hero-buttons flex">
-          <a href="#contact" className="btn btn-primary">
+          <a href="#contact" className="btn btn-primary-hero">
             Contact Us
           </a>
           <a href="#services" className="btn btn-secondary">

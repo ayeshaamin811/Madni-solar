@@ -167,14 +167,14 @@
   transform: translateY(-3px);
 }
 
-.btn-primary {
+.btn-primary-hero {
   background-color: var(--theme-color);
   color: #ffffff;
   border: 2px solid transparent;
   transition: .2s;
 
 }
-.btn-primary:hover {
+.btn-primary-hero:hover {
   background-color: transparent;
   border: 2px solid #fff;
 }

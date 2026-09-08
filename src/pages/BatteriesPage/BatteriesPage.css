@@ -1,0 +1,18 @@
+/* ===== Batteries page content ===== */
+.batteries-content {
+  padding: 50px 40px;
+}
+
+/* Placeholder message — replace once real data is added */
+.batteries-placeholder {
+  color: #666666;
+  font-size: 15px;
+  padding: 40px 0;
+}
+
+/* ===== Responsive design ===== */
+@media (max-width: 480px) {
+  .batteries-content {
+    padding: 30px 20px;
+  }
+}

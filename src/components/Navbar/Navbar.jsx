@@ -40,7 +40,7 @@ const invertersMenu = [
       // Pehle ye object tha jisme 10 sub-items (12V, 24V, 6kw...25kw) inline
       // expand ho rahe the. Ab ye ek simple single link hai — apni khud ki
       // page par le jayega jahan saari capacities dikhengi (jaise brand pages).
-      "All Brands with Capacity (kW)",
+      { name: "All Brands with Capacity (kW)", to: "/inverters" },
       "Chint", "Sineng", "Sofar",
       { name: "Hoymiles", sub: ["Single Phase", "Three Phase"] },
     ],
@@ -130,18 +130,29 @@ const otherProductsMenu = [
 ];
 
 const slugify = (name) => name.toLowerCase().trim().replace(/\s+/g, "-");
-// Recursively renders a list of items, supporting one or two levels of nesting
+// Recursively renders a list of items, supporting one or two levels of nesting.
+// Object items with a `to` property render as internal router links (e.g. the
+// "All Brands with Capacity (kW)" entry pointing to the Inverters page).
 const renderItems = (items, keyPrefix) =>
   items.map((item, index) => {
     const isObject = typeof item === "object";
     const label = isObject ? item.name : item;
     const key = `${keyPrefix}-${index}`;
 
-    return (
-      <li key={key} className="mega-item">
+    const inner =
+      isObject && item.to ? (
+        <Link to={item.to}>
+          <FaSun className="bullet-icon" /> {label}
+        </Link>
+      ) : (
         <a href="#">
           <FaSun className="bullet-icon" /> {label}
         </a>
+      );
+
+    return (
+      <li key={key} className="mega-item">
+        {inner}
         {isObject && item.sub && (
           <ul className="mega-sublist">{renderItems(item.sub, key)}</ul>
         )}
@@ -159,6 +170,55 @@ const renderColumn = (column, colIndex) => (
       <>
         <h4 className="mega-heading mega-heading-spaced">{column.extra.heading}</h4>
         <ul className="mega-list">{renderItems(column.extra.items, `col${colIndex}-extra`)}</ul>
+      </>
+    )}
+  </div>
+);
+
+// ============================================================================
+// INVERSER MENU HELPERS (per-brand pages)
+// ----------------------------------------------------------------------------
+// Each brand/category item (and nested phase/model sub-items) links to its own
+// Inverter brand page at /inverters/:slug, mirroring how the Solar Panels menu
+// links to /solar-panels/:brandSlug. Items with an explicit `to` (the "All
+// Brands with Capacity (kW)" entry) keep their own destination. Used ONLY for
+// the Inverters menu (desktop + mobile) — the shared renderItems/renderColumn
+// helpers used by Solar, Batteries and other menus are not touched.
+// ============================================================================
+const renderInverterItems = (items, keyPrefix, parentSlug) =>
+  items.map((item, index) => {
+    const isObject = typeof item === "object";
+    const label = isObject ? item.name : item;
+    const key = `${keyPrefix}-${index}`;
+
+    // Slugs follow the same rule as the inverter data (title slugified to kebab).
+    const ownSlug = parentSlug ? `${parentSlug}-${slugify(label)}` : slugify(label);
+
+    // Resolve destination: explicit `to` (e.g. /inverters for "All Brands"), or
+    // the brand's own page at /inverters/:slug.
+    const to = isObject && item.to ? item.to : `/inverters/${ownSlug}`;
+
+    return (
+      <li key={key} className="mega-item">
+        <Link to={to}>
+          <FaSun className="bullet-icon" /> {label}
+        </Link>
+        {isObject && item.sub && (
+          <ul className="mega-sublist">{renderInverterItems(item.sub, key, ownSlug)}</ul>
+        )}
+      </li>
+    );
+  });
+
+const renderInverterColumn = (column, colIndex) => (
+  <div className="mega-column" key={colIndex}>
+    {column.heading && <h4 className="mega-heading">{column.heading}</h4>}
+    <ul className="mega-list">{renderInverterItems(column.items, `col${colIndex}`)}</ul>
+
+    {column.extra && (
+      <>
+        <h4 className="mega-heading mega-heading-spaced">{column.extra.heading}</h4>
+        <ul className="mega-list">{renderInverterItems(column.extra.items, `col${colIndex}-extra`)}</ul>
       </>
     )}
   </div>
@@ -323,9 +383,15 @@ const Navbar = () => {
               <span className="nav-link">Inverters <FaChevronDown className="chevron" /></span>
               {openMenu === "inverters" && (
                 <div className="mega-menu">
-                  <h3 className="mega-title">Inverters</h3>
+                  <Link
+                    to="/inverters"
+                    className="mega-title-link"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    <h3 className="mega-title">Inverters</h3>
+                  </Link>
                   <div className="mega-grid mega-grid-4">
-                    {invertersMenu.map((column, index) => renderColumn(column, index))}
+                    {invertersMenu.map((column, index) => renderInverterColumn(column, index))}
                   </div>
                 </div>
               )}
@@ -339,6 +405,13 @@ const Navbar = () => {
               <span className="nav-link">Batteries <FaChevronDown className="chevron" /></span>
               {openMenu === "batteries" && (
                 <div className="mega-menu mega-menu-wide">
+                  <Link
+                    to="/batteries"
+                    className="mega-title-link"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    <h3 className="mega-title">Batteries</h3>
+                  </Link>
                   <div className="mega-grid mega-grid-4">
                     {batteriesMenu.map((column, index) => renderColumn(column, `bat${index}`))}
                     <div className="mega-divider" />
@@ -531,11 +604,11 @@ const Navbar = () => {
                 {invertersMenu.map((column, index) => (
                   <React.Fragment key={index}>
                     {column.heading && <li className="mobile-section-heading">{column.heading}</li>}
-                    {renderItems(column.items, `m-inv-${index}`)}
+                    {renderInverterItems(column.items, `m-inv-${index}`)}
                     {column.extra && (
                       <>
                         <li className="mobile-section-heading">{column.extra.heading}</li>
-                        {renderItems(column.extra.items, `m-inv-${index}-extra`)}
+                        {renderInverterItems(column.extra.items, `m-inv-${index}-extra`)}
                       </>
                     )}
                   </React.Fragment>

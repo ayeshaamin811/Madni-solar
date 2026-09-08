@@ -240,16 +240,27 @@
 .mega-title {
   color: #fff;
   text-align: center;
+}
+
+/* Whole "Inverters" mega-menu title acts as a link to the Inverters page */
+.mega-title-link {
+  display: block;
+  text-decoration: none;
+}
+
+.mega-title-link:hover .mega-title {
+  text-decoration: underline;
+}
+.mega-title {
   font-size: 26px;
   font-weight: 700;
   margin: 0 0 20px 0;
+  text-decoration: underline;
 }
-
 .mega-grid {
   display: grid;
   gap: 0 30px;
 }
-
 .mega-grid-4 {
   grid-template-columns: repeat(4, 1fr);
 }
