@@ -101,7 +101,7 @@ function PolicyTrading() {
       num: "16",
       title: "Verified Stock Information",
       lines: [
-        "Only Sun Solar's daily updated stock list or the stock available on www.sunsolar.pk is valid.",
+        "Only Madni Solar's daily updated stock list or the stock available on www.sunsolar.pk is valid.",
         "Do not inquire about out-of-stock items.",
       ],
     },
@@ -159,7 +159,7 @@ function PolicyTrading() {
       title: "Warranty & Service Claims",
       lines: [
         "All claims will be handled by the manufacturer as per their policy.",
-        "Sun Solar only guarantees genuine import and genuine products.",
+        "Madni Solar only guarantees genuine import and genuine products.",
       ],
     },
     {
@@ -288,7 +288,7 @@ function PolicyTrading() {
       num: "13",
       title: "Stock Availability Delays",
       lines: [
-        "Sun Solar is not responsible for delays or shortages in stock availability (e.g., due to import delays or logistics issues) other than for ready stock.",
+        "Madni Solar is not responsible for delays or shortages in stock availability (e.g., due to import delays or logistics issues) other than for ready stock.",
       ],
     },
     {
@@ -311,7 +311,7 @@ function PolicyTrading() {
       num: "16",
       title: "Stock Information",
       lines: [
-        "Only Sun Solar's official stock updates are authentic.",
+        "Only Madni Solar's official stock updates are authentic.",
         "We provide daily updates of available stock.",
         "Please avoid inquiries about unavailable items.",
       ],
@@ -373,7 +373,7 @@ function PolicyTrading() {
       title: "Warranty and Service Claims",
       lines: [
         "Warranty and service claims will be handled according to the manufacturer's policy and remain their responsibility.",
-        "Sun Solar only guarantees genuine imports.",
+        "Madni Solar only guarantees genuine imports.",
       ],
     },
     {
@@ -566,12 +566,12 @@ function PolicyTrading() {
       <section className="policy-doc policy-summary">
         <div className="container">
           <div className="policy-tag flex justify-center">
-            <span className="policy-tag-highlight">Sun Solar</span>
+            <span className="policy-tag-highlight">Madni Solar</span>
             <span className="policy-tag-plain">Policy at a Glance</span>
           </div>
 
           <h2 className="policy-doc-heading">
-            Sun Solar – Business Dealing and Stock Delivery Policy
+            Madni Solar – Business Dealing and Stock Delivery Policy
           </h2>
 
           <p className="policy-doc-bismillah">بِسمِ اللہِ الرَّحمٰنِ الرَّحِيم</p>
