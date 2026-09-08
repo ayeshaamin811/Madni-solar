@@ -54,7 +54,12 @@ function SolarPanelBrandPage() {
     <div>
       <Navbar />
 
-      <PageBanner image={bannerImage} title={brand.name} currentPage={brand.name} />
+      <PageBanner
+        image={bannerImage}
+        title={brand.name}
+        parent={{ name: "Solar Panels", to: "/solar-panels" }}
+        currentPage={brand.name}
+      />
 
       <section className="brand-content">
         <div className="container">

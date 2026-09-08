@@ -1,7 +1,7 @@
 import React from "react";
 import "./Pagebanner.css";
 
-function PageBanner({ image, title, currentPage }) {
+function PageBanner({ image, title, currentPage, parent }) {
   return (
     <section className="page-banner">
       {/* Background image - different for every page, passed as a prop */}
@@ -20,6 +20,17 @@ function PageBanner({ image, title, currentPage }) {
             Madni Solar
           </a>
           <span className="page-banner-breadcrumb-sep"> / </span>
+
+          {/* Optional beech ka link, jaise "Inverters" - sirf tab jab parent diya ho */}
+          {parent && (
+            <>
+              <a href={parent.to} className="page-banner-breadcrumb-link">
+                {parent.name}
+              </a>
+              <span className="page-banner-breadcrumb-sep"> / </span>
+            </>
+          )}
+
           <span className="page-banner-breadcrumb-current">{currentPage}</span>
         </p>
       </div>

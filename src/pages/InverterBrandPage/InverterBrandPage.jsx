@@ -41,7 +41,12 @@ function InverterBrandPage() {
     <div>
       <Navbar />
 
-      <PageBanner image={heroBanner} title={brand.name} currentPage={brand.name} />
+      <PageBanner
+        image={heroBanner}
+        title={brand.name}
+        parent={{ name: "Inverters", to: "/inverters" }}
+        currentPage={brand.name}
+      />
 
       <section className="brand-content">
         <div className="container">
