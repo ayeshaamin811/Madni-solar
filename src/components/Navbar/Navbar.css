@@ -198,7 +198,7 @@
 }
 
 .bullet-icon {
-  color: var(--theme-color);
+  color: #fff;
   font-size: 12px;
   flex-shrink: 0;
 }
@@ -220,10 +220,10 @@
   top: 100%;
   left: -130%;
   /* transform: translateX(-50%); */
-  background-color: #fff;
+  background-color: var(--theme-color);
   padding: 30px;
-  min-width: 900px;
-  max-width: 1100px;
+  min-width: 1100px;
+  max-width: 1200px;
   box-shadow: var(--shadow);
   border-radius: 4px;
   animation: fadeIn 0.15s ease;
@@ -238,9 +238,10 @@
 }
 
 .mega-title {
-  color: var(--theme-color);
+  color: #fff;
   text-align: center;
-  font-size: 24px;
+  font-size: 26px;
+  font-weight: 700;
   margin: 0 0 20px 0;
 }
 
@@ -263,8 +264,9 @@
 }
 
 .mega-heading {
-  color: var(--theme-color);
-  font-size: 15px;
+  color: var(--orange-dark);
+  font-size: 18px;
+  font-weight: 700;
   margin: 0 0 10px 0;
 }
 
@@ -286,7 +288,7 @@
 }
 
 .mega-item a {
-  color: var(--theme-color);
+  color: #fff;
   text-decoration: none;
   font-size: 13.5px;
   display: inline-flex;
@@ -311,8 +313,7 @@
 }
 
 .mega-item a:hover {
-  text-decoration: underline;
-  color: var(--theme-color);
+  color: var(--orange-dark);
 }
 
 .mega-divider {
@@ -350,7 +351,7 @@
 }
 
 .calculator-btn:hover {
-  background-color: red;
+  background-color: var(--orange-dark);
 }
 
 .cart-btn {
@@ -808,9 +809,7 @@
   .mini-cart {
     width: 300px;
   }
-  .top-bar {
-    padding: 8px 0px;
-  }
+
   .top-bar-inner  {
     padding: 0;
   }

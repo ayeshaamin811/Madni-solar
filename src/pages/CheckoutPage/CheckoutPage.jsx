@@ -11,10 +11,17 @@ function CheckoutPage() {
   const { cartItems, subtotal, cartCount } = useCart();
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    firstName: "",
+    lastName: "",
     address: "",
+    apartment: "",
+    city: "",
+    state: "",
+    postCode: "",
     phone: "",
+    email: "",
+    businessName: "",
+    orderNotes: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -47,7 +54,12 @@ function CheckoutPage() {
             </div>
           ) : submitted ? (
             <div className="checkout-success">
-              <h2 className="checkout-success-title">Thank you, {form.name || "customer"}!</h2>
+              <h2 className="checkout-success-title">
+                Thank you,{" "}
+                {[form.firstName, form.lastName].filter(Boolean).join(" ") ||
+                  "customer"}
+                !
+              </h2>
               <p className="checkout-success-text">
                 Your order request has been received. This is a demo checkout,
                 so no payment has been processed yet. Our team will contact you
@@ -62,44 +74,115 @@ function CheckoutPage() {
           ) : (
             <div className="checkout-grid">
               {/* ===== Billing form ===== */}
-              <form className="checkout-form" onSubmit={handleSubmit}>
+              <form
+                className="checkout-form"
+                id="checkout-form"
+                onSubmit={handleSubmit}
+              >
                 <h3 className="checkout-form-title">Billing Details</h3>
 
-                <label className="checkout-label" htmlFor="checkout-name">
-                  Full Name *
+                <label className="checkout-label" htmlFor="checkout-first-name">
+                  First Name *
                 </label>
                 <input
-                  id="checkout-name"
+                  id="checkout-first-name"
                   type="text"
                   className="checkout-input"
-                  placeholder="e.g. Ali Khan"
-                  value={form.name}
-                  onChange={updateField("name")}
+                  placeholder="e.g. Ali"
+                  value={form.firstName}
+                  onChange={updateField("firstName")}
                   required
                 />
 
-                <label className="checkout-label" htmlFor="checkout-email">
-                  Email *
+                <label className="checkout-label" htmlFor="checkout-last-name">
+                  Last Name *
                 </label>
                 <input
-                  id="checkout-email"
-                  type="email"
+                  id="checkout-last-name"
+                  type="text"
                   className="checkout-input"
-                  placeholder="you@example.com"
-                  value={form.email}
-                  onChange={updateField("email")}
+                  placeholder="e.g. Khan"
+                  value={form.lastName}
+                  onChange={updateField("lastName")}
                   required
                 />
 
-                <label className="checkout-label" htmlFor="checkout-address">
-                  Address *
+                <label className="checkout-label" htmlFor="checkout-country">
+                  Country/Region
                 </label>
-                <textarea
+                <div className="checkout-country" id="checkout-country">
+                  Pakistan
+                </div>
+
+                <label className="checkout-label" htmlFor="checkout-address">
+                  House number and street name *
+                </label>
+                <input
                   id="checkout-address"
-                  className="checkout-input checkout-textarea"
-                  placeholder="Street, city, province..."
+                  type="text"
+                  className="checkout-input"
+                  placeholder="House number and street name"
                   value={form.address}
                   onChange={updateField("address")}
+                  required
+                />
+
+                <label className="checkout-label" htmlFor="checkout-apartment">
+                  Apartment, suite, unit, etc. (optional)
+                </label>
+                <input
+                  id="checkout-apartment"
+                  type="text"
+                  className="checkout-input"
+                  placeholder="Apartment, suite, unit, etc."
+                  value={form.apartment}
+                  onChange={updateField("apartment")}
+                />
+
+                <label className="checkout-label" htmlFor="checkout-city">
+                  City *
+                </label>
+                <input
+                  id="checkout-city"
+                  type="text"
+                  className="checkout-input"
+                  placeholder="e.g. Lahore"
+                  value={form.city}
+                  onChange={updateField("city")}
+                  required
+                />
+
+                <label className="checkout-label" htmlFor="checkout-state">
+                  State/Province
+                </label>
+                <select
+                  id="checkout-state"
+                  className="checkout-input checkout-select"
+                  value={form.state}
+                  onChange={updateField("state")}
+                >
+                  <option value="">Select state/province</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Sindh">Sindh</option>
+                  <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
+                  <option value="Balochistan">Balochistan</option>
+                  <option value="Azad Kashmir">Azad Kashmir</option>
+                  <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
+                  <option value="Islamabad Capital Territory">
+                    Islamabad Capital Territory
+                  </option>
+                </select>
+
+                <label className="checkout-label" htmlFor="checkout-post-code">
+                  Post Code *
+                </label>
+                <input
+                  id="checkout-post-code"
+                  type="text"
+                  className="checkout-input"
+                  placeholder="e.g. 54000"
+                  value={form.postCode}
+                  onChange={updateField("postCode")}
                   required
                 />
 
@@ -116,9 +199,41 @@ function CheckoutPage() {
                   required
                 />
 
-                <button type="submit" className="checkout-submit-btn">
-                  Place Order
-                </button>
+                <label className="checkout-label" htmlFor="checkout-email">
+                  Email Address *
+                </label>
+                <input
+                  id="checkout-email"
+                  type="email"
+                  className="checkout-input"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={updateField("email")}
+                  required
+                />
+
+                <label className="checkout-label" htmlFor="checkout-business">
+                  Business Name (optional)
+                </label>
+                <input
+                  id="checkout-business"
+                  type="text"
+                  className="checkout-input"
+                  placeholder="Business name (optional)"
+                  value={form.businessName}
+                  onChange={updateField("businessName")}
+                />
+
+                <label className="checkout-label" htmlFor="checkout-notes">
+                  Order Notes
+                </label>
+                <textarea
+                  id="checkout-notes"
+                  className="checkout-input checkout-textarea"
+                  placeholder="Notes about your order, e.g. special notes for delivery."
+                  value={form.orderNotes}
+                  onChange={updateField("orderNotes")}
+                />
               </form>
 
               {/* ===== Order summary ===== */}
@@ -126,6 +241,11 @@ function CheckoutPage() {
                 <h3 className="checkout-summary-title">
                   Order Summary ({cartCount})
                 </h3>
+
+                <div className="checkout-summary-head">
+                  <span>Product</span>
+                  <span>Subtotal</span>
+                </div>
 
                 <ul className="checkout-summary-items">
                   {cartItems.map((item) => (
@@ -146,13 +266,45 @@ function CheckoutPage() {
                   ))}
                 </ul>
 
-                <div className="checkout-summary-total">
+                <div className="checkout-summary-row checkout-summary-subtotal">
                   <span>Subtotal</span>
                   <span>Rs{subtotal.toLocaleString()}</span>
                 </div>
-                <p className="checkout-summary-note">
-                  Payment gateway and shipping will be added here soon.
-                </p>
+
+                <div className="checkout-summary-row checkout-summary-shipment">
+                  <span>Shipment</span>
+                  <span className="checkout-shipment-label">Flat rate:</span>
+                  <span>Rs2,000</span>
+                </div>
+
+                <div className="checkout-summary-row checkout-summary-total-row">
+                  <span>Total</span>
+                  <span>Rs{(subtotal + 2000).toLocaleString()}</span>
+                </div>
+
+                <label className="checkout-agree">
+                  <input type="checkbox" className="checkout-agree-checkbox" />
+                  <span>
+                    I have read and agree to the website{" "}
+                    <span className="checkout-agree-link">
+                      terms and conditions
+                    </span>{" "}
+                    *
+                  </span>
+                </label>
+
+                <div className="checkout-actions">
+                  <Link to="/request-quote" className="checkout-quote-btn">
+                    OR ASK FOR A QUOTE
+                  </Link>
+                  <button
+                    type="submit"
+                    form="checkout-form"
+                    className="checkout-order-btn"
+                  >
+                    PLACE ORDER
+                  </button>
+                </div>
               </aside>
             </div>
           )}

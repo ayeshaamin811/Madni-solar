@@ -105,7 +105,7 @@ function CareerContent() {
               Join Our Growing Team and Power the Future of Energy
             </h2>
 
-            <p className="hero-description">
+            <p className="hero-descriptions">
               At madni solar, we&apos;re not just providing solar solutions —
               we&apos;re shaping a brighter, more sustainable future for
               Pakistan. We are constantly looking for passionate, driven, and

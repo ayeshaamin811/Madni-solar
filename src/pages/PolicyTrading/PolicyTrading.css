@@ -1,0 +1,543 @@
+/* ===== Intro section ===== */
+.policy-intro {
+  background-color: #ffffff;
+  padding: 80px 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.container {
+  margin: 0 auto;
+}
+
+/* Tag above heading */
+.policy-tag {
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.policy-tag-highlight {
+  background-color: #ff5c00;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 6px;
+}
+
+.policy-tag-plain {
+  color: #ff5c00;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  align-self: center;
+}
+
+.policy-intro-heading {
+  color: #111111;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.4;
+  max-width: 1000px;
+  margin: 0 auto 20px auto;
+}
+
+.policy-intro-heading::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  background-color: #ff5c00;
+  margin: 18px auto 0 auto;
+  border-radius: 2px;
+}
+
+.policy-intro-text {
+  color: #6a7382;
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===== Services grid (dark navy section) ===== */
+.policy-services {
+  background-color: var(--theme-color);
+  padding: 80px 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.policy-services-title {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 800;
+  margin: 0 0 50px 0;
+}
+
+.policy-services-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  text-align: left;
+}
+
+.policy-service-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 30px 25px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.policy-service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+}
+
+.policy-service-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #ff5c00;
+  color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+
+.policy-service-title {
+  color: var(--theme-color);
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+.policy-service-desc {
+  color: #6a7382;
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ===== Benefits section ===== */
+.policy-benefits {
+  background-color: #f4f6fb;
+  padding: 80px 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+.policy-benefits-inner {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.policy-benefits-heading {
+  color: #111111;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.4;
+  margin: 0 0 25px 0;
+}
+
+.policy-benefits-list {
+  list-style: none;
+  margin: 0 0 30px 0;
+  padding: 0;
+}
+
+.policy-benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #444444;
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.policy-benefit-icon {
+  color: #ff5c00;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.policy-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--theme-color);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 15px 34px;
+  border-radius: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.policy-cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(35, 126, 171, 0.4);
+}
+
+.policy-benefits-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.policy-benefit-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 26px 20px;
+  text-align: center;
+  border-bottom: 4px solid #ff5c00;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.policy-benefit-big {
+  display: block;
+  color: var(--theme-color);
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.policy-benefit-card p {
+  color: #6a7382;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===== Process steps ===== */
+.policy-process {
+  background-color: #ffffff;
+  padding: 80px 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.policy-process-title {
+  color: #111111;
+  font-size: 30px;
+  font-weight: 800;
+  margin: 0 0 50px 0;
+}
+
+.policy-process-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  text-align: left;
+}
+
+.policy-process-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e8ef;
+  border-radius: 12px;
+  padding: 30px 25px;
+  transition: box-shadow 0.3s ease;
+}
+
+.policy-process-card:hover {
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.1);
+}
+
+.policy-process-step {
+  color: #ff5c00;
+  font-size: 34px;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.policy-process-name {
+  color: var(--theme-color);
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+.policy-process-desc {
+  color: #6a7382;
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ===== Responsive design ===== */
+
+/* Tablet */
+@media (max-width: 992px) {
+  .policy-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .policy-process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .policy-benefits-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .policy-intro-heading,
+  .policy-services-title,
+  .policy-process-title {
+    font-size: 26px;
+  }
+
+  .policy-benefits-heading {
+    font-size: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .policy-intro,
+  .policy-services,
+  .policy-benefits,
+  .policy-process {
+    padding: 55px 0;
+  }
+
+  .policy-services-grid,
+  .policy-process-grid,
+  .policy-benefits-right {
+    grid-template-columns: 1fr;
+  }
+
+  .policy-benefits-right {
+    gap: 14px;
+  }
+
+  .policy-intro-heading,
+  .policy-services-title,
+  .policy-process-title {
+    font-size: 21px;
+  }
+}
+/* ===== Detailed policy document ===== */
+.policy-doc {
+  background-color: #ffffff;
+  padding: 80px 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+.policy-doc-heading {
+  color: #111111;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.4;
+  max-width: 1000px;
+  margin: 20px auto 16px auto;
+  text-align: center;
+}
+
+.policy-doc-heading::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  background-color: #ff5c00;
+  margin: 18px auto 0 auto;
+  border-radius: 2px;
+}
+
+.policy-doc-bismillah {
+  color: #111111;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin: 30px 0 20px 0;
+  direction: rtl;
+}
+
+.policy-doc-intro {
+  color: #6a7382;
+  font-size: 16px;
+  line-height: 1.9;
+  max-width: 900px;
+  margin: 0 auto 45px auto;
+  text-align: center;
+}
+
+.policy-doc-list {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.policy-doc-card {
+  background-color: #f7f9fc;
+  border: 1px solid #e5e8ef;
+  border-left: 4px solid #ff5c00;
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.25s ease;
+}
+
+.policy-doc-card:hover {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.policy-doc-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.policy-doc-num {
+  background-color: var(--theme-color);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  min-width: 44px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.policy-doc-title {
+  color: var(--theme-color);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.policy-doc-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.policy-doc-lines li {
+  color: #444444;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 6px;
+  padding-left: 18px;
+  position: relative;
+}
+
+.policy-doc-lines li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff5c00;
+}
+
+.policy-doc-closing {
+  color: #111111;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  margin: 44px 0 10px 0;
+}
+
+.policy-doc-closing-text {
+  color: #6a7382;
+  font-size: 16px;
+  line-height: 1.9;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ===== Summary policy grid ===== */
+.policy-summary {
+  background-color: #f4f6fb;
+  padding: 80px 0;
+}
+
+.policy-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* ===== Contact & About section ===== */
+.policy-contact {
+  background-color: var(--theme-color);
+  padding: 80px 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.policy-contact-heading {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 800;
+  margin: 0 0 50px 0;
+}
+
+.policy-contact-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+  text-align: left;
+}
+
+.policy-contact-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 26px 24px;
+  border-bottom: 4px solid #ff5c00;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.policy-contact-label {
+  color: var(--theme-color);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0 0 12px 0;
+}
+
+.policy-contact-value {
+  color: #444444;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  word-break: break-word;
+}
+
+.policy-contact-value a {
+  color: var(--theme-color);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+/* Responsive additions for the new sections */
+@media (max-width: 992px) {
+  .policy-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .policy-contact-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .policy-contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .policy-doc-heading {
+    font-size: 21px;
+  }
+}

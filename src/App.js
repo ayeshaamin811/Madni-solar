@@ -20,6 +20,7 @@ import SolarPanelBrandPage from "./pages/SolarPanelBrandPage/SolarPanelBrandPage
 import ProductDetailPage from "./pages/ProductDetailPage/ProductDetailPage";
 import CartPage from "./pages/CartPage/CartPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
+import PolicyTrading from "./pages/PolicyTrading/PolicyTrading";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/request-quote" element={<SendRequest />} />
         <Route path="/our-products" element={<ProductsPage />} />
         <Route path="/careers" element={<Career />} />
+        <Route path="/policy-trading" element={<PolicyTrading />} />
         <Route path="/blog" element={<BlogPage />} />
         {/* Bare /solar-panels (no brand chosen) redirects to the first brand */}
         <Route path="/solar-panels" element={<Navigate to="/solar-panels/yingli" replace />} />

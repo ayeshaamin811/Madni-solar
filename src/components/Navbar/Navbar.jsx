@@ -37,15 +37,10 @@ const invertersMenu = [
   {
     heading: "Hybrid Inverters",
     items: [
-      {
-        name: "All Brands with Capacity (kW)",
-        sub: [
-          "12V Inverters (1 Phase)", "24V Inverters (1 Phase)", "6kw Inverters (1 Phase)",
-          "8kw Inverters (1 Phase)", "10kw Inverters (1 Phase)", "12kw Inverters (1 Phase)",
-          "12kw Inverters LV (3 Phase)", "15kw Inverters LV (3 Phase)",
-          "20kw Inverters LV (3 Phase)", "25kw Inverters LV (3 Phase)",
-        ],
-      },
+      // Pehle ye object tha jisme 10 sub-items (12V, 24V, 6kw...25kw) inline
+      // expand ho rahe the. Ab ye ek simple single link hai — apni khud ki
+      // page par le jayega jahan saari capacities dikhengi (jaise brand pages).
+      "All Brands with Capacity (kW)",
       "Chint", "Sineng", "Sofar",
       { name: "Hoymiles", sub: ["Single Phase", "Three Phase"] },
     ],
@@ -289,6 +284,8 @@ const Navbar = () => {
                         <Link to="/team">{item}</Link>
                       ) : item === "Careers" ? (
                         <Link to="/careers">{item}</Link>
+                      ) : item === "Policy Trading" ? (
+                        <Link to="/policy-trading">{item}</Link>
                       ) : (
                         <a href="#">{item}</a>
                       )}
@@ -491,6 +488,8 @@ const Navbar = () => {
                         <Link to="/contact">{item}</Link>
                       ) : item === "Our Team" ? (
                         <Link to="/team">{item}</Link>
+                      ) : item === "Policy Trading" ? (
+                        <Link to="/policy-trading">{item}</Link>
                       ) : item === "Careers" ? (
                         <Link to="/careers">{item}</Link>
                       ) : (
