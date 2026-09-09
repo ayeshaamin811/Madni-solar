@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import { useCart } from "../../context/CartContext";
+import { buildCartQuoteLink } from "../../data/findProduct";
 import heroBanner from "../../assets/hero-banner.webp";
 import "./CheckoutPage.css";
 
@@ -294,7 +295,10 @@ function CheckoutPage() {
                 </label>
 
                 <div className="checkout-actions">
-                  <Link to="/request-quote" className="checkout-quote-btn">
+                  <Link
+                    to={buildCartQuoteLink(cartItems)}
+                    className="checkout-quote-btn"
+                  >
                     OR ASK FOR A QUOTE
                   </Link>
                   <button

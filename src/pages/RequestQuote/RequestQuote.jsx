@@ -1,13 +1,22 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./RequestQuote.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import QuoteBanner from "../../assets/hero-banner.webp";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
+import { parseQuoteItems } from "../../data/findProduct";
 
 
 // Simple "Send the request" quote form component
 function SendRequest() {
+  // Quote ke items URL query se aate hain — ya to product detail page ka
+  // single product (?product=&brand=&qty=), ya checkout ka poora basket
+  // (?items=<slug>:<qty>,...).
+  const [searchParams] = useSearchParams();
+  const quoteItems = parseQuoteItems(searchParams);
+  const quoteTotal = quoteItems.reduce((sum, item) => sum + item.lineTotal, 0);
+
   // State for each form field
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -26,6 +35,15 @@ function SendRequest() {
       email,
       message,
       createAccount,
+      // Jo product(s) quote ke liye chune gaye
+      items: quoteItems.map(({ product, quantity, lineTotal }) => ({
+        name: product.name,
+        slug: product.slug,
+        price: product.price,
+        quantity,
+        lineTotal,
+      })),
+      quoteTotal,
     });
   };
 
@@ -41,6 +59,56 @@ function SendRequest() {
     <div className="request-container flex justify-start">
       <div className="request-column">
         <h1 className="request-title">Send the request</h1>
+
+        {/* Quote ke items — product detail page ya checkout basket se aate hain */}
+        {quoteItems.length > 0 && (
+          <div className="quote-items">
+            <h2 className="quote-items-title">
+              Products in this quote ({quoteItems.length})
+            </h2>
+
+            <ul className="quote-items-list">
+              {quoteItems.map(({ product, quantity, lineTotal }) => (
+                <li className="quote-product-card" key={product.slug}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="quote-product-image"
+                  />
+                  <div className="quote-product-info">
+                    <h3 className="quote-product-name">{product.name}</h3>
+                    <p className="quote-product-price">
+                      Rs{product.price.toLocaleString()}
+                      <span className="quote-product-qty">
+                        {" "}
+                        &times; {quantity}
+                      </span>
+                    </p>
+                    <p className="quote-product-total">
+                      Total: Rs{lineTotal.toLocaleString()}
+                    </p>
+                    {product.categories && product.categories.length > 0 && (
+                      <div className="quote-product-categories">
+                        {product.categories.map((category) => (
+                          <span key={category} className="quote-product-badge">
+                            {category}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            {quoteItems.length > 1 && (
+              <div className="quote-items-total">
+                <span>Quote total</span>
+                <span>Rs{quoteTotal.toLocaleString()}</span>
+              </div>
+            )}
+          </div>
+        )}
 
         <form className="request-form" onSubmit={handleSubmit}>
           {/* First Name field */}
@@ -104,16 +172,7 @@ function SendRequest() {
             />
           </div>
 
-          {/* Create an account checkbox */}
-          <div className="form-group checkbox-group">
-            <input
-              type="checkbox"
-              id="createAccount"
-              checked={createAccount}
-              onChange={(e) => setCreateAccount(e.target.checked)}
-            />
-            <label htmlFor="createAccount">Create an account?</label>
-          </div>
+    
 
           {/* Submit button */}
           <button type="submit" className="btn-primary">

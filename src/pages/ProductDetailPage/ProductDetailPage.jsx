@@ -6,6 +6,7 @@ import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import { useCart } from "../../context/CartContext";
 import solarPanelProducts from "../../data/solarProducts";
+import { buildQuoteLink } from "../../data/findProduct";
 import "./ProductDetailPage.css";
 
 // Default fallback image used when a product has no image of its own.
@@ -101,7 +102,7 @@ function ProductDetailPage() {
                   Add to Basket
                 </button>
                 <Link
-                  to={`/request-quote?product=${encodeURIComponent(product.name)}`}
+                  to={buildQuoteLink(product, quantity)}
                   className="product-btn btn-quote"
                 >
                   Add to Quote

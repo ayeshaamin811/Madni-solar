@@ -1,24 +1,26 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Equipmenttrading.css";
 import { FaSolarPanel, FaBolt, FaCarBattery } from "react-icons/fa";
 
 function EquipmentTrading() {
-  // Equipment data - easy to update or load from an API later
+  // Equipment data - easy to update or load from an API later.
+  // `link` har category ki listing page par jata hai.
   const equipmentData = [
     {
       icon: <FaSolarPanel />,
-      title: "Solar Panel",
-      link: "#",
+      title: "Solar Panels",
+      link: "/solar-panels",
     },
     {
       icon: <FaBolt />,
       title: "Inverters",
-      link: "#",
+      link: "/inverters",
     },
     {
       icon: <FaCarBattery />,
       title: "Batteries",
-      link: "#",
+      link: "/batteries",
     },
   ];
 
@@ -42,7 +44,9 @@ function EquipmentTrading() {
                 <span className="equipment-icon">{item.icon}</span>
               </div>
               <h3 className="equipment-title">{item.title}</h3>
-              <a href={item.link} className="equipment-btn">Read More</a>
+              <Link to={item.link} className="equipment-btn">
+                View All
+              </Link>
             </div>
           ))}
         </div>

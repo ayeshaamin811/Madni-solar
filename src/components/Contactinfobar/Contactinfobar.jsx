@@ -35,8 +35,8 @@ function ContactInfoBar() {
             +923 111 666 677
           </ContactItem>
 
-          <ContactItem icon={<FaEnvelope />} label="Email Us Here" href="mailto:info@madni solar.pk">
-            info@madni solar.pk
+          <ContactItem icon={<FaEnvelope />} label="Email Us Here" href="mailto:info@madnisolar.pk">
+            info@madnisolar.pk
           </ContactItem>
 
           <ContactItem

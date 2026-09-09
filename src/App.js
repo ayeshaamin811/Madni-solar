@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
 import ContactPage from './pages/ContactPage/ContactPage';
 import FaqPage from './pages/FaqPage';
@@ -22,9 +22,12 @@ import CartPage from "./pages/CartPage/CartPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import PolicyTrading from "./pages/PolicyTrading/PolicyTrading";
 import InvertersPage from "./pages/InvertersPage/InvertersPage";
+import SolarPanelsPage from "./pages/SolarPanelsPage/SolarPanelsPage";
+import InverterCategoryPage from "./pages/InverterCategoryPage/InverterCategoryPage";
 import InverterBrandPage from "./pages/InverterBrandPage/InverterBrandPage";
 import InverterDetailPage from "./pages/InverterDetailPage/InverterDetailPage";
 import BatteriesPage from "./pages/BatteriesPage/BatteriesPage";
+import inverterCategories from "./data/inverterCategories";
 
 
 function App() {
@@ -48,12 +51,42 @@ function App() {
         <Route path="/careers" element={<Career />} />
         <Route path="/policy-trading" element={<PolicyTrading />} />
         <Route path="/inverters" element={<InvertersPage />} />
+
+        {/* ===== Inverter category routes =====
+            Har category ke teen routes bante hain:
+
+              /inverters/ongrid-inverters                    -> category page
+              /inverters/ongrid-inverters/:brandSlug         -> brand page
+              /inverters/ongrid-inverters/:brandSlug/:productSlug -> detail page
+
+            Category segment static hai (data se generate hoti hai), is liye ye
+            neeche waale purane dynamic routes se pehle match hoti hain — React
+            Router static segments ko priority deta hai. */}
+        {inverterCategories.map((category) => (
+          <React.Fragment key={category.slug}>
+            <Route
+              path={`/inverters/${category.slug}`}
+              element={<InverterCategoryPage categorySlug={category.slug} />}
+            />
+            <Route
+              path={`/inverters/${category.slug}/:brandSlug`}
+              element={<InverterBrandPage categorySlug={category.slug} />}
+            />
+            <Route
+              path={`/inverters/${category.slug}/:brandSlug/:productSlug`}
+              element={<InverterDetailPage categorySlug={category.slug} />}
+            />
+          </React.Fragment>
+        ))}
+
+        {/* Purane flat URLs — bookmarks/links tootne se bachane ke liye rakhe
+            hain; category pata na ho tou breadcrumb khud dhoond leta hai. */}
         <Route path="/inverters/:brandSlug" element={<InverterBrandPage />} />
         <Route path="/inverters/:brandSlug/:productSlug" element={<InverterDetailPage />} />
         <Route path="/batteries" element={<BatteriesPage />} />
         <Route path="/blog" element={<BlogPage />} />
-        {/* Bare /solar-panels (no brand chosen) redirects to the first brand */}
-        <Route path="/solar-panels" element={<Navigate to="/solar-panels/yingli" replace />} />
+        {/* /solar-panels par saare panels ki listing (Inverters page jaisi) */}
+        <Route path="/solar-panels" element={<SolarPanelsPage />} />
         <Route path="/solar-panels/:brandSlug" element={<SolarPanelBrandPage />} />
         <Route path="/solar-panels/:brandSlug/:productSlug" element={<ProductDetailPage />} />
         <Route path="/cart" element={<CartPage />} />

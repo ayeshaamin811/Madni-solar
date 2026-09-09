@@ -3,9 +3,10 @@ import "./Navbar.css";
 import logo from "../../assets/project-logo.png";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import invertersMenu, { slugifyInverter } from "../../data/inverterMenu";
 
 // Professional icon set from react-icons (install: npm i react-icons)
-import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaSun } from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaSun, FaMinus } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 // ===== Dropdown data =====
@@ -20,121 +21,114 @@ const solarPanelsMenu = [
   "Mesol Alpha", "Longi", "Osda", "Trina Solar", "Tongwei", "Cora Dawn",
 ];
 
-// Inverters mega menu - 4 columns, matching the site's layout
-const invertersMenu = [
-  {
-    heading: "Ongrid Inverters",
-    items: [
-      "Canadian", "Fox", "SolarMax", "Sofar", "Goodwe", "Sineng", "Growatt", "Huawei",
-      { name: "Inverex", sub: ["Single Phase", "Three Phase"] },
-      "Knox", "SMA", "Chint", "MaxPower", "Livoltek", "Luminey", "Solis", "Sungrow", "ZIEWNIC", "Crown",
-    ],
-    extra: {
-      heading: "Batteryless PV Inverters",
-      items: ["Fronus", "Ziewnic"],
-    },
-  },
-  {
-    heading: "Hybrid Inverters",
-    items: [
-      // Pehle ye object tha jisme 10 sub-items (12V, 24V, 6kw...25kw) inline
-      // expand ho rahe the. Ab ye ek simple single link hai — apni khud ki
-      // page par le jayega jahan saari capacities dikhengi (jaise brand pages).
-      { name: "All Brands with Capacity (kW)", to: "/inverters" },
-      "Chint", "Sineng", "Sofar",
-      { name: "Hoymiles", sub: ["Single Phase", "Three Phase"] },
-    ],
-  },
-  {
-    heading: null,
-    items: [
-      "Auxsol", "Fox",
-      { name: "Goodwe", sub: ["Single Phase", "Three Phase LV", "Three Phase HV"] },
-      "Growatt", "Inverex", "Anicsun", "MaxPower", "Pilot", "Luminey", "Crown",
-    ],
-  },
-  {
-    heading: null,
-    items: [
-      "Solar Max",
-      { name: "Solis", sub: ["Single Phase", "Three Phase"] },
-      "Itel", "Huawei", "ZIEWNIC",
-      { name: "Knox", sub: ["Krypton", "XENON", "Zapher", "Zynex"] },
-      { name: "SAJ", sub: ["Single Phase", "Three Phase"] },
-    ],
-  },
-];
+// ===== Mega menu shape (Inverters + Batteries) =====
+// Inverters ki tree ab src/data/inverterMenu.js mein hai (Navbar, category
+// pages aur breadcrumbs — teenon wahin se banti hain). Batteries ka data neeche
+// isi shape mein hai:
+//
+//   group   -> ek category ka block; `span` = menu grid ki kitni tracks leta hai
+//              (1 = apni jagah, 2 = poori width); groups ke darmiyan divider.
+//   section -> heading (+ inverters ke case mein categorySlug, jo heading ko
+//              us category ki page se link kar deta hai).
+//   columns -> us section ke items, jitni columns mein baantna ho.
 
-// Batteries mega menu - 4 battery columns + a separate "Other Products" group
+// Batteries mega menu — Inverters jaisa hi group/section/columns structure.
+// "Batteries" ek hi heading ke neeche 4 columns mein aati hain, taake pehle ki
+// tarah 3 columns bin-heading ke na latken.
 const batteriesMenu = [
   {
-    heading: "Batteries",
-    items: [
-      "12V Batteries", "HV Batteries", "2.5kwh Batteries", "5kwh LV Batteries",
-      "10kwh Batteries", "14.33/16kwh LV Batteries", "Lithium Valley", "Mesol",
-      "SAJ", "Crown", "Fronus", "Pilot",
-    ],
-  },
-  {
-    heading: null,
-    items: [
-      "Sofar", "Chint", "LvtopSun", "VestWoods",
-      { name: "Huawei", sub: ["HV"] },
-      "Inverex", "Hithium",
-      { name: "BYD", sub: ["HV", "LV"] },
-      "Knox", "Nimbess", "Itel",
-    ],
-  },
-  {
-    heading: null,
-    items: [
-      "EVE", "Sunwoda", "Livoltek",
-      { name: "EY Power", sub: ["HV", "LV"] },
-      { name: "Dyness", sub: ["HV", "LV"] },
-      { name: "Fox", sub: ["HV", "LV"] },
-      { name: "ZIEWNIC", sub: ["LI-WALL 2.0", "Z Box European"] },
-      { name: "Goodwe", sub: ["HV", "LV"] },
-    ],
-  },
-  {
-    heading: null,
-    items: [
-      "Narada", "Vaults", "SunFlx", "Growatt", "Soluna", "ESS",
-      { name: "PylonTech", sub: ["HV", "LV"] },
-      "Max Power", "Hoymiles", "Auxsol",
+    // Poori width leta hai (dono tracks), andar 4 columns
+    span: 2,
+    sections: [
+      {
+        heading: "Batteries",
+        columns: [
+          [
+            "12V Batteries", "HV Batteries", "2.5kwh Batteries", "5kwh LV Batteries",
+            "10kwh Batteries", "14.33/16kwh LV Batteries", "Lithium Valley", "Mesol",
+            "SAJ", "Crown", "Fronus", "Pilot",
+          ],
+          [
+            "Sofar", "Chint", "LvtopSun", "VestWoods",
+            { name: "Huawei", sub: ["HV"] },
+            "Inverex", "Hithium",
+            { name: "BYD", sub: ["HV", "LV"] },
+            "Knox", "Nimbess", "Itel",
+          ],
+          [
+            "EVE", "Sunwoda", "Livoltek",
+            { name: "EY Power", sub: ["HV", "LV"] },
+            { name: "Dyness", sub: ["HV", "LV"] },
+            { name: "Fox", sub: ["HV", "LV"] },
+            { name: "ZIEWNIC", sub: ["LI-WALL 2.0", "Z Box European"] },
+            { name: "Goodwe", sub: ["HV", "LV"] },
+          ],
+          [
+            "Narada", "Vaults", "SunFlx", "Growatt", "Soluna", "ESS",
+            { name: "PylonTech", sub: ["HV", "LV"] },
+            "Max Power", "Hoymiles", "Auxsol",
+          ],
+        ],
+      },
     ],
   },
 ];
 
-// "Other Products" is shown alongside Batteries in the same mega menu
+// "Other Products" is shown alongside Batteries in the same mega menu — do
+// groups, har group ke andar apni do headings (main + choti wali).
 const otherProductsMenu = [
   {
-    heading: "Installation Accessories",
-    items: [
-      { name: "Cables", sub: [{ name: "Nafees Cables", sub: ["DC Cables", "AC Cables"] }] },
-      "Structure", "Installation Labor", "Civil Works", "D.B Box with Breakers", "Supporting Items",
+    span: 1,
+    sections: [
+      {
+        heading: "Installation Accessories",
+        columns: [
+          [
+            { name: "Cables", sub: [{ name: "Nafees Cables", sub: ["DC Cables", "AC Cables"] }] },
+            "Structure", "Installation Labor", "Civil Works", "D.B Box with Breakers",
+            "Supporting Items",
+          ],
+        ],
+      },
+      {
+        heading: "Packages",
+        columns: [["Huawei", "Solis", "Goodwe"]],
+      },
     ],
-    extra: {
-      heading: "Packages",
-      items: ["Huawei", "Solis", "Goodwe"],
-    },
   },
   {
-    heading: "Product Accessories",
-    items: ["Sungrow", "BYD", "Pylontech", "Luminey", "Fox", "Solis", "Huawei"],
-    extra: {
-      heading: "VFDs",
-      items: ["Invent", "INVT (Original)"],
-    },
+    span: 1,
+    sections: [
+      {
+        heading: "Product Accessories",
+        columns: [["Sungrow", "BYD", "Pylontech", "Luminey", "Fox", "Solis", "Huawei"]],
+      },
+      {
+        heading: "VFDs",
+        columns: [["Invent", "INVT (Original)"]],
+      },
+    ],
   },
 ];
 
 const slugify = (name) => name.toLowerCase().trim().replace(/\s+/g, "-");
+
+// Bullet icon: top-level brand par sun, aur sub-items (phases / HV-LV / models)
+// par dash icon — is se ek nazar mein pata chal jata hai ke ye kisi brand ke
+// andar ka option hai, apna alag brand nahi. `depth` 0 = top level.
+const bulletFor = (depth) =>
+  depth === 0 ? (
+    <FaSun className="bullet-icon" />
+  ) : (
+    <FaMinus className="sub-bullet-icon" aria-hidden="true" />
+  );
+
 // Recursively renders a list of items, supporting one or two levels of nesting.
 // Object items with a `to` property render as internal router links (e.g. the
 // "All Brands with Capacity (kW)" entry pointing to the Inverters page).
-const renderItems = (items, keyPrefix) =>
-  items.map((item, index) => {
+const renderItems = (items, keyPrefix, opts = {}) => {
+  const { depth = 0 } = opts;
+  return items.map((item, index) => {
     const isObject = typeof item === "object";
     const label = isObject ? item.name : item;
     const key = `${keyPrefix}-${index}`;
@@ -142,11 +136,11 @@ const renderItems = (items, keyPrefix) =>
     const inner =
       isObject && item.to ? (
         <Link to={item.to}>
-          <FaSun className="bullet-icon" /> {label}
+          {bulletFor(depth)} {label}
         </Link>
       ) : (
         <a href="#">
-          <FaSun className="bullet-icon" /> {label}
+          {bulletFor(depth)} {label}
         </a>
       );
 
@@ -154,75 +148,125 @@ const renderItems = (items, keyPrefix) =>
       <li key={key} className="mega-item">
         {inner}
         {isObject && item.sub && (
-          <ul className="mega-sublist">{renderItems(item.sub, key)}</ul>
+          <ul className="mega-sublist">
+            {renderItems(item.sub, key, { depth: depth + 1 })}
+          </ul>
         )}
       </li>
     );
   });
+};
 
-// Renders one mega menu column, including its optional heading and extra section
-const renderColumn = (column, colIndex) => (
-  <div className="mega-column" key={colIndex}>
-    {column.heading && <h4 className="mega-heading">{column.heading}</h4>}
-    <ul className="mega-list">{renderItems(column.items, `col${colIndex}`)}</ul>
+// ============================================================================
+// GROUPED MEGA MENU RENDERERS (Inverters + Batteries)
+// ----------------------------------------------------------------------------
+// Ek group = ek category ka block (heading + uske items ki columns). Groups ke
+// darmiyan vertical divider aata hai, aur group `span` ke mutabiq menu grid ki
+// columns leta hai. `renderer` batata hai ke items kaise banenge —
+// renderInverterItems (brand pages ke links) ya renderItems (baaki menus).
+// ============================================================================
 
-    {column.extra && (
-      <>
-        <h4 className="mega-heading mega-heading-spaced">{column.extra.heading}</h4>
-        <ul className="mega-list">{renderItems(column.extra.items, `col${colIndex}-extra`)}</ul>
-      </>
+// Section heading: `to` ho tou clickable link, warna plain text.
+const renderMegaHeading = (heading, to, spaced) => (
+  <h4 className={`mega-heading${spaced ? " mega-heading-spaced" : ""}`}>
+    {to ? (
+      <Link to={to} className="mega-heading-link">
+        {heading}
+      </Link>
+    ) : (
+      heading
     )}
-  </div>
+  </h4>
 );
 
+// `totalCols` = mega grid ki kul tracks. Jo group poori width leta hai uska
+// right divider hata dete hain, warna menu ke kinare par ek bekaar line aa jati hai.
+const renderMegaGroups = (groups, keyPrefix, renderer, totalCols) =>
+  groups.map((group, groupIndex) => (
+    <div
+      className={`mega-group${group.span === totalCols ? " mega-group-full" : ""}`}
+      key={`${keyPrefix}-g${groupIndex}`}
+      style={{ "--mega-span": group.span }}
+    >
+      {group.sections.map((section, sectionIndex) => (
+        <div className="mega-section" key={`${keyPrefix}-g${groupIndex}-s${sectionIndex}`}>
+          {section.heading &&
+            renderMegaHeading(
+              section.heading,
+              section.categorySlug ? `/inverters/${section.categorySlug}` : undefined,
+              sectionIndex > 0
+            )}
+
+          <div
+            className="mega-section-columns"
+            style={{ "--mega-cols": section.columns.length }}
+          >
+            {section.columns.map((columnItems, columnIndex) => (
+              <ul
+                className="mega-list"
+                key={`${keyPrefix}-g${groupIndex}-s${sectionIndex}-c${columnIndex}`}
+              >
+                {renderer(
+                  columnItems,
+                  `${keyPrefix}-g${groupIndex}-s${sectionIndex}-c${columnIndex}`,
+                  { categorySlug: section.categorySlug }
+                )}
+              </ul>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  ));
+
 // ============================================================================
-// INVERSER MENU HELPERS (per-brand pages)
+// INVERTER MENU HELPERS (per-brand pages)
 // ----------------------------------------------------------------------------
-// Each brand/category item (and nested phase/model sub-items) links to its own
-// Inverter brand page at /inverters/:slug, mirroring how the Solar Panels menu
-// links to /solar-panels/:brandSlug. Items with an explicit `to` (the "All
-// Brands with Capacity (kW)" entry) keep their own destination. Used ONLY for
-// the Inverters menu (desktop + mobile) — the shared renderItems/renderColumn
-// helpers used by Solar, Batteries and other menus are not touched.
+// Har brand (aur uske nested phase/model sub-items) apni page par jata hai:
+//
+//   /inverters/<categorySlug>/<brandSlug>
+//
+// Category URL mein hone ki wajah se breadcrumb poora ban jata hai —
+// "Madni Solar / Inverters / Ongrid Inverters / Inverex / Single Phase" — aur
+// jo brand ek se zyada category mein hai (Goodwe, Knox, ZIEWNIC) uska bhi pata
+// chal jata hai ke user kis category se aaya tha.
+//
+// Jis item par explicit `to` ho ("All Brands with Capacity (kW)") wo apni hi
+// destination rakhta hai. Ye helper sirf Inverters menu ke liye hai (desktop +
+// mobile) — Batteries aur baaki menus plain renderItems use karte hain.
 // ============================================================================
-const renderInverterItems = (items, keyPrefix, parentSlug) =>
-  items.map((item, index) => {
+const renderInverterItems = (items, keyPrefix, opts = {}) => {
+  const { categorySlug, parentSlug, depth = 0 } = opts;
+  return items.map((item, index) => {
     const isObject = typeof item === "object";
     const label = isObject ? item.name : item;
     const key = `${keyPrefix}-${index}`;
 
     // Slugs follow the same rule as the inverter data (title slugified to kebab).
-    const ownSlug = parentSlug ? `${parentSlug}-${slugify(label)}` : slugify(label);
+    const ownSlug = parentSlug
+      ? `${parentSlug}-${slugifyInverter(label)}`
+      : slugifyInverter(label);
 
-    // Resolve destination: explicit `to` (e.g. /inverters for "All Brands"), or
-    // the brand's own page at /inverters/:slug.
-    const to = isObject && item.to ? item.to : `/inverters/${ownSlug}`;
+    const to = isObject && item.to ? item.to : `/inverters/${categorySlug}/${ownSlug}`;
 
     return (
       <li key={key} className="mega-item">
         <Link to={to}>
-          <FaSun className="bullet-icon" /> {label}
+          {bulletFor(depth)} {label}
         </Link>
         {isObject && item.sub && (
-          <ul className="mega-sublist">{renderInverterItems(item.sub, key, ownSlug)}</ul>
+          <ul className="mega-sublist">
+            {renderInverterItems(item.sub, key, {
+              categorySlug,
+              parentSlug: ownSlug,
+              depth: depth + 1,
+            })}
+          </ul>
         )}
       </li>
     );
   });
-
-const renderInverterColumn = (column, colIndex) => (
-  <div className="mega-column" key={colIndex}>
-    {column.heading && <h4 className="mega-heading">{column.heading}</h4>}
-    <ul className="mega-list">{renderInverterItems(column.items, `col${colIndex}`)}</ul>
-
-    {column.extra && (
-      <>
-        <h4 className="mega-heading mega-heading-spaced">{column.extra.heading}</h4>
-        <ul className="mega-list">{renderInverterItems(column.extra.items, `col${colIndex}-extra`)}</ul>
-      </>
-    )}
-  </div>
-);
+};
 
 // Simple Navbar component with a top info bar and a main nav bar.
 // The top bar hides on scroll down, and the main nav sticks to the top.
@@ -247,6 +291,48 @@ const Navbar = () => {
 
   // Global cart state (items, count, subtotal and action helpers)
   const { cartItems, cartCount, subtotal, removeFromBasket } = useCart();
+
+  // Mobile mega-menu ki section heading. Agar `to` diya ho (Ongrid / Batteryless
+  // PV / Hybrid) tou clickable link banti hai jo apni category page kholti hai
+  // aur mobile drawer band kar deti hai; warna plain text rehti hai.
+  const renderMobileHeading = (heading, to, key) => (
+    <li className="mobile-section-heading" key={key}>
+      {to ? (
+        <Link
+          to={to}
+          className="mobile-section-heading-link"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          {heading}
+        </Link>
+      ) : (
+        heading
+      )}
+    </li>
+  );
+
+  // Mobile par wahi groups/sections dikhte hain jo desktop mega menu mein hain,
+  // bas columns ko flatten kar ke ek hi list bana dete hain (mobile view ke
+  // hisaab se) — heading, phir us section ke saare items, phir agla section.
+  const renderMobileGroups = (groups, keyPrefix, renderer) =>
+    groups.flatMap((group, groupIndex) =>
+      group.sections.map((section, sectionIndex) => {
+        const key = `${keyPrefix}-g${groupIndex}-s${sectionIndex}`;
+        return (
+          <React.Fragment key={key}>
+            {section.heading &&
+              renderMobileHeading(
+                section.heading,
+                section.categorySlug ? `/inverters/${section.categorySlug}` : undefined,
+                `${key}-h`
+              )}
+            {renderer(section.columns.flat(), key, {
+              categorySlug: section.categorySlug,
+            })}
+          </React.Fragment>
+        );
+      })
+    );
 
   // Listen to scroll position to hide/show the top bar.
   // Throttled via requestAnimationFrame and guarded with a small
@@ -301,8 +387,8 @@ const Navbar = () => {
             <a href="tel:+923111666677" className="top-bar-link">
               <FaPhoneAlt className="top-bar-icon" /> +923 111 666 677
             </a>
-            <a href="mailto:info@madni solar.pk" className="top-bar-link">
-              <FaEnvelope className="top-bar-icon" /> info@madni solar.pk
+            <a href="mailto:info@madnisolar.pk" className="top-bar-link">
+              <FaEnvelope className="top-bar-icon" /> info@madnisolar.pk
             </a>
           </div>
           <div className="top-bar-right flex items-center">
@@ -320,9 +406,9 @@ const Navbar = () => {
       <nav className={`main-nav ${isScrolled ? "main-nav-scrolled" : ""}`}>
         <div className="container main-nav-inner flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="logo-link">
+          <Link to="/" className="logo-link">
             <img src={logo} alt="madni solar Logo" className="logo-image" />
-          </a>
+          </Link>
 
           {/* Desktop menu */}
           <ul className="nav-menu">
@@ -363,6 +449,17 @@ const Navbar = () => {
               <span className="nav-link">Solar Panels <FaChevronDown className="chevron" /></span>
               {openMenu === "solarPanels" && (
                 <ul className="dropdown dropdown-wide">
+                  {/* Heading khud "saare solar panels" page ka link hai —
+                      Inverters/Batteries mega menus jaisa hi. */}
+                  <li className="dropdown-title-item">
+                    <Link
+                      to="/solar-panels"
+                      className="mega-title-link"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      <h3 className="mega-title">Solar Panels</h3>
+                    </Link>
+                  </li>
                   <div className="dropdown-columns">
                     {solarPanelsMenu.map((item) => (
                       <li key={item}>
@@ -390,8 +487,8 @@ const Navbar = () => {
                   >
                     <h3 className="mega-title">Inverters</h3>
                   </Link>
-                  <div className="mega-grid mega-grid-4">
-                    {invertersMenu.map((column, index) => renderInverterColumn(column, index))}
+                  <div className="mega-grid mega-grid-inverters">
+                    {renderMegaGroups(invertersMenu, "inv", renderInverterItems, 2)}
                   </div>
                 </div>
               )}
@@ -412,10 +509,10 @@ const Navbar = () => {
                   >
                     <h3 className="mega-title">Batteries</h3>
                   </Link>
-                  <div className="mega-grid mega-grid-4">
-                    {batteriesMenu.map((column, index) => renderColumn(column, `bat${index}`))}
+                  <div className="mega-grid mega-grid-batteries">
+                    {renderMegaGroups(batteriesMenu, "bat", renderItems, 2)}
                     <div className="mega-divider" />
-                    {otherProductsMenu.map((column, index) => renderColumn(column, `other${index}`))}
+                    {renderMegaGroups(otherProductsMenu, "other", renderItems, 2)}
                   </div>
                 </div>
               )}
@@ -426,13 +523,13 @@ const Navbar = () => {
             </li>
 
             <li className="nav-item">
-              <a href="/our-projects" className="nav-link">Projects</a>
+              <Link to="/our-projects" className="nav-link">Projects</Link>
             </li>
             <li className="nav-item">
-              <a href="/orders" className="nav-link">Orders</a>
+              <Link to="/orders" className="nav-link">Orders</Link>
             </li>
             <li className="nav-item">
-              <a href="/request-quote" className="nav-link">Request a Quote (Beta)</a>
+              <Link to="/request-quote" className="nav-link">Request a Quote (Beta)</Link>
             </li>
           </ul>
 
@@ -581,6 +678,7 @@ const Navbar = () => {
             </div>
             {openMenu === "solarPanels" && (
               <ul className="mobile-dropdown">
+                {renderMobileHeading("All Solar Panels", "/solar-panels", "m-sp-all")}
                 {solarPanelsMenu.map((item) => (
                   <li key={item}>
                     <Link
@@ -601,18 +699,7 @@ const Navbar = () => {
             </div>
             {openMenu === "inverters" && (
               <ul className="mobile-dropdown">
-                {invertersMenu.map((column, index) => (
-                  <React.Fragment key={index}>
-                    {column.heading && <li className="mobile-section-heading">{column.heading}</li>}
-                    {renderInverterItems(column.items, `m-inv-${index}`)}
-                    {column.extra && (
-                      <>
-                        <li className="mobile-section-heading">{column.extra.heading}</li>
-                        {renderInverterItems(column.extra.items, `m-inv-${index}-extra`)}
-                      </>
-                    )}
-                  </React.Fragment>
-                ))}
+                {renderMobileGroups(invertersMenu, "m-inv", renderInverterItems)}
               </ul>
             )}
           </li>
@@ -624,24 +711,8 @@ const Navbar = () => {
           </div>
           {openMenu === "batteries" && (
             <ul className="mobile-dropdown">
-              {batteriesMenu.map((column, index) => (
-                <React.Fragment key={index}>
-                  {column.heading && <li className="mobile-section-heading">{column.heading}</li>}
-                  {renderItems(column.items, `m-bat-${index}`)}
-                </React.Fragment>
-              ))}
-              {otherProductsMenu.map((column, index) => (
-                <React.Fragment key={index}>
-                  <li className="mobile-section-heading">{column.heading}</li>
-                  {renderItems(column.items, `m-other-${index}`)}
-                  {column.extra && (
-                    <>
-                      <li className="mobile-section-heading">{column.extra.heading}</li>
-                      {renderItems(column.extra.items, `m-other-${index}-extra`)}
-                    </>
-                  )}
-                </React.Fragment>
-              ))}
+              {renderMobileGroups(batteriesMenu, "m-bat", renderItems)}
+              {renderMobileGroups(otherProductsMenu, "m-other", renderItems)}
             </ul>
           )}
         </li>

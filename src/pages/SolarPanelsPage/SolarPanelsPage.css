@@ -1,0 +1,83 @@
+/* ===== Solar Panels page content ===== */
+.solar-panels-content {
+  padding: 50px 40px;
+}
+
+/* "Showing X results" text */
+.solar-panels-results-text {
+  color: #666666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* No products fallback message */
+.solar-panels-no-products-text {
+  color: #666666;
+  font-size: 15px;
+  padding: 40px 0;
+}
+
+/* ===== Product grid ===== */
+.solar-panels-product-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.solar-panels-product-card {
+  display: block;
+  border: 1px solid #eeeeee;
+  border-radius: 6px;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.solar-panels-product-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.solar-panels-product-card-image {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.solar-panels-product-card-title {
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.solar-panels-product-card-price {
+  color: #e07b1a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ===== Responsive design ===== */
+@media (max-width: 1024px) {
+  .solar-panels-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .solar-panels-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .solar-panels-content {
+    padding: 30px 20px;
+  }
+
+  .solar-panels-product-grid {
+    grid-template-columns: 1fr;
+  }
+}

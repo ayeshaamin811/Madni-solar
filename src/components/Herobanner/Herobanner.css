@@ -68,7 +68,7 @@
   align-items: center;
   /* angled edge like the screenshot */
   clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
-  margin-right: -20px;
+  margin-right: -25px;
   z-index: 3;
 }
 

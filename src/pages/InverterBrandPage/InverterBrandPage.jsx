@@ -5,15 +5,21 @@ import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import inverterBrands from "../../data/inverterBrands";
 import inverterProducts from "../../data/inverterProducts";
+import { getInverterTrail, findCategoryForSlug } from "../../data/inverterMenu";
 import "./InverterBrandPage.css";
 
 // ===== Default banner (used when a brand has no image below) =====
 import heroBanner from "../../assets/hero-banner.webp";
 
-// Mirrors SolarPanelBrandPage exactly, driven by the :brandSlug route param and
-// the inverter data files. Product cards link to /inverters/:brandSlug/:slug.
-function InverterBrandPage() {
-  // URL se brandSlug nikalo, e.g. /inverters/goodwe -> "goodwe"
+// Mirrors SolarPanelBrandPage, driven by the :brandSlug route param and the
+// inverter data files.
+//
+// `categorySlug` route se aata hai (/inverters/ongrid-inverters/canadian). Uski
+// wajah se breadcrumb poora banta hai aur product cards bhi category ke andar
+// hi rehte hain. Purane flat URL (/inverters/canadian) par categorySlug nahi
+// hota — us case mein pehli matching category dhoond lete hain.
+function InverterBrandPage({ categorySlug }) {
+  // URL se brandSlug nikalo, e.g. /inverters/ongrid-inverters/goodwe -> "goodwe"
   const { brandSlug } = useParams();
 
   // Data file mein matching brand dhoondo
@@ -37,15 +43,39 @@ function InverterBrandPage() {
     (product) => product.brandSlug === brand.slug
   );
 
+  // Breadcrumb: Madni Solar / Inverters / <Category> / [<Parent brand> /] <Item>
+  const activeCategory = categorySlug || findCategoryForSlug(brand.slug);
+  const trail = getInverterTrail(activeCategory, brand.slug);
+
+  const crumbs = [{ name: "Inverters", to: "/inverters" }];
+  if (trail) {
+    crumbs.push({
+      name: trail.category.name,
+      to: `/inverters/${trail.category.slug}`,
+    });
+    // Sub-variant (Single Phase, Krypton...) ho tou uska parent brand bhi dikhao
+    if (trail.parent) {
+      crumbs.push({
+        name: trail.parent.name,
+        to: `/inverters/${trail.category.slug}/${trail.parent.slug}`,
+      });
+    }
+  }
+
+  // Page ka title/current crumb: sub-variant ka chhota naam ("Single Phase")
+  // dikhta hai, poora "Inverex Single Phase" nahi — kyunke parent upar hi hai.
+  const currentName = trail ? trail.item.name : brand.name;
+  const basePath = trail ? `/inverters/${trail.category.slug}` : "/inverters";
+
   return (
     <div>
       <Navbar />
 
       <PageBanner
         image={heroBanner}
-        title={brand.name}
-        parent={{ name: "Inverters", to: "/inverters" }}
-        currentPage={brand.name}
+        title={currentName}
+        trail={crumbs}
+        currentPage={currentName}
       />
 
       <section className="brand-content">
@@ -60,7 +90,7 @@ function InverterBrandPage() {
                 {brandProducts.map((product) => (
                   <Link
                     key={product.slug}
-                    to={`/inverters/${brand.slug}/${product.slug}`}
+                    to={`${basePath}/${brand.slug}/${product.slug}`}
                     className="product-card"
                   >
                     <img

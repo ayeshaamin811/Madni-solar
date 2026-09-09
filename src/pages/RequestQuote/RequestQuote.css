@@ -94,6 +94,101 @@
   color: var(--theme-color);
 }
 
+/* ===== Quote items wrapper (single product ya poora basket) ===== */
+.quote-items {
+  margin-bottom: 28px;
+}
+
+.quote-items-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #374151;
+}
+
+.quote-items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quote-items-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ===== Ek quote item ka card ===== */
+.quote-product-card {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.quote-product-image {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.quote-product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quote-product-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.quote-product-price {
+  margin: 0;
+  color: var(--theme-color);
+  font-weight: 600;
+}
+
+.quote-product-qty {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.quote-product-total {
+  margin: 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.quote-product-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.quote-product-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef2f7;
+  font-size: 12px;
+  color: #374151;
+}
+
 /* ===== Responsive design (media queries only) ===== */
 @media (max-width: 600px) {
   .request-column {
@@ -108,5 +203,11 @@
 
   .btn-primary {
     width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .quote-product-card {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./PolicyTrading.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -518,9 +519,9 @@ function PolicyTrading() {
                   </li>
                 ))}
               </ul>
-              <a href="/contact" className="policy-cta-btn">
+              <Link to="/contact" className="policy-cta-btn">
                 Get Started <FaArrowRight />
-              </a>
+              </Link>
             </div>
 
             <div className="policy-benefits-right">

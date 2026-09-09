@@ -23,7 +23,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with tempered glass",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Yingli"],
+    categories: ["Madni Solar", "Solar Panels", "Yingli"],
   },
   {
     name: "Astronergy Solar 555W Mono Panel",
@@ -44,16 +44,16 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with dual-glass design",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Astronergy"],
+    categories: ["Madni Solar", "Solar Panels", "Astronergy"],
   },
   {
-    name: "Hanersun Solar 545W Mono Panel",
+    name: "HanerMadni Solar 545W Mono Panel",
     slug: "hanersun-solar-545w-mono-panel",
     brandSlug: "hanersun",
     price: 17800,
     image: SolarImg,
     shortDescription:
-      "The Hanersun Solar 545W Mono Panel provides efficient, long-lasting energy generation for a wide range of solar applications.",
+      "The HanerMadni Solar 545W Mono Panel provides efficient, long-lasting energy generation for a wide range of solar applications.",
     description: [
       "The Hanersun 545W Panel is engineered for consistent power output across varying weather conditions.",
       "It features high-efficiency cells that maximize energy yield per square meter.",
@@ -65,7 +65,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Durable frame and glass",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Hanersun"],
+    categories: ["Madni Solar", "Solar Panels", "Hanersun"],
   },
   {
     name: "Risen Solar 560W Mono Panel",
@@ -86,7 +86,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with dual-glass design",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Risen"],
+    categories: ["Madni Solar", "Solar Panels", "Risen"],
   },
   {
     name: "TCL Solar 620W Bifacial Solar Panel",
@@ -109,7 +109,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with dual-glass design",
     ],
-    categories: ["Sun Solar", "Solar Panels", "TCL"],
+    categories: ["Madni Solar", "Solar Panels", "TCL"],
   },
   {
     name: "Jinko Solar 585W Mono Panel",
@@ -130,7 +130,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with tempered glass",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Jinko"],
+    categories: ["Madni Solar", "Solar Panels", "Jinko"],
   },
   {
     name: "Mesol Alpha Solar 550W Mono Panel",
@@ -151,7 +151,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Durable outdoor-rated frame",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Mesol Alpha"],
+    categories: ["Madni Solar", "Solar Panels", "Mesol Alpha"],
   },
   {
     name: "Osda Solar 545W Mono Panel",
@@ -172,7 +172,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Durable construction",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Osda"],
+    categories: ["Madni Solar", "Solar Panels", "Osda"],
   },
   {
     name: "Tongwei Solar 555W Mono Panel",
@@ -193,7 +193,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Tempered glass construction",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Tongwei"],
+    categories: ["Madni Solar", "Solar Panels", "Tongwei"],
   },
   {
     name: "Aiko Solar 615W Bifacial Panel",
@@ -214,16 +214,16 @@ const solarPanelProducts = [
       "Advanced ABC cell technology",
       "Strong durability with dual-glass design",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Aiko Solar"],
+    categories: ["Madni Solar", "Solar Panels", "Aiko Solar"],
   },
   {
-    name: "Huasun Solar 610W Heterojunction Panel",
+    name: "HuaMadni Solar 610W Heterojunction Panel",
     slug: "huasun-solar-610w-heterojunction-panel",
     brandSlug: "huasun",
     price: 23500,
     image: SolarImg,
     shortDescription:
-      "The Huasun Solar 610W Heterojunction Panel offers premium efficiency and performance using advanced HJT cell technology.",
+      "The HuaMadni Solar 610W Heterojunction Panel offers premium efficiency and performance using advanced HJT cell technology.",
     description: [
       "The Huasun 610W Panel uses heterojunction (HJT) technology for higher efficiency and lower temperature coefficient.",
       "It performs exceptionally well in high-temperature environments compared to conventional panels.",
@@ -235,7 +235,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with dual-glass design",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Huasun"],
+    categories: ["Madni Solar", "Solar Panels", "Huasun"],
   },
   {
     name: "Canadian Solar 550W Mono Panel",
@@ -256,7 +256,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with tempered glass",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Canadian"],
+    categories: ["Madni Solar", "Solar Panels", "Canadian"],
   },
   {
     name: "JA Solar 585W Mono Panel",
@@ -277,7 +277,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with tempered glass",
     ],
-    categories: ["Sun Solar", "Solar Panels", "JA Solar"],
+    categories: ["Madni Solar", "Solar Panels", "JA Solar"],
   },
   {
     name: "Ronma Solar 550W Mono Panel",
@@ -298,7 +298,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Durable outdoor-rated frame",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Ronma Solar"],
+    categories: ["Madni Solar", "Solar Panels", "Ronma Solar"],
   },
   {
     name: "Znshine Solar 555W Mono Panel",
@@ -319,7 +319,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Durable construction",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Znshine"],
+    categories: ["Madni Solar", "Solar Panels", "Znshine"],
   },
   {
     name: "Longi Solar 590W Mono Panel",
@@ -340,7 +340,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with tempered glass",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Longi"],
+    categories: ["Madni Solar", "Solar Panels", "Longi"],
   },
   {
     name: "Trina Solar 590W Mono Panel",
@@ -361,7 +361,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Strong durability with dual-glass design",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Trina Solar"],
+    categories: ["Madni Solar", "Solar Panels", "Trina Solar"],
   },
   {
     name: "Cora Dawn Solar 545W Mono Panel",
@@ -382,7 +382,7 @@ const solarPanelProducts = [
       "Low degradation & long lifespan",
       "Durable outdoor-rated frame",
     ],
-    categories: ["Sun Solar", "Solar Panels", "Cora Dawn"],
+    categories: ["Madni Solar", "Solar Panels", "Cora Dawn"],
   },
 ];
 

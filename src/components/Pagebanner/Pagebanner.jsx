@@ -1,7 +1,22 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Pagebanner.css";
 
-function PageBanner({ image, title, currentPage, parent }) {
+/*
+  Breadcrumb do tarah se diya ja sakta hai:
+
+    parent={{ name: "Inverters", to: "/inverters" }}      -> ek beech ka link
+    trail={[{ name, to }, { name, to }, ...]}             -> poora rasta
+
+  `trail` un pages ke liye hai jahan hierarchy gehri hai, jaise
+  Madni Solar / Inverters / Ongrid Inverters / Inverex / Single Phase.
+  Dono na do tou sirf "Madni Solar / <currentPage>" dikhta hai.
+*/
+function PageBanner({ image, title, currentPage, parent, trail }) {
+  // `parent` ko bhi ek crumb ki tarah treat kar lete hain, taake neeche ek hi
+  // loop se dono cases render ho jayen.
+  const crumbs = trail && trail.length > 0 ? trail : parent ? [parent] : [];
+
   return (
     <section className="page-banner">
       {/* Background image - different for every page, passed as a prop */}
@@ -14,22 +29,26 @@ function PageBanner({ image, title, currentPage, parent }) {
         {/* Title - different for every page */}
         <h1 className="page-banner-title">{title}</h1>
 
-        {/* Breadcrumb - "Home" is always a working link back to the home page */}
+        {/* Breadcrumb - "Madni Solar" is always a working link back home */}
         <p className="page-banner-breadcrumb">
-          <a href="/" className="page-banner-breadcrumb-link">
+          <Link to="/" className="page-banner-breadcrumb-link">
             Madni Solar
-          </a>
+          </Link>
           <span className="page-banner-breadcrumb-sep"> / </span>
 
-          {/* Optional beech ka link, jaise "Inverters" - sirf tab jab parent diya ho */}
-          {parent && (
-            <>
-              <a href={parent.to} className="page-banner-breadcrumb-link">
-                {parent.name}
-              </a>
+          {/* Beech ke saare links (Inverters / Ongrid Inverters / Inverex ...) */}
+          {crumbs.map((crumb) => (
+            <React.Fragment key={crumb.to || crumb.name}>
+              {crumb.to ? (
+                <Link to={crumb.to} className="page-banner-breadcrumb-link">
+                  {crumb.name}
+                </Link>
+              ) : (
+                <span className="page-banner-breadcrumb-current">{crumb.name}</span>
+              )}
               <span className="page-banner-breadcrumb-sep"> / </span>
-            </>
-          )}
+            </React.Fragment>
+          ))}
 
           <span className="page-banner-breadcrumb-current">{currentPage}</span>
         </p>

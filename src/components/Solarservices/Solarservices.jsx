@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Solarservices.css";
 import { FaLightbulb, FaHome, FaChargingStation, FaHandHoldingUsd, FaArrowRight } from "react-icons/fa";
 
@@ -85,9 +86,9 @@ function SolarServices() {
 
         {/* View all button */}
         <div className="view-all-wrapper flex justify-center">
-          <a href="/services">
+          <Link to="/services">
           <button className="view-all-btn">View All Services</button>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

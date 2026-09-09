@@ -121,7 +121,7 @@
   color: var(--theme-color);
   font-weight: 600;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   transition: color 0.2s ease;
   white-space: nowrap;
@@ -173,8 +173,20 @@
 
 .dropdown-wide {
   min-width: 480px;
-  background-color: #fff;
+  background-color: var(--theme-color);
   padding: 20px;
+}
+
+/* "Solar Panels" heading — dropdown ki poori width leta hai aur uska link
+   normal item styling (padding/hover fill) na le. */
+.dropdown-title-item {
+  list-style: none;
+}
+
+.dropdown-title-item .mega-title-link,
+.dropdown-title-item .mega-title-link:hover {
+  padding: 0;
+  background-color: transparent;
 }
 
 .dropdown-columns {
@@ -184,7 +196,7 @@
 }
 
 .dropdown-wide li a {
-  color: var(--theme-color);
+  color: #fff;
   padding: 6px 0;
   display: inline-flex;
   align-items: center;
@@ -194,12 +206,11 @@
 .dropdown-wide li a:hover {
   background-color: transparent;
   text-decoration: underline;
-  color: var(--theme-color) !important;
 }
 
 .bullet-icon {
-  color: #fff;
-  font-size: 12px;
+  color: var(--orange-dark);
+  font-size: 13px;
   flex-shrink: 0;
 }
 
@@ -228,8 +239,6 @@
   border-radius: 4px;
   animation: fadeIn 0.15s ease;
   z-index: 50;
-  max-height: 75vh;
-  overflow-y: auto;
 }
 
 .mega-menu-wide {
@@ -260,9 +269,20 @@
 .mega-grid {
   display: grid;
   gap: 0 30px;
+  align-items: start;
 }
 .mega-grid-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Inverters: Ongrid block (2 columns) chhota, Hybrid block (3 columns) bada */
+.mega-grid-inverters {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+}
+
+/* Batteries: Batteries block poori width, neeche do barabar groups */
+.mega-grid-batteries {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .mega-column {
@@ -274,6 +294,40 @@
   border-right: none;
 }
 
+/* ===== Grouped mega menu (Inverters / Batteries) =====
+   Ek group = ek category ka block. Divider sirf groups ke darmiyan aata hai,
+   group ke andar ki columns ke beech nahi — is liye UI saaf lagta hai. */
+.mega-group {
+  /* --mega-span inline style se aata hai (group.span) */
+  grid-column: span var(--mega-span, 1);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  padding-right: 30px;
+  min-width: 0;
+}
+  
+.mega-group:last-child,
+.mega-group-full {
+  border-right: none;
+  padding-right: 0;
+}
+
+/* Heading + uske items ka block */
+.mega-section {
+  min-width: 0;
+}
+
+.mega-section + .mega-section {
+  margin-top: 22px;
+}
+
+/* Ek section ke items ki columns — --mega-cols inline style se aata hai */
+.mega-section-columns {
+  display: grid;
+  grid-template-columns: repeat(var(--mega-cols, 1), minmax(0, 1fr));
+  gap: 0 30px;
+  align-items: start;
+}
+
 .mega-heading {
   color: var(--orange-dark);
   font-size: 18px;
@@ -283,6 +337,19 @@
 
 .mega-heading-spaced {
   margin-top: 18px;
+}
+
+/* Clickable mega menu headings (Ongrid / Hybrid Inverters) — heading ka
+   look same rakhte hain, sirf hover par underline aata hai. */
+.mega-heading-link {
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.mega-heading-link:hover,
+.mega-heading-link:focus-visible {
+  text-decoration: underline;
 }
 
 .mega-list,
@@ -301,7 +368,7 @@
 .mega-item a {
   color: #fff;
   text-decoration: none;
-  font-size: 13.5px;
+  font-size: 14px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -313,14 +380,13 @@
   font-size: 13px;
 }
 
-.mega-sublist .mega-item a::before {
-  content: "–";
-  color: var(--theme-color);
-  margin-right: 2px;
-}
-
-.mega-sublist .bullet-icon {
-  display: none;
+/* Sub-item ka dash icon (phases, HV/LV, models). Pehle ye CSS ka "–" character
+   tha jo theme-color hone ki wajah se navy background par nazar hi nahi aata
+   tha — ab ye asli icon hai aur orange mein clearly dikhta hai. */
+.sub-bullet-icon {
+  color: var(--orange-dark);
+  font-size: 9px;
+  flex-shrink: 0;
 }
 
 .mega-item a:hover {
@@ -442,6 +508,13 @@
   gap: 8px;
 }
 
+/* Mobile drawer ka background safed hai, is liye yahan sun icon ko orange
+   karte hain — warna white-on-white hone ki wajah se ghayab rehta hai aur
+   parent/sub ka farq samajh nahi aata. */
+.mobile-menu .bullet-icon {
+  color: var(--orange-dark);
+}
+
 .mobile-dropdown {
   list-style: none;
   margin: 10px 0 0 0;
@@ -458,6 +531,13 @@
   font-size: 13px;
   margin-top: 10px;
   text-transform: none;
+}
+
+/* Clickable mobile section heading (Ongrid / Hybrid Inverters) */
+.mobile-section-heading-link {
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
 }
 
 /* ===== Search Overlay ===== */
@@ -746,6 +826,31 @@
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     padding-bottom: 14px;
+  }
+
+  /* Chhoti screens par groups ek ke neeche ek — divider bhi horizontal ho jata
+     hai, aur har section ke items 2 columns mein sikud jate hain. */
+  .mega-grid-inverters,
+  .mega-grid-batteries {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 20px;
+  }
+
+  .mega-group {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-right: 0;
+    padding-bottom: 16px;
+  }
+
+  .mega-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .mega-section-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

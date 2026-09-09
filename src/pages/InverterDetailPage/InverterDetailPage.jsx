@@ -6,6 +6,8 @@ import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import { useCart } from "../../context/CartContext";
 import inverterProducts from "../../data/inverterProducts";
+import { getInverterTrail, findCategoryForSlug } from "../../data/inverterMenu";
+import { buildQuoteLink } from "../../data/findProduct";
 import "./InverterDetailPage.css";
 
 // Default fallback image used when a product has no image of its own.
@@ -15,9 +17,10 @@ import heroBanner from "../../assets/hero-banner.webp";
 const WHATSAPP_NUMBER = "923111666677";
 
 // Mirrors the Solar Panels ProductDetailPage exactly, but for inverter data.
-function InverterDetailPage() {
-  // URL se brandSlug + productSlug nikalo,
-  // e.g. /inverters/goodwe/goodwe -> brandSlug "goodwe", productSlug "goodwe"
+// `categorySlug` route se aata hai, e.g.
+// /inverters/ongrid-inverters/inverex-single-phase/inverex-single-phase
+function InverterDetailPage({ categorySlug }) {
+  // URL se brandSlug + productSlug nikalo
   const { brandSlug, productSlug } = useParams();
 
   // Data file mein matching product dhoondo (brand + product dono match honi chahiye)
@@ -44,6 +47,23 @@ function InverterDetailPage() {
     );
   }
 
+  // Breadcrumb: Madni Solar / Inverters / <Category> / [<Parent> /] <Item> / <Product>
+  const activeCategory = categorySlug || findCategoryForSlug(brandSlug);
+  const trail = getInverterTrail(activeCategory, brandSlug);
+
+  const crumbs = [{ name: "Inverters", to: "/inverters" }];
+  if (trail) {
+    const categoryPath = `/inverters/${trail.category.slug}`;
+    crumbs.push({ name: trail.category.name, to: categoryPath });
+    if (trail.parent) {
+      crumbs.push({
+        name: trail.parent.name,
+        to: `${categoryPath}/${trail.parent.slug}`,
+      });
+    }
+    crumbs.push({ name: trail.item.name, to: `${categoryPath}/${trail.item.slug}` });
+  }
+
   return (
     <div>
       <Navbar />
@@ -51,6 +71,7 @@ function InverterDetailPage() {
       <PageBanner
         image={product.image || heroBanner}
         title={product.name}
+        trail={crumbs}
         currentPage={product.name}
       />
 
@@ -102,7 +123,7 @@ function InverterDetailPage() {
                   Add to Basket
                 </button>
                 <Link
-                  to={`/request-quote?product=${encodeURIComponent(product.name)}`}
+                  to={buildQuoteLink(product, quantity)}
                   className="product-btn btn-quote"
                 >
                   Add to Quote

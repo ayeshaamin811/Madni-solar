@@ -1,0 +1,118 @@
+/* ===== Inverter category page (Ongrid / Hybrid) ===== */
+.inverter-category-content {
+  padding: 50px 40px;
+}
+
+/* Short intro paragraph under the banner */
+.inverter-category-intro {
+  color: #555555;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 900px;
+  margin-bottom: 26px;
+}
+
+/* "Showing X results" text */
+.inverter-category-results-text {
+  color: #666666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* No products fallback message */
+.inverter-category-no-products-text {
+  color: #666666;
+  font-size: 15px;
+  padding: 40px 0;
+}
+
+/* Not found message (invalid category slug) */
+.inverter-category-not-found {
+  padding: 80px 20px;
+  text-align: center;
+  color: #666666;
+  font-size: 16px;
+}
+
+/* ===== Sections (e.g. "Ongrid Inverters" + "Batteryless PV Inverters") ===== */
+.inverter-category-section + .inverter-category-section {
+  margin-top: 50px;
+}
+
+.inverter-category-section-title {
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+/* ===== Product grid ===== */
+.inverter-category-product-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.inverter-category-product-card {
+  display: block;
+  border: 1px solid #eeeeee;
+  border-radius: 6px;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.inverter-category-product-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.inverter-category-product-card-image {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.inverter-category-product-card-title {
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.inverter-category-product-card-price {
+  color: #e07b1a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ===== Responsive design ===== */
+@media (max-width: 1024px) {
+  .inverter-category-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .inverter-category-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .inverter-category-content {
+    padding: 30px 20px;
+  }
+
+  .inverter-category-section-title {
+    font-size: 19px;
+  }
+
+  .inverter-category-product-grid {
+    grid-template-columns: 1fr;
+  }
+}
