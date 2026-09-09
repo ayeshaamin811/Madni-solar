@@ -501,7 +501,7 @@ const Navbar = () => {
               onMouseEnter={() => setOpenMenu("products")}
               onMouseLeave={() => setOpenMenu(null)}
             >
-              <span className="nav-link">Products <FaChevronDown className="chevron" /></span>
+              <span className="nav-link">Accessories <FaChevronDown className="chevron" /></span>
               {openMenu === "products" && (
                 <div className="mega-menu mega-menu-products">
                   <Link
@@ -509,7 +509,7 @@ const Navbar = () => {
                     className="mega-title-link"
                     onClick={() => setOpenMenu(null)}
                   >
-                    <h3 className="mega-title">Products</h3>
+                    <h3 className="mega-title">Other Products</h3>
                   </Link>
                   <div className="mega-grid mega-grid-products">
                     {renderMegaGroups(productsMenu, "prd", renderProductItems, 2, "/products")}
