@@ -178,30 +178,19 @@
   margin-bottom: 22px;
 }
 
-.description-list {
-  list-style: none;
+/* Description ek hi block hai (baad mein backend se aayegi), is liye yahan
+   bullets nahi — sirf paragraph(s). Ek se zyada paragraph ho tou unke darmiyan
+   gap aa jata hai. */
+.description-text {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.description-item {
+.description-paragraph {
   color: #555555;
   font-size: 15px;
   line-height: 1.7;
-  padding-left: 22px;
-  position: relative;
-}
-
-.description-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 10px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #e07b1a;
 }
 
 /* ===== Why Choose section ===== */

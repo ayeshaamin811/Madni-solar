@@ -44,6 +44,15 @@ function ProductDetailPage() {
     );
   }
 
+  // Description ek hi block hai — bullets ki jagah paragraph(s) mein dikhti hai.
+  // Backend se aage ek single string aayegi, is liye string aur paragraphs ki
+  // array — dono chal jati hain.
+  const descriptionParagraphs = Array.isArray(product.description)
+    ? product.description
+    : product.description
+    ? [product.description]
+    : [];
+
   return (
     <div>
       <Navbar />
@@ -131,19 +140,17 @@ function ProductDetailPage() {
           </div>
 
           {/* ===== Description section ===== */}
-          {product.description && product.description.length > 0 && (
+          {descriptionParagraphs.length > 0 && (
             <section className="description-section">
-              <>
-                <hr className="section-divider" />
-                <h2 className="description-title">Description</h2>
-                <ul className="description-list">
-                  {product.description.map((paragraph, index) => (
-                    <li key={index} className="description-item">
-                      {paragraph}
-                    </li>
-                  ))}
-                </ul>
-              </>
+              <hr className="section-divider" />
+              <h2 className="description-title">Description</h2>
+              <div className="description-text">
+                {descriptionParagraphs.map((paragraph, index) => (
+                  <p key={index} className="description-paragraph">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             </section>
           )}
 
