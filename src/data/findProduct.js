@@ -4,11 +4,15 @@
 // isi liye page refresh ya shared link par bhi quote wala product zinda rehta hai.
 import solarPanelProducts from "./solarProducts";
 import inverterProducts from "./inverterProducts";
+import productItems from "./productItems";
 
 // Har product ke saath uska type rakho taake quote page category dikha sake.
+// productItems ke slugs category ke saath prefixed hain ("packages-huawei"),
+// is liye ye kisi inverter/panel slug se takrate nahi.
 const allProducts = [
   ...solarPanelProducts.map((product) => ({ ...product, type: "solar-panel" })),
   ...inverterProducts.map((product) => ({ ...product, type: "inverter" })),
+  ...productItems.map((product) => ({ ...product, type: "product" })),
 ];
 
 // slug (aur agar diya ho to brandSlug) se matching product return karta hai.

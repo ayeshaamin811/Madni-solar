@@ -27,7 +27,12 @@ import InverterCategoryPage from "./pages/InverterCategoryPage/InverterCategoryP
 import InverterBrandPage from "./pages/InverterBrandPage/InverterBrandPage";
 import InverterDetailPage from "./pages/InverterDetailPage/InverterDetailPage";
 import BatteriesPage from "./pages/BatteriesPage/BatteriesPage";
+import ProductsCatalogPage from "./pages/ProductsCatalogPage/ProductsCatalogPage";
+import ProductCategoryPage from "./pages/ProductCategoryPage/ProductCategoryPage";
+import ProductItemPage from "./pages/ProductItemPage/ProductItemPage";
+import ProductItemDetailPage from "./pages/ProductItemDetailPage/ProductItemDetailPage";
 import inverterCategories from "./data/inverterCategories";
+import productCategories from "./data/productCategories";
 
 
 function App() {
@@ -84,6 +89,42 @@ function App() {
         <Route path="/inverters/:brandSlug" element={<InverterBrandPage />} />
         <Route path="/inverters/:brandSlug/:productSlug" element={<InverterDetailPage />} />
         <Route path="/batteries" element={<BatteriesPage />} />
+
+        {/* ===== Products (navbar ka Products mega menu) =====
+            Inverters jaisa hi teen-tier layout:
+
+              /products                                        -> saare products
+              /products/packages                               -> category page
+              /products/packages/:itemSlug                     -> item page
+              /products/packages/:itemSlug/:productSlug        -> detail page
+
+            Category segment static hai (productCategories se generate hoti
+            hai), is liye ye neeche waale flat routes se pehle match hoti hai. */}
+        <Route path="/products" element={<ProductsCatalogPage />} />
+
+        {productCategories.map((category) => (
+          <React.Fragment key={category.slug}>
+            <Route
+              path={`/products/${category.slug}`}
+              element={<ProductCategoryPage categorySlug={category.slug} />}
+            />
+            <Route
+              path={`/products/${category.slug}/:itemSlug`}
+              element={<ProductItemPage categorySlug={category.slug} />}
+            />
+            <Route
+              path={`/products/${category.slug}/:itemSlug/:productSlug`}
+              element={<ProductItemDetailPage categorySlug={category.slug} />}
+            />
+          </React.Fragment>
+        ))}
+
+        {/* Category ke baghair flat URLs — breadcrumb khud category dhoond leta hai. */}
+        <Route path="/products/:itemSlug" element={<ProductItemPage />} />
+        <Route
+          path="/products/:itemSlug/:productSlug"
+          element={<ProductItemDetailPage />}
+        />
         <Route path="/blog" element={<BlogPage />} />
         {/* /solar-panels par saare panels ki listing (Inverters page jaisi) */}
         <Route path="/solar-panels" element={<SolarPanelsPage />} />

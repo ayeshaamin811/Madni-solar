@@ -225,7 +225,7 @@
   }
 }
 
-/* ===== Mega Menu (Inverters / Batteries) ===== */
+/* ===== Mega Menu (Inverters / Products / Batteries) ===== */
 .mega-menu {
   position: absolute;
   top: 100%;
@@ -244,6 +244,16 @@
 .mega-menu-wide {
   min-width: 1000px;
   max-width: 1200px;
+}
+
+/* Products menu Inverters/Batteries se chhota hai (do columns) aur nav mein
+   thoda daayen hota hai — is liye isay nav item ke right edge se align karte
+   hain, taake screen se bahar na nikle. */
+.mega-menu-products {
+  left: 0;
+  right: 0;
+  min-width: 640px;
+  max-width: 760px;
 }
 
 .mega-title {
@@ -285,6 +295,12 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+/* Products: do barabar groups — Installation Accessories + Packages | Product
+   Accessories + VFDs */
+.mega-grid-products {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .mega-column {
   border-right: 1px solid rgba(255, 255, 255, 0.15);
   padding-right: 20px;
@@ -294,7 +310,7 @@
   border-right: none;
 }
 
-/* ===== Grouped mega menu (Inverters / Batteries) =====
+/* ===== Grouped mega menu (Inverters / Products / Batteries) =====
    Ek group = ek category ka block. Divider sirf groups ke darmiyan aata hai,
    group ke andar ki columns ke beech nahi — is liye UI saaf lagta hai. */
 .mega-group {
@@ -817,6 +833,11 @@
     max-width: 90vw;
   }
 
+  .mega-menu-products {
+    min-width: 520px;
+    max-width: 90vw;
+  }
+
   .mega-grid-4 {
     grid-template-columns: repeat(2, 1fr);
     row-gap: 20px;
@@ -831,7 +852,8 @@
   /* Chhoti screens par groups ek ke neeche ek — divider bhi horizontal ho jata
      hai, aur har section ke items 2 columns mein sikud jate hain. */
   .mega-grid-inverters,
-  .mega-grid-batteries {
+  .mega-grid-batteries,
+  .mega-grid-products {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 20px;
   }

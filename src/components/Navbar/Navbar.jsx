@@ -4,6 +4,7 @@ import logo from "../../assets/project-logo.png";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import invertersMenu, { slugifyInverter } from "../../data/inverterMenu";
+import productsMenu, { slugifyProduct } from "../../data/productsMenu";
 
 // Professional icon set from react-icons (install: npm i react-icons)
 import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaSun, FaMinus } from "react-icons/fa";
@@ -21,10 +22,11 @@ const solarPanelsMenu = [
   "Mesol Alpha", "Longi", "Osda", "Trina Solar", "Tongwei", "Cora Dawn",
 ];
 
-// ===== Mega menu shape (Inverters + Batteries) =====
-// Inverters ki tree ab src/data/inverterMenu.js mein hai (Navbar, category
-// pages aur breadcrumbs — teenon wahin se banti hain). Batteries ka data neeche
-// isi shape mein hai:
+// ===== Mega menu shape (Inverters + Products + Batteries) =====
+// Inverters ki tree src/data/inverterMenu.js mein hai aur Products ki
+// src/data/productsMenu.js mein (dono jagah Navbar, category pages aur
+// breadcrumbs — teenon wahin se banti hain). Batteries ka data neeche isi
+// shape mein hai:
 //
 //   group   -> ek category ka block; `span` = menu grid ki kitni tracks leta hai
 //              (1 = apni jagah, 2 = poori width); groups ke darmiyan divider.
@@ -69,43 +71,6 @@ const batteriesMenu = [
             "Max Power", "Hoymiles", "Auxsol",
           ],
         ],
-      },
-    ],
-  },
-];
-
-// "Other Products" is shown alongside Batteries in the same mega menu — do
-// groups, har group ke andar apni do headings (main + choti wali).
-const otherProductsMenu = [
-  {
-    span: 1,
-    sections: [
-      {
-        heading: "Installation Accessories",
-        columns: [
-          [
-            { name: "Cables", sub: [{ name: "Nafees Cables", sub: ["DC Cables", "AC Cables"] }] },
-            "Structure", "Installation Labor", "Civil Works", "D.B Box with Breakers",
-            "Supporting Items",
-          ],
-        ],
-      },
-      {
-        heading: "Packages",
-        columns: [["Huawei", "Solis", "Goodwe"]],
-      },
-    ],
-  },
-  {
-    span: 1,
-    sections: [
-      {
-        heading: "Product Accessories",
-        columns: [["Sungrow", "BYD", "Pylontech", "Luminey", "Fox", "Solis", "Huawei"]],
-      },
-      {
-        heading: "VFDs",
-        columns: [["Invent", "INVT (Original)"]],
       },
     ],
   },
@@ -163,7 +128,8 @@ const renderItems = (items, keyPrefix, opts = {}) => {
 // Ek group = ek category ka block (heading + uske items ki columns). Groups ke
 // darmiyan vertical divider aata hai, aur group `span` ke mutabiq menu grid ki
 // columns leta hai. `renderer` batata hai ke items kaise banenge —
-// renderInverterItems (brand pages ke links) ya renderItems (baaki menus).
+// renderInverterItems / renderProductItems (apne apne pages ke links) ya
+// renderItems (baaki menus).
 // ============================================================================
 
 // Section heading: `to` ho tou clickable link, warna plain text.
@@ -180,8 +146,9 @@ const renderMegaHeading = (heading, to, spaced) => (
 );
 
 // `totalCols` = mega grid ki kul tracks. Jo group poori width leta hai uska
-// right divider hata dete hain, warna menu ke kinare par ek bekaar line aa jati hai.
-const renderMegaGroups = (groups, keyPrefix, renderer, totalCols) =>
+// right divider hata dete hain, warna menu ke kinare par ek bekaar line aa jati
+// hai. `basePath` se heading ka link banta hai (/inverters ya /products).
+const renderMegaGroups = (groups, keyPrefix, renderer, totalCols, basePath = "/inverters") =>
   groups.map((group, groupIndex) => (
     <div
       className={`mega-group${group.span === totalCols ? " mega-group-full" : ""}`}
@@ -193,7 +160,7 @@ const renderMegaGroups = (groups, keyPrefix, renderer, totalCols) =>
           {section.heading &&
             renderMegaHeading(
               section.heading,
-              section.categorySlug ? `/inverters/${section.categorySlug}` : undefined,
+              section.categorySlug ? `${basePath}/${section.categorySlug}` : undefined,
               sectionIndex > 0
             )}
 
@@ -220,53 +187,66 @@ const renderMegaGroups = (groups, keyPrefix, renderer, totalCols) =>
   ));
 
 // ============================================================================
-// INVERTER MENU HELPERS (per-brand pages)
+// LINKED MENU HELPERS (Inverters + Products — per-item pages)
 // ----------------------------------------------------------------------------
-// Har brand (aur uske nested phase/model sub-items) apni page par jata hai:
+// Har item (aur uske nested sub-items) apni page par jata hai:
 //
 //   /inverters/<categorySlug>/<brandSlug>
+//   /products/<categorySlug>/<itemSlug>
 //
 // Category URL mein hone ki wajah se breadcrumb poora ban jata hai —
-// "Madni Solar / Inverters / Ongrid Inverters / Inverex / Single Phase" — aur
-// jo brand ek se zyada category mein hai (Goodwe, Knox, ZIEWNIC) uska bhi pata
-// chal jata hai ke user kis category se aaya tha.
+// "Madni Solar / Inverters / Ongrid Inverters / Inverex / Single Phase", ya
+// "Madni Solar / Products / Installation Accessories / Cables / Nafees Cables"
+// — aur jo item ek se zyada category mein hai (Goodwe, Knox, Huawei) uska bhi
+// pata chal jata hai ke user kis category se aaya tha.
 //
 // Jis item par explicit `to` ho ("All Brands with Capacity (kW)") wo apni hi
-// destination rakhta hai. Ye helper sirf Inverters menu ke liye hai (desktop +
-// mobile) — Batteries aur baaki menus plain renderItems use karte hain.
+// destination rakhta hai. Batteries aur baaki menus (jinki abhi pages nahi
+// hain) plain renderItems use karte hain.
+//
+// Dono menus ka logic ek hi hai, bas base path aur slug rule alag — is liye ek
+// factory se dono renderers bana lete hain (desktop + mobile, dono jagah).
 // ============================================================================
-const renderInverterItems = (items, keyPrefix, opts = {}) => {
-  const { categorySlug, parentSlug, depth = 0 } = opts;
-  return items.map((item, index) => {
-    const isObject = typeof item === "object";
-    const label = isObject ? item.name : item;
-    const key = `${keyPrefix}-${index}`;
+const makeLinkedItemRenderer = (basePath, slugifyName) => {
+  const render = (items, keyPrefix, opts = {}) => {
+    const { categorySlug, parentSlug, depth = 0 } = opts;
+    return items.map((item, index) => {
+      const isObject = typeof item === "object";
+      const label = isObject ? item.name : item;
+      const key = `${keyPrefix}-${index}`;
 
-    // Slugs follow the same rule as the inverter data (title slugified to kebab).
-    const ownSlug = parentSlug
-      ? `${parentSlug}-${slugifyInverter(label)}`
-      : slugifyInverter(label);
+      // Slugs follow the same rule as the data files (title slugified to kebab,
+      // nested items parent ke slug ke saath jud kar).
+      const ownSlug = parentSlug
+        ? `${parentSlug}-${slugifyName(label)}`
+        : slugifyName(label);
 
-    const to = isObject && item.to ? item.to : `/inverters/${categorySlug}/${ownSlug}`;
+      const to = isObject && item.to ? item.to : `${basePath}/${categorySlug}/${ownSlug}`;
 
-    return (
-      <li key={key} className="mega-item">
-        <Link to={to}>
-          {bulletFor(depth)} {label}
-        </Link>
-        {isObject && item.sub && (
-          <ul className="mega-sublist">
-            {renderInverterItems(item.sub, key, {
-              categorySlug,
-              parentSlug: ownSlug,
-              depth: depth + 1,
-            })}
-          </ul>
-        )}
-      </li>
-    );
-  });
+      return (
+        <li key={key} className="mega-item">
+          <Link to={to}>
+            {bulletFor(depth)} {label}
+          </Link>
+          {isObject && item.sub && (
+            <ul className="mega-sublist">
+              {render(item.sub, key, {
+                categorySlug,
+                parentSlug: ownSlug,
+                depth: depth + 1,
+              })}
+            </ul>
+          )}
+        </li>
+      );
+    });
+  };
+
+  return render;
 };
+
+const renderInverterItems = makeLinkedItemRenderer("/inverters", slugifyInverter);
+const renderProductItems = makeLinkedItemRenderer("/products", slugifyProduct);
 
 // Simple Navbar component with a top info bar and a main nav bar.
 // The top bar hides on scroll down, and the main nav sticks to the top.
@@ -292,9 +272,9 @@ const Navbar = () => {
   // Global cart state (items, count, subtotal and action helpers)
   const { cartItems, cartCount, subtotal, removeFromBasket } = useCart();
 
-  // Mobile mega-menu ki section heading. Agar `to` diya ho (Ongrid / Batteryless
-  // PV / Hybrid) tou clickable link banti hai jo apni category page kholti hai
-  // aur mobile drawer band kar deti hai; warna plain text rehti hai.
+  // Mobile mega-menu ki section heading. Agar `to` diya ho (Ongrid / Hybrid /
+  // Packages / VFDs ...) tou clickable link banti hai jo apni category page
+  // kholti hai aur mobile drawer band kar deti hai; warna plain text rehti hai.
   const renderMobileHeading = (heading, to, key) => (
     <li className="mobile-section-heading" key={key}>
       {to ? (
@@ -314,7 +294,7 @@ const Navbar = () => {
   // Mobile par wahi groups/sections dikhte hain jo desktop mega menu mein hain,
   // bas columns ko flatten kar ke ek hi list bana dete hain (mobile view ke
   // hisaab se) — heading, phir us section ke saare items, phir agla section.
-  const renderMobileGroups = (groups, keyPrefix, renderer) =>
+  const renderMobileGroups = (groups, keyPrefix, renderer, basePath = "/inverters") =>
     groups.flatMap((group, groupIndex) =>
       group.sections.map((section, sectionIndex) => {
         const key = `${keyPrefix}-g${groupIndex}-s${sectionIndex}`;
@@ -323,7 +303,7 @@ const Navbar = () => {
             {section.heading &&
               renderMobileHeading(
                 section.heading,
-                section.categorySlug ? `/inverters/${section.categorySlug}` : undefined,
+                section.categorySlug ? `${basePath}/${section.categorySlug}` : undefined,
                 `${key}-h`
               )}
             {renderer(section.columns.flat(), key, {
@@ -511,8 +491,28 @@ const Navbar = () => {
                   </Link>
                   <div className="mega-grid mega-grid-batteries">
                     {renderMegaGroups(batteriesMenu, "bat", renderItems, 2)}
-                    <div className="mega-divider" />
-                    {renderMegaGroups(otherProductsMenu, "other", renderItems, 2)}
+                  </div>
+                </div>
+              )}
+            </li>
+
+            <li
+              className="nav-item has-dropdown"
+              onMouseEnter={() => setOpenMenu("products")}
+              onMouseLeave={() => setOpenMenu(null)}
+            >
+              <span className="nav-link">Products <FaChevronDown className="chevron" /></span>
+              {openMenu === "products" && (
+                <div className="mega-menu mega-menu-products">
+                  <Link
+                    to="/products"
+                    className="mega-title-link"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    <h3 className="mega-title">Products</h3>
+                  </Link>
+                  <div className="mega-grid mega-grid-products">
+                    {renderMegaGroups(productsMenu, "prd", renderProductItems, 2, "/products")}
                   </div>
                 </div>
               )}
@@ -712,7 +712,19 @@ const Navbar = () => {
           {openMenu === "batteries" && (
             <ul className="mobile-dropdown">
               {renderMobileGroups(batteriesMenu, "m-bat", renderItems)}
-              {renderMobileGroups(otherProductsMenu, "m-other", renderItems)}
+            </ul>
+          )}
+        </li>
+
+        <li onClick={() => toggleMenu("products")}>
+          <div className="mobile-nav-row">
+            <span>Products</span>
+            <FaChevronDown className="chevron" />
+          </div>
+          {openMenu === "products" && (
+            <ul className="mobile-dropdown">
+              {renderMobileHeading("All Products", "/products", "m-prd-all")}
+              {renderMobileGroups(productsMenu, "m-prd", renderProductItems, "/products")}
             </ul>
           )}
         </li>
