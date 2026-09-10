@@ -1,33 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
-import solarPanelBrands from "../../data/solarPanelBrands";
-import solarPanelProducts from "../../data/solarProducts";
+import { getSolarPanelBrands, getSolarPanelProducts } from "../../api/solarPanels";
 import "./SolarPanelBrandPage.css";
 
-// ===== Default banner (used when a brand has no image below) =====
+// Default banner — brand ki apni image na ho (ya abhi load ho rahi ho) tou yehi dikhta hai.
 import heroBanner from "../../assets/hero-banner.webp";
-
-// ===== Per-brand banner images =====
-// Jab kisi brand ki image mil jaye, bas 2 kaam karo:
-// 1. Yahan ek naya import add karo
-// 2. Neeche brandImageMap mein us brand ka slug: importedImage add karo
-// import jaSolarImg from "../../assets/brands/ja-solar.webp";
-
-const brandImageMap = {
-  // "ja-solar": jaSolarImg,
-};
-
-// Product ki apni image na ho tou (product.image khaali ho) heroBanner fallback use hoga.
 
 function SolarPanelBrandPage() {
   // URL se brandSlug nikalo, e.g. /solar-panels/ja-solar -> "ja-solar"
   const { brandSlug } = useParams();
 
-  // Data file mein matching brand dhoondo
-  const brand = solarPanelBrands.find((b) => b.slug === brandSlug);
+  const [brand, setBrand] = useState(null);
+  const [brandProducts, setBrandProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    Promise.all([getSolarPanelBrands(), getSolarPanelProducts(brandSlug)])
+      .then(([brands, products]) => {
+        if (cancelled) return;
+        setBrand(brands.find((b) => b.slug === brandSlug) || null);
+        setBrandProducts(products);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [brandSlug]);
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="brand-not-found">
+          <p>Loading...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   // Agar brand na mile (galat slug), simple message dikhao
   if (!brand) {
@@ -42,13 +61,7 @@ function SolarPanelBrandPage() {
     );
   }
 
-  // Is brand ki image map mein mile tou wahi use karo, warna default heroBanner
-  const bannerImage = brandImageMap[brand.slug] || heroBanner;
-
-  // Sirf isi brand ke products nikalo
-  const brandProducts = solarPanelProducts.filter(
-    (product) => product.brandSlug === brand.slug
-  );
+  const bannerImage = brand.image || heroBanner;
 
   return (
     <div>

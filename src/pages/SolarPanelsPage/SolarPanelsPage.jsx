@@ -1,16 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import heroBanner from "../../assets/hero-banner.webp";
-import solarPanelProducts from "../../data/solarProducts";
+import { getSolarPanelProducts } from "../../api/solarPanels";
 import "./SolarPanelsPage.css";
 
 // Inverters page ka exact same pattern — Navbar + PageBanner + product cards ka
-// grid + Footer. Sirf data source (solarProducts) aur route prefix
-// (/solar-panels/<brandSlug>/<productSlug>) mukhtalif hain.
+// grid + Footer. Sirf data source (ab backend API, src/api/solarPanels.js) aur
+// route prefix (/solar-panels/<brandSlug>/<productSlug>) mukhtalif hain.
 function SolarPanelsPage() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getSolarPanelProducts()
+      .then((data) => {
+        if (!cancelled) setProducts(data);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -23,17 +42,19 @@ function SolarPanelsPage() {
 
       <section className="solar-panels-content">
         <div className="container">
-          {solarPanelProducts.length > 0 ? (
+          {loading ? (
+            <p className="solar-panels-no-products-text">Loading solar panels...</p>
+          ) : products.length > 0 ? (
             <>
               <p className="solar-panels-results-text">
                 Showing{" "}
-                {solarPanelProducts.length === 1
+                {products.length === 1
                   ? "the single result"
-                  : `all ${solarPanelProducts.length} results`}
+                  : `all ${products.length} results`}
               </p>
 
               <div className="solar-panels-product-grid grid">
-                {solarPanelProducts.map((product) => (
+                {products.map((product) => (
                   <Link
                     key={product.slug}
                     to={`/solar-panels/${product.brandSlug}/${product.slug}`}

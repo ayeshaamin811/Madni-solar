@@ -10,7 +10,6 @@ import AboutPage from './pages/AboutPage/AboutPage';
 import TeamPage from './pages/TeamPage/TeamPage';
 import ServicesPage from './pages/ServicesPage/ServicesPage';
 import ProjectsPage from './pages/ProjectsPage/ProjectsPage';
-import LoginRegister from './pages/Loginregister/Loginregister';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import SendRequest from './pages/RequestQuote/RequestQuote';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
@@ -27,10 +26,13 @@ import InverterCategoryPage from "./pages/InverterCategoryPage/InverterCategoryP
 import InverterBrandPage from "./pages/InverterBrandPage/InverterBrandPage";
 import InverterDetailPage from "./pages/InverterDetailPage/InverterDetailPage";
 import BatteriesPage from "./pages/BatteriesPage/BatteriesPage";
+import BatteryBrandPage from "./pages/BatteryBrandPage/BatteryBrandPage";
+import BatteryDetailPage from "./pages/BatteryDetailPage/BatteryDetailPage";
 import ProductsCatalogPage from "./pages/ProductsCatalogPage/ProductsCatalogPage";
 import ProductCategoryPage from "./pages/ProductCategoryPage/ProductCategoryPage";
 import ProductItemPage from "./pages/ProductItemPage/ProductItemPage";
 import ProductItemDetailPage from "./pages/ProductItemDetailPage/ProductItemDetailPage";
+import CalculatorPage from "./pages/CalculatorPage/CalculatorPage";
 import inverterCategories from "./data/inverterCategories";
 import productCategories from "./data/productCategories";
 
@@ -50,23 +52,14 @@ function App() {
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/our-projects" element={<ProjectsPage />} />
-        <Route path="/orders" element={<LoginRegister />} />
         <Route path="/request-quote" element={<SendRequest />} />
+        <Route path="/calculator" element={<CalculatorPage />} />
         <Route path="/our-products" element={<ProductsPage />} />
         <Route path="/careers" element={<Career />} />
         <Route path="/policy-trading" element={<PolicyTrading />} />
         <Route path="/inverters" element={<InvertersPage />} />
 
-        {/* ===== Inverter category routes =====
-            Har category ke teen routes bante hain:
 
-              /inverters/ongrid-inverters                    -> category page
-              /inverters/ongrid-inverters/:brandSlug         -> brand page
-              /inverters/ongrid-inverters/:brandSlug/:productSlug -> detail page
-
-            Category segment static hai (data se generate hoti hai), is liye ye
-            neeche waale purane dynamic routes se pehle match hoti hain — React
-            Router static segments ko priority deta hai. */}
         {inverterCategories.map((category) => (
           <React.Fragment key={category.slug}>
             <Route
@@ -88,18 +81,13 @@ function App() {
             hain; category pata na ho tou breadcrumb khud dhoond leta hai. */}
         <Route path="/inverters/:brandSlug" element={<InverterBrandPage />} />
         <Route path="/inverters/:brandSlug/:productSlug" element={<InverterDetailPage />} />
+
         <Route path="/batteries" element={<BatteriesPage />} />
-
-        {/* ===== Products (navbar ka Products mega menu) =====
-            Inverters jaisa hi teen-tier layout:
-
-              /products                                        -> saare products
-              /products/packages                               -> category page
-              /products/packages/:itemSlug                     -> item page
-              /products/packages/:itemSlug/:productSlug        -> detail page
-
-            Category segment static hai (productCategories se generate hoti
-            hai), is liye ye neeche waale flat routes se pehle match hoti hai. */}
+        <Route path="/batteries/:brandSlug" element={<BatteryBrandPage />} />
+        <Route
+          path="/batteries/:brandSlug/:productSlug"
+          element={<BatteryDetailPage />}
+        />
         <Route path="/products" element={<ProductsCatalogPage />} />
 
         {productCategories.map((category) => (

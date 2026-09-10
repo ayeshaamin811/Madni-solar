@@ -210,6 +210,7 @@
 
 .bullet-icon {
   color: var(--orange-dark);
+  transform: rotate(20deg);
   font-size: 13px;
   flex-shrink: 0;
 }
@@ -429,7 +430,20 @@
   display: inline-flex;
 }
 
+/* Login / Register icon — modal kholta hai (pehle /orders page tha) */
+.account-btn {
+  font-size: 18px;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: none;
+}
+
+.account-btn:hover {
+  color: var(--orange-dark);
+  transform: scale(1.1);
+}
+
 .calculator-btn {
+  display: inline-block;
   background-color: var(--theme-color);
   color: var(--white);
   border: none;
@@ -438,6 +452,7 @@
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.5px;
+  text-decoration: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
   white-space: nowrap;
@@ -524,11 +539,28 @@
   gap: 8px;
 }
 
-/* Mobile drawer ka background safed hai, is liye yahan sun icon ko orange
-   karte hain — warna white-on-white hone ki wajah se ghayab rehta hai aur
-   parent/sub ka farq samajh nahi aata. */
+
 .mobile-menu .bullet-icon {
   color: var(--orange-dark);
+}
+
+.mobile-account-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.mobile-account-icon {
+  color: var(--orange-dark);
+  font-size: 13px;
 }
 
 .mobile-dropdown {

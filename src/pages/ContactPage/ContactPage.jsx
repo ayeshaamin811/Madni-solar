@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import ContactBannerImg from "../../assets/hero-banner.webp";
+import { sendContactMessage, parseContactError } from "../../api/contact";
 import "../ContactPage/ContactPage.css"
 import {
   FaPhoneAlt,
@@ -15,14 +16,25 @@ import {
 } from "react-icons/fa";
 
 function ContactPage() {
-  const [formData, setFormData] = useState({
+  const EMPTY_FORM = {
     name: "",
     email: "",
     phone: "",
     subject: "",
     message: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
+  };
+
+  const [formData, setFormData] = useState(EMPTY_FORM);
+
+  // Pehle sirf `submitted` boolean tha, is liye API fail hone par bhi
+  // "Thank you!" dikh jata tha. Ab chaar states: idle | sending | success | error
+  const [status, setStatus] = useState("idle");
+
+  // Field-wise errors server se ({ email: "Enter a valid email address." })
+  const [errors, setErrors] = useState({});
+
+  // Form ke upar dikhne wala error (network / throttle / server)
+  const [formError, setFormError] = useState("");
 
   // The office address - kept in one place so the text, map query,
   // and directions link always stay in sync
@@ -31,14 +43,76 @@ function ContactPage() {
   const mapQueryAddress = "Johar Town, Lahore, Pakistan";
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // User dobara type kare tou us field ka purana error hata do — warna
+    // theek karne ke baad bhi red text chipka rehta hai.
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // In a real app you would POST formData to your API here.
+  // Server ke serializer jaise hi rules, client par. Maqsad ye hai ke aam
+  // ghaltiyan server tak jayen hi na — DRF ka throttle (5/hour per IP) 400
+  // responses ko bhi ginta hai, is liye har fail hui koshish ek slot kha jati
+  // hai. `minLength` attribute jaan-boojh kar use nahi kiya: browser usay
+  // chhote tooltip ke saath chup-chaap block karta hai, aur user ko lagta hai
+  // form toota hua hai. Ye errors wahi red text dikhate hain jo server ke.
+  const validate = (data) => {
+    const found = {};
 
-    setSubmitted(true);
+    if (data.name.trim().length < 2) {
+      found.name = "Please enter your full name.";
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+      found.email = "Enter a valid email address.";
+    }
+    if (data.subject.trim().length < 3) {
+      found.subject = "Please enter a subject (at least 3 characters).";
+    }
+    if (data.message.trim().length < 10) {
+      found.message = "Please write a slightly longer message (at least 10 characters).";
+    } else if (data.message.trim().length > 5000) {
+      found.message = "Message is too long (max 5000 characters).";
+    }
+
+    return found;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Double submit band — warna button 5 dafa dabne par 5 messages jate hain.
+    if (status === "sending") return;
+
+    const clientErrors = validate(formData);
+    if (Object.keys(clientErrors).length > 0) {
+      setErrors(clientErrors);
+      setFormError("Please fix the highlighted fields and try again.");
+      setStatus("error");
+      return;
+    }
+
+    setStatus("sending");
+    setErrors({});
+    setFormError("");
+
+    try {
+      await sendContactMessage(formData);
+      setStatus("success");
+      setFormData(EMPTY_FORM);
+    } catch (error) {
+      // Server ke 400 field errors aur throttle/network errors — dono ek hi
+      // helper se aate hain (src/api/contact.js).
+      const { fieldErrors, formError: message } = parseContactError(error);
+      setErrors(fieldErrors);
+      setFormError(message);
+      setStatus("error");
+    }
   };
 
   return (
@@ -87,14 +161,22 @@ function ContactPage() {
                 Fill out the form below and our team will get back to you shortly.
               </p>
 
-              {submitted ? (
+              {status === "success" ? (
                 <div className="contact-success">
-                  <FaCheckCircle className="contact-success-icon" />
+                  <span className="contact-success-icon-wrap">
+                    <FaCheckCircle className="contact-success-icon" />
+                  </span>
                   <h3>Thank you!</h3>
                   <p>Your message has been sent successfully. We will contact you soon.</p>
                 </div>
               ) : (
                 <form className="contact-form" onSubmit={handleSubmit}>
+                  {formError && (
+                    <p className="contact-form-error" role="alert">
+                      {formError}
+                    </p>
+                  )}
+
                   <div className="form-row flex gap-4">
                     <div className="form-group">
                       <label htmlFor="name">Full Name</label>
@@ -106,7 +188,11 @@ function ContactPage() {
                         required
                         value={formData.name}
                         onChange={handleChange}
+                        aria-invalid={Boolean(errors.name)}
                       />
+                      {errors.name && (
+                        <span className="contact-field-error">{errors.name}</span>
+                      )}
                     </div>
                     <div className="form-group">
                       <label htmlFor="email">Email Address</label>
@@ -118,7 +204,11 @@ function ContactPage() {
                         required
                         value={formData.email}
                         onChange={handleChange}
+                        aria-invalid={Boolean(errors.email)}
                       />
+                      {errors.email && (
+                        <span className="contact-field-error">{errors.email}</span>
+                      )}
                     </div>
                   </div>
 
@@ -132,7 +222,11 @@ function ContactPage() {
                         placeholder="Enter your phone"
                         value={formData.phone}
                         onChange={handleChange}
+                        aria-invalid={Boolean(errors.phone)}
                       />
+                      {errors.phone && (
+                        <span className="contact-field-error">{errors.phone}</span>
+                      )}
                     </div>
                     <div className="form-group">
                       <label htmlFor="subject">Subject</label>
@@ -144,7 +238,11 @@ function ContactPage() {
                         required
                         value={formData.subject}
                         onChange={handleChange}
+                        aria-invalid={Boolean(errors.subject)}
                       />
+                      {errors.subject && (
+                        <span className="contact-field-error">{errors.subject}</span>
+                      )}
                     </div>
                   </div>
 
@@ -156,13 +254,28 @@ function ContactPage() {
                       rows="5"
                       placeholder="Write your message here..."
                       required
+                      maxLength={5000}
                       value={formData.message}
                       onChange={handleChange}
+                      aria-invalid={Boolean(errors.message)}
                     ></textarea>
+                    {errors.message && (
+                      <span className="contact-field-error">{errors.message}</span>
+                    )}
                   </div>
 
-                  <button type="submit" className="contact-submit-btn">
-                    Send Message <FaPaperPlane />
+                  <button
+                    type="submit"
+                    className="contact-submit-btn"
+                    disabled={status === "sending"}
+                  >
+                    {status === "sending" ? (
+                      "Sending..."
+                    ) : (
+                      <>
+                        Send Message <FaPaperPlane />
+                      </>
+                    )}
                   </button>
                 </form>
               )}

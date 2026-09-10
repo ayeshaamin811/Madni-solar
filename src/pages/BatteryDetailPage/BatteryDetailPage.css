@@ -1,0 +1,271 @@
+/* ===== Battery detail page =====
+   Ye styles InverterDetailPage.css / ProductItemDetailPage.css jaisi hi hain
+   (wahi generic .product-* classes), taake saari detail pages ek jaisi dikhein. */
+/* ===== Not found message (invalid product slug) ===== */
+.product-not-found {
+  padding: 80px 20px;
+  text-align: center;
+  color: #666666;
+  font-size: 16px;
+}
+
+/* ===== Product detail wrapper ===== */
+.product-detail-content {
+  padding: 50px 40px;
+}
+
+/* ===== Info section: image left, details right (grid via Tailwind) ===== */
+.product-info {
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.product-image-wrap {
+  text-align: center;
+}
+
+.product-image {
+  width: 100%;
+  height: 420px;
+  object-fit: contain;
+  border: 1px solid #eeeeee;
+  border-radius: 6px;
+  padding: 24px;
+  background: #ffffff;
+}
+
+/* Product details */
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.product-name {
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.product-price {
+  color: #e07b1a;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.product-short-description {
+  color: #555555;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ===== Quantity input ===== */
+.product-quantity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-quantity-label {
+  color: #333333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.product-quantity-input {
+  width: 80px;
+  height: 44px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 0 10px;
+  font-size: 15px;
+  color: #0f172a;
+  outline: none;
+}
+
+.product-quantity-input:focus {
+  border-color: #01164f;
+}
+
+/* ===== Action buttons ===== */
+.product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.product-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-basket {
+  background-color: #e07b1a;
+  color: #ffffff;
+}
+
+.btn-basket:hover {
+  background-color: #c9680f;
+}
+
+.btn-quote {
+  background-color: #01164f;
+  color: #ffffff;
+}
+
+.btn-quote:hover {
+  background-color: #0a2a75;
+}
+
+.btn-whatsapp {
+  background-color: #25d366;
+  color: #ffffff;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebe52;
+}
+
+.btn-whatsapp-icon {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* ===== Categories ===== */
+.product-categories {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-categories-label {
+  color: #333333;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.product-badge {
+  background-color: #f2f2f2;
+  color: #01164f;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* ===== Divider between sections ===== */
+.section-divider {
+  border: none;
+  border-top: 1px solid #eeeeee;
+  margin: 48px 0;
+}
+
+/* ===== Description section ===== */
+.description-section {
+  max-width: 900px;
+}
+
+.description-title {
+  color: #0f172a;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 22px;
+}
+
+/* Description ek hi block hai (baad mein backend se aayegi), is liye yahan
+   bullets nahi — sirf paragraph(s). Ek se zyada paragraph ho tou unke darmiyan
+   gap aa jata hai. */
+.description-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.description-paragraph {
+  color: #555555;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ===== Why Choose section ===== */
+.why-choose-section {
+  max-width: 900px;
+}
+
+.why-choose-title {
+  color: #0f172a;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 22px;
+}
+
+.why-choose-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.why-choose-item {
+  color: #555555;
+  font-size: 15px;
+  line-height: 1.6;
+  padding-left: 28px;
+  position: relative;
+}
+
+.why-choose-item::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #01164f;
+  font-weight: 800;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .product-detail-content {
+    padding: 30px 20px;
+  }
+
+  .product-image {
+    height: 300px;
+  }
+
+  .product-name {
+    font-size: 24px;
+  }
+
+  .product-price {
+    font-size: 24px;
+  }
+
+  .why-choose-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-detail-content {
+    padding: 25px 15px;
+  }
+
+  .product-actions {
+    flex-direction: column;
+  }
+
+  .product-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

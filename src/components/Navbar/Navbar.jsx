@@ -5,9 +5,12 @@ import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import invertersMenu, { slugifyInverter } from "../../data/inverterMenu";
 import productsMenu, { slugifyProduct } from "../../data/productsMenu";
+import batteriesMenu, { slugifyBattery } from "../../data/batteryMenu";
+import AuthModal from "../AuthModal/AuthModal";
+import { getSolarPanelBrands } from "../../api/solarPanels";
 
 // Professional icon set from react-icons (install: npm i react-icons)
-import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaSun, FaMinus } from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaBolt, FaMinus, FaRegUser } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 // ===== Dropdown data =====
@@ -16,74 +19,24 @@ import { FaXTwitter } from "react-icons/fa6";
 
 const aboutMenu = ["About", "Policy Trading", "Our Team", "Careers"];
 
-const solarPanelsMenu = [
-  "Yingli", "Aiko Solar", "Astronergy", "Huasun", "Hanersun", "Canadian",
-  "Risen", "JA Solar", "TCL", "Ronma Solar", "Jinko", "Znshine",
-  "Mesol Alpha", "Longi", "Osda", "Trina Solar", "Tongwei", "Cora Dawn",
-];
-
 // ===== Mega menu shape (Inverters + Products + Batteries) =====
-// Inverters ki tree src/data/inverterMenu.js mein hai aur Products ki
-// src/data/productsMenu.js mein (dono jagah Navbar, category pages aur
-// breadcrumbs — teenon wahin se banti hain). Batteries ka data neeche isi
-// shape mein hai:
+// Teenon menus ki tree ab apni apni data file mein hai — src/data/inverterMenu.js,
+// src/data/productsMenu.js aur src/data/batteryMenu.js. Har jagah Navbar,
+// category/brand pages aur breadcrumbs — teenon wahin se banti hain, is liye
+// menu aur pages kabhi alag nahi ho sakte.
 //
 //   group   -> ek category ka block; `span` = menu grid ki kitni tracks leta hai
 //              (1 = apni jagah, 2 = poori width); groups ke darmiyan divider.
-//   section -> heading (+ inverters ke case mein categorySlug, jo heading ko
-//              us category ki page se link kar deta hai).
+//   section -> heading + uski categorySlug, jo heading ko us category ki page
+//              se link kar deta hai.
 //   columns -> us section ke items, jitni columns mein baantna ho.
 
-// Batteries mega menu — Inverters jaisa hi group/section/columns structure.
-// "Batteries" ek hi heading ke neeche 4 columns mein aati hain, taake pehle ki
-// tarah 3 columns bin-heading ke na latken.
-const batteriesMenu = [
-  {
-    // Poori width leta hai (dono tracks), andar 4 columns
-    span: 2,
-    sections: [
-      {
-        heading: "Batteries",
-        columns: [
-          [
-            "12V Batteries", "HV Batteries", "2.5kwh Batteries", "5kwh LV Batteries",
-            "10kwh Batteries", "14.33/16kwh LV Batteries", "Lithium Valley", "Mesol",
-            "SAJ", "Crown", "Fronus", "Pilot",
-          ],
-          [
-            "Sofar", "Chint", "LvtopSun", "VestWoods",
-            { name: "Huawei", sub: ["HV"] },
-            "Inverex", "Hithium",
-            { name: "BYD", sub: ["HV", "LV"] },
-            "Knox", "Nimbess", "Itel",
-          ],
-          [
-            "EVE", "Sunwoda", "Livoltek",
-            { name: "EY Power", sub: ["HV", "LV"] },
-            { name: "Dyness", sub: ["HV", "LV"] },
-            { name: "Fox", sub: ["HV", "LV"] },
-            { name: "ZIEWNIC", sub: ["LI-WALL 2.0", "Z Box European"] },
-            { name: "Goodwe", sub: ["HV", "LV"] },
-          ],
-          [
-            "Narada", "Vaults", "SunFlx", "Growatt", "Soluna", "ESS",
-            { name: "PylonTech", sub: ["HV", "LV"] },
-            "Max Power", "Hoymiles", "Auxsol",
-          ],
-        ],
-      },
-    ],
-  },
-];
-
-const slugify = (name) => name.toLowerCase().trim().replace(/\s+/g, "-");
-
-// Bullet icon: top-level brand par sun, aur sub-items (phases / HV-LV / models)
-// par dash icon — is se ek nazar mein pata chal jata hai ke ye kisi brand ke
-// andar ka option hai, apna alag brand nahi. `depth` 0 = top level.
+// Bullet icon: top-level brand par lightning (bolt), aur sub-items (phases /
+// HV-LV / models) par dash icon — is se ek nazar mein pata chal jata hai ke ye
+// kisi brand ke andar ka option hai, apna alag brand nahi. `depth` 0 = top level.
 const bulletFor = (depth) =>
   depth === 0 ? (
-    <FaSun className="bullet-icon" />
+    <FaBolt className="bullet-icon" />
   ) : (
     <FaMinus className="sub-bullet-icon" aria-hidden="true" />
   );
@@ -248,6 +201,17 @@ const makeLinkedItemRenderer = (basePath, slugifyName) => {
 const renderInverterItems = makeLinkedItemRenderer("/inverters", slugifyInverter);
 const renderProductItems = makeLinkedItemRenderer("/products", slugifyProduct);
 
+// Batteries ki filhaal ek hi category hai ("Batteries") aur uski page khud
+// /batteries hai — Inverters ki tarah alag category segment nahi banta. Is
+// liye base path khaali rakhte hain aur URL section ki categorySlug se hi
+// mukammal ho jata hai: heading -> /batteries, item -> /batteries/huawei,
+// sub-item -> /batteries/huawei-hv.
+const BATTERIES_BASE_PATH = "";
+const renderBatteryItems = makeLinkedItemRenderer(
+  BATTERIES_BASE_PATH,
+  slugifyBattery
+);
+
 // Simple Navbar component with a top info bar and a main nav bar.
 // The top bar hides on scroll down, and the main nav sticks to the top.
 const Navbar = () => {
@@ -269,8 +233,25 @@ const Navbar = () => {
   // Tracks whether the mini-cart dropdown is open
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // Login / Register popup — pehle ye /orders page tha, ab modal hai
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+
   // Global cart state (items, count, subtotal and action helpers)
   const { cartItems, cartCount, subtotal, removeFromBasket } = useCart();
+
+  // Solar Panels dropdown ab backend se aata hai (Django admin mein naya brand
+  // add karte hi yahan bhi dikhna chahiye) — is liye hardcoded list ki jagah fetch.
+  const [solarPanelBrands, setSolarPanelBrands] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    getSolarPanelBrands().then((brands) => {
+      if (!cancelled) setSolarPanelBrands(brands);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Mobile mega-menu ki section heading. Agar `to` diya ho (Ongrid / Hybrid /
   // Packages / VFDs ...) tou clickable link banti hai jo apni category page
@@ -441,10 +422,13 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <div className="dropdown-columns">
-                    {solarPanelsMenu.map((item) => (
-                      <li key={item}>
-                        <Link to={`/solar-panels/${slugify(item)}`}>
-                          <FaSun className="bullet-icon" /> {item}
+                    {solarPanelBrands.map((brand) => (
+                      <li key={brand.slug}>
+                        <Link
+                          to={`/solar-panels/${brand.slug}`}
+                          onClick={() => setOpenMenu(null)}
+                        >
+                          <FaBolt className="bullet-icon" /> {brand.name}
                         </Link>
                       </li>
                     ))}
@@ -490,7 +474,13 @@ const Navbar = () => {
                     <h3 className="mega-title">Batteries</h3>
                   </Link>
                   <div className="mega-grid mega-grid-batteries">
-                    {renderMegaGroups(batteriesMenu, "bat", renderItems, 2)}
+                    {renderMegaGroups(
+                      batteriesMenu,
+                      "bat",
+                      renderBatteryItems,
+                      2,
+                      BATTERIES_BASE_PATH
+                    )}
                   </div>
                 </div>
               )}
@@ -526,9 +516,6 @@ const Navbar = () => {
               <Link to="/our-projects" className="nav-link">Projects</Link>
             </li>
             <li className="nav-item">
-              <Link to="/orders" className="nav-link">Orders</Link>
-            </li>
-            <li className="nav-item">
               <Link to="/request-quote" className="nav-link">Request a Quote (Beta)</Link>
             </li>
           </ul>
@@ -536,13 +523,21 @@ const Navbar = () => {
           {/* Right side actions */}
           <div className="nav-actions flex items-center">
             <button
+              className="icon-btn account-btn"
+              aria-label="Login or register"
+              title="Login / Register"
+              onClick={() => setIsAuthOpen(true)}
+            >
+              <FaRegUser />
+            </button>
+            <button
               className="icon-btn"
               aria-label="Search"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
               <FaSearch />
             </button>
-            <button className="calculator-btn">CALCULATOR</button>
+            <Link to="/calculator" className="calculator-btn">CALCULATOR</Link>
             <div className="cart-wrap">
               <button
                 className="cart-btn"
@@ -679,13 +674,13 @@ const Navbar = () => {
             {openMenu === "solarPanels" && (
               <ul className="mobile-dropdown">
                 {renderMobileHeading("All Solar Panels", "/solar-panels", "m-sp-all")}
-                {solarPanelsMenu.map((item) => (
-                  <li key={item}>
+                {solarPanelBrands.map((brand) => (
+                  <li key={brand.slug}>
                     <Link
-                      to={`/solar-panels/${slugify(item)}`}
+                      to={`/solar-panels/${brand.slug}`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <FaSun className="bullet-icon" /> {item}
+                      <FaBolt className="bullet-icon" /> {brand.name}
                     </Link>
                   </li>
                 ))}
@@ -711,7 +706,12 @@ const Navbar = () => {
           </div>
           {openMenu === "batteries" && (
             <ul className="mobile-dropdown">
-              {renderMobileGroups(batteriesMenu, "m-bat", renderItems)}
+              {renderMobileGroups(
+                batteriesMenu,
+                "m-bat",
+                renderBatteryItems,
+                BATTERIES_BASE_PATH
+              )}
             </ul>
           )}
         </li>
@@ -734,7 +734,19 @@ const Navbar = () => {
             <li><Link to="/services">Services</Link></li>
             <li><Link to="/blog">Blog</Link></li>
             <li><Link to="/our-projects">Projects</Link></li>
-            <li><Link to="/orders">Orders</Link></li>
+            <li><Link to="/calculator" onClick={() => setIsMobileMenuOpen(false)}>Calculator</Link></li>
+            <li>
+              <button
+                type="button"
+                className="mobile-account-btn"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsAuthOpen(true);
+                }}
+              >
+                <FaRegUser className="mobile-account-icon" /> Login / Register
+              </button>
+            </li>
             <li><Link to="/request-quote">Request a Quote (Beta)</Link></li>
           </ul>
         )}
@@ -762,6 +774,8 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      {/* Login / Register popup */}
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </header>
   );
 };

@@ -1,0 +1,126 @@
+/* ===== Battery brand page (Huawei / BYD / 12V Batteries ...) ===== */
+.battery-brand-content {
+  padding: 50px 40px;
+}
+
+/* "Showing X results" text */
+.battery-brand-results-text {
+  color: #666666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* No products fallback message */
+.battery-brand-no-products-text {
+  color: #666666;
+  font-size: 15px;
+  padding: 40px 0;
+}
+
+/* Not found message (invalid brand slug) */
+.battery-brand-not-found {
+  padding: 80px 20px;
+  text-align: center;
+  color: #666666;
+  font-size: 16px;
+}
+
+/* ===== Sub-items (e.g. Huawei -> HV, BYD -> HV/LV) ===== */
+.battery-brand-subs {
+  margin-bottom: 30px;
+}
+
+.battery-brand-subs-title {
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.battery-brand-subs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.battery-brand-sub-chip {
+  border: 1px solid #eeeeee;
+  border-radius: 999px;
+  padding: 8px 18px;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.battery-brand-sub-chip:hover {
+  background-color: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+/* ===== Product grid ===== */
+.battery-brand-product-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.battery-brand-product-card {
+  display: block;
+  border: 1px solid #eeeeee;
+  border-radius: 6px;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.battery-brand-product-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.battery-brand-product-card-image {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.battery-brand-product-card-title {
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.battery-brand-product-card-price {
+  color: #e07b1a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ===== Responsive design ===== */
+@media (max-width: 1024px) {
+  .battery-brand-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .battery-brand-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .battery-brand-content {
+    padding: 30px 20px;
+  }
+
+  .battery-brand-product-grid {
+    grid-template-columns: 1fr;
+  }
+}

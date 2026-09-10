@@ -1,0 +1,267 @@
+/* ===== Login / Register popup =====
+   Saare class names `auth-modal-*` se prefix kiye hain — app ki CSS global hai
+   (CRA scoping nahi karta), is liye purane generic naam (.form-group,
+   .btn-primary) yahan dobara istemal nahi karte. */
+
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(1, 22, 79, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 999;
+  animation: authModalFade 0.18s ease;
+}
+
+.auth-modal {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+  animation: authModalPop 0.2s ease;
+  margin-top: 9%;
+}
+
+@keyframes authModalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes authModalPop {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===== Header (navy band, theme ke saath) ===== */
+.auth-modal-head {
+  background-color: var(--theme-color);
+  color: var(--white);
+  padding: 26px 28px 22px;
+  border-radius: 10px 10px 0 0;
+}
+
+.auth-modal-heading {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.auth-modal-sub {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.auth-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 17px;
+  cursor: pointer;
+  display: inline-flex;
+  padding: 4px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.auth-modal-close:hover {
+  color: var(--orange-dark);
+  transform: scale(1.12);
+}
+
+/* ===== Tabs ===== */
+.auth-modal-tabs {
+  display: flex;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.auth-modal-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 14px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #7b8290;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.auth-modal-tab:hover {
+  color: var(--theme-color);
+}
+
+.auth-modal-tab-active {
+  color: var(--theme-color);
+  border-bottom-color: var(--orange-dark);
+}
+
+/* ===== Body / form ===== */
+.auth-modal-body {
+  padding: 24px 28px 28px;
+}
+
+.auth-modal-field {
+  margin-bottom: 18px;
+}
+
+.auth-modal-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.auth-modal-required {
+  color: #cc3333;
+}
+
+.auth-modal-field input[type="text"],
+.auth-modal-field input[type="email"],
+.auth-modal-field input[type="password"] {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid #d5d8de;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-modal-field input:focus {
+  border-color: var(--theme-color);
+  box-shadow: 0 0 0 3px rgba(1, 22, 79, 0.08);
+}
+
+/* Password field ka show/hide toggle */
+.auth-modal-password {
+  position: relative;
+}
+
+.auth-modal-password input {
+  padding-right: 42px;
+}
+
+.auth-modal-eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #8b919c;
+  font-size: 15px;
+  cursor: pointer;
+  display: inline-flex;
+  transition: color 0.2s ease;
+}
+
+.auth-modal-eye:hover {
+  color: var(--theme-color);
+}
+
+/* Remember me + forget password ek hi row mein */
+.auth-modal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.auth-modal-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.auth-modal-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--theme-color);
+  cursor: pointer;
+}
+
+.auth-modal-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--orange-dark);
+  cursor: pointer;
+}
+
+.auth-modal-link:hover {
+  text-decoration: underline;
+}
+
+.auth-modal-helper {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.auth-modal-submit {
+  width: 100%;
+  background-color: var(--orange-dark);
+  color: var(--white);
+  border: none;
+  padding: 13px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.auth-modal-submit:hover {
+  background-color: var(--theme-color);
+}
+
+.auth-modal-submit:active {
+  transform: scale(0.99);
+}
+
+.auth-modal-switch {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+/* ===== Phones ===== */
+@media (max-width: 480px) {
+  .auth-modal-head {
+    padding: 22px 20px 18px;
+  }
+
+  .auth-modal-heading {
+    font-size: 21px;
+  }
+
+  .auth-modal-body {
+    padding: 20px 20px 24px;
+  }
+}

@@ -424,17 +424,32 @@
 
 /* Success message */
 .contact-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 50px 24px;
+  padding: 60px 24px;
   border: 1.5px dashed var(--navy);
   border-radius: 12px;
   background: #f5f9ff;
 }
 
+.contact-success-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #22c369, #158a48);
+  box-shadow: 0 12px 26px rgba(21, 138, 72, 0.32);
+  animation: contact-success-pop 0.4s ease;
+}
+
 .contact-success-icon {
-  font-size: 48px;
-  color: #1aaf5c;
-  margin-bottom: 14px;
+  font-size: 38px;
+  color: #ffffff;
 }
 
 .contact-success h3 {
@@ -446,6 +461,18 @@
 .contact-success p {
   color: #66707b;
   margin: 0;
+  max-width: 420px;
+}
+
+@keyframes contact-success-pop {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* ================= Map ================= */
@@ -556,4 +583,43 @@
   .contact-map-wrap {
     padding: 20px;
   }
+}
+/* ===== Form states (API wiring) ===== */
+
+/* Field ke neeche server ka validation message */
+.contact-field-error {
+  font-size: 13px;
+  font-weight: 500;
+  color: #d93025;
+}
+
+/* Jis field mein error ho uska border bhi red */
+.form-group input[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+  border-color: #d93025;
+  background: #fffafa;
+}
+
+.form-group input[aria-invalid="true"]:focus,
+.form-group textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 4px rgba(217, 48, 37, 0.12);
+}
+
+/* Form ke upar wala error (network / throttle / server) */
+.contact-form-error {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #a1180f;
+  background: #fdecea;
+  border: 1px solid #f5c2bd;
+  border-radius: 8px;
+}
+
+/* Sending ke doran button dobara na dabe */
+.contact-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./RequestQuote.css";
 import Navbar from "../../components/Navbar/Navbar";
@@ -12,9 +12,21 @@ import { parseQuoteItems } from "../../data/findProduct";
 function SendRequest() {
   // Quote ke items URL query se aate hain — ya to product detail page ka
   // single product (?product=&brand=&qty=), ya checkout ka poora basket
-  // (?items=<slug>:<qty>,...).
+  // (?items=<slug>:<qty>,...). Solar panel products API se aate hain, is liye
+  // parseQuoteItems async hai.
   const [searchParams] = useSearchParams();
-  const quoteItems = parseQuoteItems(searchParams);
+  const [quoteItems, setQuoteItems] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    parseQuoteItems(searchParams).then((items) => {
+      if (!cancelled) setQuoteItems(items);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [searchParams]);
+
   const quoteTotal = quoteItems.reduce((sum, item) => sum + item.lineTotal, 0);
 
   // State for each form field
