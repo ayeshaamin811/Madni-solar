@@ -348,8 +348,8 @@ const Navbar = () => {
             <a href="tel:+923111666677" className="top-bar-link">
               <FaPhoneAlt className="top-bar-icon" /> +923 111 666 677
             </a>
-            <a href="mailto:info@madnisolar.pk" className="top-bar-link">
-              <FaEnvelope className="top-bar-icon" /> info@madnisolar.pk
+            <a href="mailto:madnisolar560@gmail.com" className="top-bar-link">
+              <FaEnvelope className="top-bar-icon" /> madnisolar560@gmail.com
             </a>
           </div>
           <div className="top-bar-right flex items-center">
