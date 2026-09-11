@@ -63,4 +63,4 @@ export const sendQuoteRequest = (payload) =>
 export const parseQuoteError = (error) => { /* same shape as parseContactError */ };
 ```
 
-Then in `RequestQuote.jsx`'s `handleSubmit`, replace the `console.log(...)` with a call to `sendQuoteRequest({ firstName, lastName, phone, email, message, items: quoteItems.map(...), quoteTotal })`, and add `status`/`errors`/`formError` state the same way `ContactPage.jsx` does (idle → sending → success/error), showing a success message in place of the form once it's sent.
+Then in `RequestQuote.jsx`'s `handleSubmit`, replace the `console.log(...)` with a call to `sendQuoteRequest({ firstName, lastName, phone, email, message, items: quoteItems.map(...), quoteTotal })`, and add `status`/`errors`/`formError` state the same way `ContactPage.jsx` does (idle → sending → success/error), showing a success message in place of the form once it's sents
