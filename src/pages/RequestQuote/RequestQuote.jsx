@@ -6,7 +6,15 @@ import Footer from "../../components/Footer/Footer";
 import QuoteBanner from "../../assets/hero-banner.webp";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import { parseQuoteItems } from "../../data/findProduct";
+import { sendQuoteRequest, parseQuoteError } from "../../api/quotes";
 
+const EMPTY_FORM = {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  email: "",
+  message: "",
+};
 
 // Simple "Send the request" quote form component
 function SendRequest() {
@@ -29,34 +37,78 @@ function SendRequest() {
 
   const quoteTotal = quoteItems.reduce((sum, item) => sum + item.lineTotal, 0);
 
-  // State for each form field
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [createAccount, setCreateAccount] = useState(false);
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
-  // Handle form submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Request submitted:", {
-      firstName,
-      lastName,
-      phone,
-      email,
-      message,
-      createAccount,
-      // Jo product(s) quote ke liye chune gaye
-      items: quoteItems.map(({ product, quantity, lineTotal }) => ({
-        name: product.name,
-        slug: product.slug,
-        price: product.price,
-        quantity,
-        lineTotal,
-      })),
-      quoteTotal,
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // User dobara type kare tou us field ka purana error hata do.
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
     });
+  };
+
+  const validate = (data) => {
+    const found = {};
+    if (data.firstName.trim().length < 2) {
+      found.firstName = "Please enter your first name.";
+    }
+    if (data.lastName.trim().length < 2) {
+      found.lastName = "Please enter your last name.";
+    }
+    if (data.phone.trim().length < 7) {
+      found.phone = "Please enter a valid phone number.";
+    }
+    if (data.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+      found.email = "Enter a valid email address.";
+    }
+    return found;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (status === "sending") return;
+
+    const clientErrors = validate(formData);
+    if (Object.keys(clientErrors).length > 0) {
+      setErrors(clientErrors);
+      setFormError("Please fix the highlighted fields and try again.");
+      setStatus("error");
+      return;
+    }
+
+    setStatus("sending");
+    setErrors({});
+    setFormError("");
+
+    try {
+      await sendQuoteRequest({
+        ...formData,
+        items: quoteItems.map(({ product, quantity, lineTotal }) => ({
+          name: product.name,
+          slug: product.slug,
+          price: product.price,
+          quantity,
+          lineTotal,
+        })),
+        quoteTotal,
+      });
+      setStatus("success");
+      setFormData(EMPTY_FORM);
+    } catch (error) {
+      const { fieldErrors, formError: message } = parseQuoteError(error);
+      setErrors(fieldErrors);
+      setFormError(message);
+      setStatus("error");
+    }
   };
 
   return (
@@ -122,75 +174,107 @@ function SendRequest() {
           </div>
         )}
 
-        <form className="request-form" onSubmit={handleSubmit}>
-          {/* First Name field */}
-          <div className="form-group">
-            <label htmlFor="firstName">
-              First Name <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
+        {status === "success" ? (
+          <div className="request-success">
+            <h3>Thank you!</h3>
+            <p>Your quote request has been received. We will contact you soon.</p>
           </div>
+        ) : (
+          <form className="request-form" onSubmit={handleSubmit} noValidate>
+            {formError && (
+              <p className="request-form-error" role="alert">
+                {formError}
+              </p>
+            )}
 
-          {/* Last Name field */}
-          <div className="form-group">
-            <label htmlFor="lastName">
-              Last Name <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
+            {/* First Name field */}
+            <div className="form-group">
+              <label htmlFor="firstName">
+                First Name <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                aria-invalid={Boolean(errors.firstName)}
+              />
+              {errors.firstName && (
+                <span className="request-field-error">{errors.firstName}</span>
+              )}
+            </div>
 
-          {/* Phone field */}
-          <div className="form-group">
-            <label htmlFor="phone">
-              Phone <span className="required">*</span>
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
+            {/* Last Name field */}
+            <div className="form-group">
+              <label htmlFor="lastName">
+                Last Name <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                aria-invalid={Boolean(errors.lastName)}
+              />
+              {errors.lastName && (
+                <span className="request-field-error">{errors.lastName}</span>
+              )}
+            </div>
 
-          {/* Email field (optional) */}
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+            {/* Phone field */}
+            <div className="form-group">
+              <label htmlFor="phone">
+                Phone <span className="required">*</span>
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                aria-invalid={Boolean(errors.phone)}
+              />
+              {errors.phone && (
+                <span className="request-field-error">{errors.phone}</span>
+              )}
+            </div>
 
-          {/* Message field (optional) */}
-          <div className="form-group">
-            <label htmlFor="message">Message</label>
-            <textarea
-              id="message"
-              rows="4"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-          </div>
+            {/* Email field (optional) */}
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                aria-invalid={Boolean(errors.email)}
+              />
+              {errors.email && (
+                <span className="request-field-error">{errors.email}</span>
+              )}
+            </div>
 
-    
+            {/* Message field (optional) */}
+            <div className="form-group">
+              <label htmlFor="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                value={formData.message}
+                onChange={handleChange}
+              />
+            </div>
 
-          {/* Submit button */}
-          <button type="submit" className="btn-primary">
-            SEND YOUR REQUEST
-          </button>
-        </form>
+            {/* Submit button */}
+            <button type="submit" className="btn-primary" disabled={status === "sending"}>
+              {status === "sending" ? "SENDING..." : "SEND YOUR REQUEST"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
 

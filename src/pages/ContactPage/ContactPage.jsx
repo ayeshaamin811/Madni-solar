@@ -140,7 +140,7 @@ function ContactPage() {
             <div className="contact-card">
               <span className="contact-card-icon"><FaEnvelope /></span>
               <h3 className="contact-card-title">Email Us</h3>
-              <p className="contact-card-value">madnisolar560@gmail.com</p>
+              <p className="contact-card-value">info@madnisolar.pk</p>
               <p className="contact-card-label">We reply within 24 hours</p>
             </div>
             <div className="contact-card">
