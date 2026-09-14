@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import heroBanner from "../../assets/hero-banner.webp";
-import batteryProducts from "../../data/batteryProducts";
+import { getBatteryProducts } from "../../api/batteries";
 import "./BatteriesPage.css";
 
 /*
@@ -12,16 +12,31 @@ import "./BatteriesPage.css";
   BATTERIES PAGE  (/batteries)
   ----------------------------------------------------------------------------
   InvertersPage jaisa hi — Navbar + PageBanner + saare products ka grid +
-  Footer. Farq sirf data source (batteryProducts) aur route prefix
-  (/batteries) ka hai.
-
-  Batteries mein sirf ek category hai, is liye ye page do kaam karta hai:
-  poori listing bhi aur "Batteries" category page bhi (Navbar ka heading isi
-  par aata hai). Product data src/data/batteryMenu.js ki tree se derive hota
-  hai, hath se nahi likha jata.
+  Footer. Batteries mein sirf ek category hai, is liye ye page do kaam karta
+  hai: poori listing bhi aur "Batteries" category page bhi (Navbar ka heading
+  isi par aata hai). Products ab backend se aate hain (src/api/batteries.js).
   ============================================================================
 */
 function BatteriesPage() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getBatteryProducts()
+      .then((data) => {
+        if (!cancelled) setProducts(data);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -30,17 +45,19 @@ function BatteriesPage() {
 
       <section className="batteries-content">
         <div className="container">
-          {batteryProducts.length > 0 ? (
+          {loading ? (
+            <p className="batteries-no-products-text">Loading batteries...</p>
+          ) : products.length > 0 ? (
             <>
               <p className="batteries-results-text">
                 Showing{" "}
-                {batteryProducts.length === 1
+                {products.length === 1
                   ? "the single result"
-                  : `all ${batteryProducts.length} results`}
+                  : `all ${products.length} results`}
               </p>
 
               <div className="batteries-product-grid grid">
-                {batteryProducts.map((product) => (
+                {products.map((product) => (
                   <Link
                     key={product.slug}
                     to={`/batteries/${product.brandSlug}/${product.slug}`}

@@ -4,10 +4,11 @@ import logo from "../../assets/project-logo.png";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import productsMenu, { slugifyProduct } from "../../data/productsMenu";
-import batteriesMenu, { slugifyBattery } from "../../data/batteryMenu";
+import { BATTERY_CATEGORY } from "../../data/batteryMenu";
 import AuthModal from "../AuthModal/AuthModal";
 import { getSolarPanelBrands } from "../../api/solarPanels";
 import { getInverterCategories } from "../../api/inverters";
+import { getBatteryBrands } from "../../api/batteries";
 
 // Professional icon set from react-icons (install: npm i react-icons)
 import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaBolt, FaMinus, FaRegUser } from "react-icons/fa";
@@ -296,10 +297,50 @@ const buildInverterGroups = (categories) => {
 // mukammal ho jata hai: heading -> /batteries, item -> /batteries/huawei,
 // sub-item -> /batteries/huawei-hv.
 const BATTERIES_BASE_PATH = "";
-const renderBatteryItems = makeLinkedItemRenderer(
-  BATTERIES_BASE_PATH,
-  slugifyBattery
-);
+
+// ============================================================================
+// BATTERIES — API-driven renderer
+// ----------------------------------------------------------------------------
+// Battery tree ab backend se aata hai (getBatteryBrands()) aur har node apna
+// slug khud leke aata hai (arbitrary depth, Inverters ke `sub` jaisa hi) — is
+// liye makeLinkedItemRenderer (jo slug client-side compute karta hai) ki
+// zaroorat nahi, seedha item.slug use karte hain.
+// ============================================================================
+const renderBatteryBrandItems = (items, keyPrefix, opts = {}) => {
+  const { categorySlug, depth = 0 } = opts;
+  return items.map((item, index) => {
+    const key = `${keyPrefix}-${index}`;
+    const to = `${BATTERIES_BASE_PATH}/${categorySlug}/${item.slug}`;
+
+    return (
+      <li key={key} className="mega-item">
+        <Link to={to}>
+          {bulletFor(depth)} {item.name}
+        </Link>
+        {item.sub && item.sub.length > 0 && (
+          <ul className="mega-sublist">
+            {renderBatteryBrandItems(item.sub, key, { categorySlug, depth: depth + 1 })}
+          </ul>
+        )}
+      </li>
+    );
+  });
+};
+
+// Battery brands ek hi flat list hain (koi sub-category nahi) — bas itni
+// columns mein taqseem karte hain (roughly even), jaisa Inverters mein hota hai.
+const buildBatteryGroups = (brands) => [
+  {
+    span: 2,
+    sections: [
+      {
+        heading: BATTERY_CATEGORY.name,
+        categorySlug: BATTERY_CATEGORY.slug,
+        columns: chunkColumns(brands, 4),
+      },
+    ],
+  },
+];
 
 // Simple Navbar component with a top info bar and a main nav bar.
 // The top bar hides on scroll down, and the main nav sticks to the top.
@@ -357,6 +398,21 @@ const Navbar = () => {
   }, []);
 
   const inverterGroups = buildInverterGroups(inverterCategories);
+
+  // Batteries ka brand tree bhi ab backend se aata hai.
+  const [batteryBrands, setBatteryBrands] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    getBatteryBrands().then((brands) => {
+      if (!cancelled) setBatteryBrands(brands);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const batteryGroups = buildBatteryGroups(batteryBrands);
 
   // Mobile mega-menu ki section heading. Agar `to` diya ho (Ongrid / Hybrid /
   // Packages / VFDs ...) tou clickable link banti hai jo apni category page
@@ -580,9 +636,9 @@ const Navbar = () => {
                   </Link>
                   <div className="mega-grid mega-grid-batteries">
                     {renderMegaGroups(
-                      batteriesMenu,
+                      batteryGroups,
                       "bat",
-                      renderBatteryItems,
+                      renderBatteryBrandItems,
                       2,
                       BATTERIES_BASE_PATH
                     )}
@@ -812,9 +868,9 @@ const Navbar = () => {
           {openMenu === "batteries" && (
             <ul className="mobile-dropdown">
               {renderMobileGroups(
-                batteriesMenu,
+                batteryGroups,
                 "m-bat",
-                renderBatteryItems,
+                renderBatteryBrandItems,
                 BATTERIES_BASE_PATH
               )}
             </ul>
