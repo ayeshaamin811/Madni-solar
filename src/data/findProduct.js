@@ -1,97 +1,48 @@
 // Shared product lookup used by the Request a Quote page.
 // Detail pages sirf slug (+ brandSlug) URL mein bhejte hain, aur ye helper us se
-// poora product object (name, price, image) dono data files se dhoond leta hai —
+// poora product object (name, price, image) saare catalogues se dhoond leta hai —
 // isi liye page refresh ya shared link par bhi quote wala product zinda rehta hai.
 //
-// Solar panels, inverters aur batteries ab backend se aate hain
-// (src/api/solarPanels.js, src/api/inverters.js, src/api/batteries.js), sirf
-// productItems abhi static data file hai — is liye uska merge synchronous
-// hai, aur backend waalon ke fetch-once cache neeche.
-import productItems from "./productItems";
+// Solar panels, inverters, batteries aur products (accessories) — chaaron ab
+// backend se aate hain, is liye koi static data file nahi bachi; har catalogue
+// ka apna fetch-once cache neeche hai.
 import { getSolarPanelProducts } from "../api/solarPanels";
 import { getInverterProducts } from "../api/inverters";
 import { getBatteryProducts } from "../api/batteries";
+import { getProducts as getAccessoryProducts } from "../api/products";
 
-// Har product ke saath uska type rakho taake quote page category dikha sake.
-// productItems ke slugs category ke saath prefixed hain ("packages-huawei"),
-// is liye ye kisi inverter/battery/panel slug se takrate nahi.
-const staticProducts = [
-  ...productItems.map((product) => ({ ...product, type: "product" })),
-];
+// Har catalogue ek dafa API se fetch karke cache ho jata hai — baar baar
+// request ki zaroorat nahi. Fetch fail ho jaye tou cache khaali reh jati hai
+// aur agli call phir se try karti hai.
+function makeProductLoader(fetchProducts, type) {
+  let cache = null;
+  let promise = null;
 
-// Solar panel aur inverter products ek dafa API se fetch karke cache ho jate
-// hain — baar baar request ki zaroorat nahi. Fetch fail ho jaye tou cache
-// khaali reh jati hai aur agli call phir se try karti hai.
-let solarPanelProductsCache = null;
-let solarPanelProductsPromise = null;
-
-function loadSolarPanelProducts() {
-  if (solarPanelProductsCache) return Promise.resolve(solarPanelProductsCache);
-  if (!solarPanelProductsPromise) {
-    solarPanelProductsPromise = getSolarPanelProducts()
-      .then((products) => {
-        solarPanelProductsCache = products.map((product) => ({
-          ...product,
-          type: "solar-panel",
-        }));
-        return solarPanelProductsCache;
-      })
-      .catch(() => {
-        solarPanelProductsPromise = null;
-        return [];
-      });
-  }
-  return solarPanelProductsPromise;
+  return function load() {
+    if (cache) return Promise.resolve(cache);
+    if (!promise) {
+      promise = fetchProducts()
+        .then((products) => {
+          cache = products.map((product) => ({ ...product, type }));
+          return cache;
+        })
+        .catch(() => {
+          promise = null;
+          return [];
+        });
+    }
+    return promise;
+  };
 }
 
-let inverterProductsCache = null;
-let inverterProductsPromise = null;
-
-function loadInverterProducts() {
-  if (inverterProductsCache) return Promise.resolve(inverterProductsCache);
-  if (!inverterProductsPromise) {
-    inverterProductsPromise = getInverterProducts()
-      .then((products) => {
-        inverterProductsCache = products.map((product) => ({
-          ...product,
-          type: "inverter",
-        }));
-        return inverterProductsCache;
-      })
-      .catch(() => {
-        inverterProductsPromise = null;
-        return [];
-      });
-  }
-  return inverterProductsPromise;
-}
-
-let batteryProductsCache = null;
-let batteryProductsPromise = null;
-
-function loadBatteryProducts() {
-  if (batteryProductsCache) return Promise.resolve(batteryProductsCache);
-  if (!batteryProductsPromise) {
-    batteryProductsPromise = getBatteryProducts()
-      .then((products) => {
-        batteryProductsCache = products.map((product) => ({
-          ...product,
-          type: "battery",
-        }));
-        return batteryProductsCache;
-      })
-      .catch(() => {
-        batteryProductsPromise = null;
-        return [];
-      });
-  }
-  return batteryProductsPromise;
-}
+const loadSolarPanelProducts = makeProductLoader(getSolarPanelProducts, "solar-panel");
+const loadInverterProducts = makeProductLoader(getInverterProducts, "inverter");
+const loadBatteryProducts = makeProductLoader(getBatteryProducts, "battery");
+const loadAccessoryProducts = makeProductLoader(getAccessoryProducts, "product");
 
 // slug (aur agar diya ho to brandSlug) se matching product return karta hai.
-// Kuch na mile to null. `products` na diya jaye tou sirf static (non-solar-panel)
-// list mein dhoondta hai.
-export function findProduct(slug, brandSlug, products = staticProducts) {
+// Kuch na mile to null.
+export function findProduct(slug, brandSlug, products) {
   if (!slug) return null;
 
   return (
@@ -131,25 +82,26 @@ export function buildCartQuoteLink(cartItems = []) {
 // Quote page yahan se apni item list banata hai. Pehle `items` (basket) dekhta
 // hai, warna single `product` param. Har entry: { product, quantity, lineTotal }.
 //
-// Async hai kyunke solar panel, inverter aur battery products ab API se aate
-// hain (loadSolarPanelProducts / loadInverterProducts / loadBatteryProducts) —
-// koi product/items param hi na ho tou ye fetch bhi nahi hota.
+// Async hai kyunke saare catalogues ab API se aate hain — koi product/items
+// param hi na ho tou ye fetch bhi nahi hota.
 export async function parseQuoteItems(searchParams) {
   const itemsParam = searchParams.get("items");
   const productParam = searchParams.get("product");
 
   if (!itemsParam && !productParam) return [];
 
-  const [solarPanelProducts, inverterProducts, batteryProducts] = await Promise.all([
-    loadSolarPanelProducts(),
-    loadInverterProducts(),
-    loadBatteryProducts(),
-  ]);
+  const [solarPanelProducts, inverterProducts, batteryProducts, accessoryProducts] =
+    await Promise.all([
+      loadSolarPanelProducts(),
+      loadInverterProducts(),
+      loadBatteryProducts(),
+      loadAccessoryProducts(),
+    ]);
   const allProducts = [
-    ...staticProducts,
     ...solarPanelProducts,
     ...inverterProducts,
     ...batteryProducts,
+    ...accessoryProducts,
   ];
 
   if (itemsParam) {

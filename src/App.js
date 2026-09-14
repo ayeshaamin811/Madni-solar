@@ -33,19 +33,20 @@ import ProductCategoryPage from "./pages/ProductCategoryPage/ProductCategoryPage
 import ProductItemPage from "./pages/ProductItemPage/ProductItemPage";
 import ProductItemDetailPage from "./pages/ProductItemDetailPage/ProductItemDetailPage";
 import CalculatorPage from "./pages/CalculatorPage/CalculatorPage";
-import productCategories from "./data/productCategories";
 
-// Inverter categories ab backend se aati hain (src/api/inverters.js), lekin
-// in teeno ki slugs stable hain (naya category add karna khud hi code change
-// maangta hai) — is liye yahan static rakhi hain. Static rehna zaroori bhi hai:
-// category segment ko bhi :param bana dete tou /inverters/:category/:brandSlug
-// aur purani flat /inverters/:brandSlug/:productSlug route ek jaisi shape ki
-// ban jati (dono "/inverters/:a/:b"), jo React Router mein ambiguous hai —
-// static segment hi unhe ek dusre se alag rakhta hai.
+
 const INVERTER_CATEGORY_SLUGS = [
   "ongrid-inverters",
   "batteryless-pv-inverters",
   "hybrid-inverters",
+];
+
+
+const PRODUCT_CATEGORY_SLUGS = [
+  "installation-accessories",
+  "packages",
+  "product-accessories",
+  "vfds",
 ];
 
 
@@ -102,19 +103,19 @@ function App() {
         />
         <Route path="/products" element={<ProductsCatalogPage />} />
 
-        {productCategories.map((category) => (
-          <React.Fragment key={category.slug}>
+        {PRODUCT_CATEGORY_SLUGS.map((categorySlug) => (
+          <React.Fragment key={categorySlug}>
             <Route
-              path={`/products/${category.slug}`}
-              element={<ProductCategoryPage categorySlug={category.slug} />}
+              path={`/products/${categorySlug}`}
+              element={<ProductCategoryPage categorySlug={categorySlug} />}
             />
             <Route
-              path={`/products/${category.slug}/:itemSlug`}
-              element={<ProductItemPage categorySlug={category.slug} />}
+              path={`/products/${categorySlug}/:itemSlug`}
+              element={<ProductItemPage categorySlug={categorySlug} />}
             />
             <Route
-              path={`/products/${category.slug}/:itemSlug/:productSlug`}
-              element={<ProductItemDetailPage categorySlug={category.slug} />}
+              path={`/products/${categorySlug}/:itemSlug/:productSlug`}
+              element={<ProductItemDetailPage categorySlug={categorySlug} />}
             />
           </React.Fragment>
         ))}

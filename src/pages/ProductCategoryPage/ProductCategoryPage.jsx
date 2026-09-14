@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import heroBanner from "../../assets/hero-banner.webp";
-import { getProductCategory } from "../../data/productCategories";
-import { getCategoryProducts } from "../../data/productItems";
+import { getProductCategories, getProducts } from "../../api/products";
 import "./ProductCategoryPage.css";
 
 /*
@@ -20,12 +19,45 @@ import "./ProductCategoryPage.css";
     /products/installation-accessories -> categorySlug="installation-accessories"
     /products/vfds                     -> categorySlug="vfds"
 
-  Category ki definition (kaun sa item kis category mein hai) yahan nahi,
-  src/data/productCategories.js (aur us se upar productsMenu.js) mein hai.
+  Category (name/description) aur products dono ab backend se aate hain
+  (src/api/products.js).
   ============================================================================
 */
 function ProductCategoryPage({ categorySlug }) {
-  const category = getProductCategory(categorySlug);
+  const [category, setCategory] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    Promise.all([getProductCategories(), getProducts({ category: categorySlug })])
+      .then(([categories, categoryProducts]) => {
+        if (cancelled) return;
+        setCategory(categories.find((c) => c.slug === categorySlug) || null);
+        setProducts(categoryProducts);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [categorySlug]);
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="product-category-not-found">
+          <p>Loading...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   // Galat/unknown slug — same fallback jaisa InverterCategoryPage mein hai.
   if (!category) {
@@ -39,10 +71,6 @@ function ProductCategoryPage({ categorySlug }) {
       </div>
     );
   }
-
-  // Is category ke saare products (menu order mein — parent item, phir uske
-  // sub-items).
-  const products = getCategoryProducts(category.slug);
 
   return (
     <div>

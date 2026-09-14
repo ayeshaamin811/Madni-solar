@@ -3,12 +3,12 @@ import "./Navbar.css";
 import logo from "../../assets/project-logo.png";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import productsMenu, { slugifyProduct } from "../../data/productsMenu";
 import { BATTERY_CATEGORY } from "../../data/batteryMenu";
 import AuthModal from "../AuthModal/AuthModal";
 import { getSolarPanelBrands } from "../../api/solarPanels";
 import { getInverterCategories } from "../../api/inverters";
 import { getBatteryBrands } from "../../api/batteries";
+import { getProductCategories } from "../../api/products";
 
 // Professional icon set from react-icons (install: npm i react-icons)
 import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaBolt, FaMinus, FaRegUser } from "react-icons/fa";
@@ -21,10 +21,10 @@ import { FaXTwitter } from "react-icons/fa6";
 const aboutMenu = ["About", "Policy Trading", "Our Team", "Careers"];
 
 // ===== Mega menu shape (Inverters + Products + Batteries) =====
-// Teenon menus ki tree ab apni apni data file mein hai — src/data/inverterMenu.js,
-// src/data/productsMenu.js aur src/data/batteryMenu.js. Har jagah Navbar,
-// category/brand pages aur breadcrumbs — teenon wahin se banti hain, is liye
-// menu aur pages kabhi alag nahi ho sakte.
+// Teenon menus ki tree ab backend se fetch hoti hai (src/api/inverters.js,
+// src/api/products.js, src/api/batteries.js) — Navbar, category/brand pages
+// aur breadcrumbs sab isi ek API response se banti hain, is liye menu aur
+// pages kabhi alag nahi ho sakte.
 //
 //   group   -> ek category ka block; `span` = menu grid ki kitni tracks leta hai
 //              (1 = apni jagah, 2 = poori width); groups ke darmiyan divider.
@@ -141,65 +141,92 @@ const renderMegaGroups = (groups, keyPrefix, renderer, totalCols, basePath = "/i
   ));
 
 // ============================================================================
-// LINKED MENU HELPERS (Inverters + Products — per-item pages)
+// PRODUCTS (ACCESSORIES) — API-driven renderer
 // ----------------------------------------------------------------------------
 // Har item (aur uske nested sub-items) apni page par jata hai:
 //
-//   /inverters/<categorySlug>/<brandSlug>
 //   /products/<categorySlug>/<itemSlug>
 //
 // Category URL mein hone ki wajah se breadcrumb poora ban jata hai —
-// "Madni Solar / Inverters / Ongrid Inverters / Inverex / Single Phase", ya
 // "Madni Solar / Products / Installation Accessories / Cables / Nafees Cables"
-// — aur jo item ek se zyada category mein hai (Goodwe, Knox, Huawei) uska bhi
-// pata chal jata hai ke user kis category se aaya tha.
-//
-// Jis item par explicit `to` ho ("All Brands with Capacity (kW)") wo apni hi
-// destination rakhta hai. Batteries aur baaki menus (jinki abhi pages nahi
-// hain) plain renderItems use karte hain.
-//
-// Dono menus ka logic ek hi hai, bas base path aur slug rule alag — is liye ek
-// factory se dono renderers bana lete hain (desktop + mobile, dono jagah).
+// — aur jo item ek se zyada category mein hai (Huawei, Solis) uska bhi pata
+// chal jata hai ke user kis category se aaya tha.
+// ----------------------------------------------------------------------------
+// Products ka tree ab backend se aata hai (getProductCategories()) aur har
+// node apna slug khud leke aata hai (arbitrary depth, jaisa Batteries mein),
+// lekin categories bhi hain (jaisa Inverters mein) — is liye dono patterns
+// milte hain: renderer categorySlug ke saath scoped hai aur recursive bhi.
 // ============================================================================
-const makeLinkedItemRenderer = (basePath, slugifyName) => {
-  const render = (items, keyPrefix, opts = {}) => {
-    const { categorySlug, parentSlug, depth = 0 } = opts;
-    return items.map((item, index) => {
-      const isObject = typeof item === "object";
-      const label = isObject ? item.name : item;
-      const key = `${keyPrefix}-${index}`;
+const renderProductItems = (items, keyPrefix, opts = {}) => {
+  const { categorySlug, depth = 0 } = opts;
+  return items.map((item, index) => {
+    const key = `${keyPrefix}-${index}`;
+    const to = `/products/${categorySlug}/${item.slug}`;
 
-      // Slugs follow the same rule as the data files (title slugified to kebab,
-      // nested items parent ke slug ke saath jud kar).
-      const ownSlug = parentSlug
-        ? `${parentSlug}-${slugifyName(label)}`
-        : slugifyName(label);
-
-      const to = isObject && item.to ? item.to : `${basePath}/${categorySlug}/${ownSlug}`;
-
-      return (
-        <li key={key} className="mega-item">
-          <Link to={to}>
-            {bulletFor(depth)} {label}
-          </Link>
-          {isObject && item.sub && (
-            <ul className="mega-sublist">
-              {render(item.sub, key, {
-                categorySlug,
-                parentSlug: ownSlug,
-                depth: depth + 1,
-              })}
-            </ul>
-          )}
-        </li>
-      );
-    });
-  };
-
-  return render;
+    return (
+      <li key={key} className="mega-item">
+        <Link to={to}>
+          {bulletFor(depth)} {item.name}
+        </Link>
+        {item.sub && item.sub.length > 0 && (
+          <ul className="mega-sublist">
+            {renderProductItems(item.sub, key, { categorySlug, depth: depth + 1 })}
+          </ul>
+        )}
+      </li>
+    );
+  });
 };
 
-const renderProductItems = makeLinkedItemRenderer("/products", slugifyProduct);
+// Fetched categories (API tree) ko renderMegaGroups/renderMobileGroups ke
+// groups/sections/columns shape mein dhalta hai. Har category ka ek hi
+// column hai — original static menu mein bhi yahi tha (koi multi-column
+// split nahi), is liye chunking ki zaroorat nahi.
+const buildProductGroups = (categories) => {
+  const bySlug = Object.fromEntries(categories.map((c) => [c.slug, c]));
+  const installation = bySlug["installation-accessories"];
+  const packages = bySlug["packages"];
+  const accessories = bySlug["product-accessories"];
+  const vfds = bySlug["vfds"];
+
+  const groups = [];
+
+  const leftSections = [];
+  if (installation) {
+    leftSections.push({
+      heading: installation.name,
+      categorySlug: installation.slug,
+      columns: [installation.items],
+    });
+  }
+  if (packages) {
+    leftSections.push({
+      heading: packages.name,
+      categorySlug: packages.slug,
+      columns: [packages.items],
+    });
+  }
+  if (leftSections.length) groups.push({ span: 1, sections: leftSections });
+
+  const rightSections = [];
+  if (accessories) {
+    rightSections.push({
+      heading: accessories.name,
+      categorySlug: accessories.slug,
+      columns: [accessories.items],
+    });
+  }
+  if (vfds) {
+    rightSections.push({
+      heading: vfds.name,
+      categorySlug: vfds.slug,
+      columns: [vfds.items],
+    });
+  }
+  if (rightSections.length) groups.push({ span: 1, sections: rightSections });
+
+  return groups;
+};
 
 // ============================================================================
 // INVERTERS — API-driven renderer
@@ -413,6 +440,21 @@ const Navbar = () => {
   }, []);
 
   const batteryGroups = buildBatteryGroups(batteryBrands);
+
+  // Products (Accessories) ka category/item tree bhi ab backend se aata hai.
+  const [productCategories, setProductCategories] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    getProductCategories().then((categories) => {
+      if (!cancelled) setProductCategories(categories);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const productGroups = buildProductGroups(productCategories);
 
   // Mobile mega-menu ki section heading. Agar `to` diya ho (Ongrid / Hybrid /
   // Packages / VFDs ...) tou clickable link banti hai jo apni category page
@@ -663,7 +705,7 @@ const Navbar = () => {
                     <h3 className="mega-title">Other Products</h3>
                   </Link>
                   <div className="mega-grid mega-grid-products">
-                    {renderMegaGroups(productsMenu, "prd", renderProductItems, 2, "/products")}
+                    {renderMegaGroups(productGroups, "prd", renderProductItems, 2, "/products")}
                   </div>
                 </div>
               )}
@@ -885,7 +927,7 @@ const Navbar = () => {
           {openMenu === "products" && (
             <ul className="mobile-dropdown">
               {renderMobileHeading("All Products", "/products", "m-prd-all")}
-              {renderMobileGroups(productsMenu, "m-prd", renderProductItems, "/products")}
+              {renderMobileGroups(productGroups, "m-prd", renderProductItems, "/products")}
             </ul>
           )}
         </li>

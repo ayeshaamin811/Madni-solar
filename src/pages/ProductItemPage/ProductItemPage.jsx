@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
-import { getItemProducts } from "../../data/productItems";
+import { getProductCategories, getProducts } from "../../api/products";
 import { getProductTrail, findProductCategoryForSlug } from "../../data/productsMenu";
 import "./ProductItemPage.css";
 
@@ -24,14 +24,56 @@ function ProductItemPage({ categorySlug }) {
   // URL se itemSlug nikalo, e.g. /products/packages/huawei -> "huawei"
   const { itemSlug } = useParams();
 
-  // Breadcrumb + item ka data ek hi trail se aata hai. Route ki category mein
-  // item na mile (galat URL) tou jahan bhi mile, wahan se utha lete hain.
-  const activeCategory =
-    categorySlug && getProductTrail(categorySlug, itemSlug)
-      ? categorySlug
-      : findProductCategoryForSlug(itemSlug);
+  const [trail, setTrail] = useState(null);
+  const [itemProducts, setItemProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const trail = activeCategory ? getProductTrail(activeCategory, itemSlug) : null;
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    getProductCategories()
+      .then((categoriesData) => {
+        // Route ki category mein item na mile (galat URL) tou jahan bhi mile,
+        // wahan se utha lete hain.
+        const activeCategory =
+          categorySlug && getProductTrail(categoriesData, categorySlug, itemSlug)
+            ? categorySlug
+            : findProductCategoryForSlug(categoriesData, itemSlug);
+
+        const nextTrail = activeCategory
+          ? getProductTrail(categoriesData, activeCategory, itemSlug)
+          : null;
+
+        if (cancelled) return null;
+        setTrail(nextTrail);
+
+        if (!nextTrail) return null;
+        return getProducts({ category: activeCategory, item: itemSlug });
+      })
+      .then((products) => {
+        if (!cancelled) setItemProducts(products || []);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [categorySlug, itemSlug]);
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="product-item-not-found">
+          <p>Loading...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   // Agar item na mile (galat slug), simple message dikhao
   if (!trail) {
@@ -48,9 +90,6 @@ function ProductItemPage({ categorySlug }) {
 
   const categoryPath = `/products/${trail.category.slug}`;
   const currentName = trail.item.name;
-
-  // Sirf isi item ke (aur isi category ke) products
-  const itemProducts = getItemProducts(trail.category.slug, trail.item.slug);
 
   // Breadcrumb: Madni Solar / Products / <Category> / [<Parents> /] <Item>
   const crumbs = [
@@ -77,11 +116,11 @@ function ProductItemPage({ categorySlug }) {
       <section className="product-item-content">
         <div className="container">
           {/* Is item ke andar ke sub-items (agar hon) */}
-          {trail.item.children.length > 0 && (
+          {trail.item.sub && trail.item.sub.length > 0 && (
             <div className="product-item-subs">
               <h2 className="product-item-subs-title">In {currentName}</h2>
               <div className="product-item-subs-list">
-                {trail.item.children.map((child) => (
+                {trail.item.sub.map((child) => (
                   <Link
                     key={child.slug}
                     to={`${categoryPath}/${child.slug}`}
