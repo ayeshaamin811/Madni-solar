@@ -33,8 +33,20 @@ import ProductCategoryPage from "./pages/ProductCategoryPage/ProductCategoryPage
 import ProductItemPage from "./pages/ProductItemPage/ProductItemPage";
 import ProductItemDetailPage from "./pages/ProductItemDetailPage/ProductItemDetailPage";
 import CalculatorPage from "./pages/CalculatorPage/CalculatorPage";
-import inverterCategories from "./data/inverterCategories";
 import productCategories from "./data/productCategories";
+
+// Inverter categories ab backend se aati hain (src/api/inverters.js), lekin
+// in teeno ki slugs stable hain (naya category add karna khud hi code change
+// maangta hai) — is liye yahan static rakhi hain. Static rehna zaroori bhi hai:
+// category segment ko bhi :param bana dete tou /inverters/:category/:brandSlug
+// aur purani flat /inverters/:brandSlug/:productSlug route ek jaisi shape ki
+// ban jati (dono "/inverters/:a/:b"), jo React Router mein ambiguous hai —
+// static segment hi unhe ek dusre se alag rakhta hai.
+const INVERTER_CATEGORY_SLUGS = [
+  "ongrid-inverters",
+  "batteryless-pv-inverters",
+  "hybrid-inverters",
+];
 
 
 function App() {
@@ -60,19 +72,19 @@ function App() {
         <Route path="/inverters" element={<InvertersPage />} />
 
 
-        {inverterCategories.map((category) => (
-          <React.Fragment key={category.slug}>
+        {INVERTER_CATEGORY_SLUGS.map((categorySlug) => (
+          <React.Fragment key={categorySlug}>
             <Route
-              path={`/inverters/${category.slug}`}
-              element={<InverterCategoryPage categorySlug={category.slug} />}
+              path={`/inverters/${categorySlug}`}
+              element={<InverterCategoryPage categorySlug={categorySlug} />}
             />
             <Route
-              path={`/inverters/${category.slug}/:brandSlug`}
-              element={<InverterBrandPage categorySlug={category.slug} />}
+              path={`/inverters/${categorySlug}/:brandSlug`}
+              element={<InverterBrandPage categorySlug={categorySlug} />}
             />
             <Route
-              path={`/inverters/${category.slug}/:brandSlug/:productSlug`}
-              element={<InverterDetailPage categorySlug={category.slug} />}
+              path={`/inverters/${categorySlug}/:brandSlug/:productSlug`}
+              element={<InverterDetailPage categorySlug={categorySlug} />}
             />
           </React.Fragment>
         ))}

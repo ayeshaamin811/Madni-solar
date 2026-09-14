@@ -3,11 +3,11 @@ import "./Navbar.css";
 import logo from "../../assets/project-logo.png";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import invertersMenu, { slugifyInverter } from "../../data/inverterMenu";
 import productsMenu, { slugifyProduct } from "../../data/productsMenu";
 import batteriesMenu, { slugifyBattery } from "../../data/batteryMenu";
 import AuthModal from "../AuthModal/AuthModal";
 import { getSolarPanelBrands } from "../../api/solarPanels";
+import { getInverterCategories } from "../../api/inverters";
 
 // Professional icon set from react-icons (install: npm i react-icons)
 import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaBolt, FaMinus, FaRegUser } from "react-icons/fa";
@@ -198,8 +198,97 @@ const makeLinkedItemRenderer = (basePath, slugifyName) => {
   return render;
 };
 
-const renderInverterItems = makeLinkedItemRenderer("/inverters", slugifyInverter);
 const renderProductItems = makeLinkedItemRenderer("/products", slugifyProduct);
+
+// ============================================================================
+// INVERTERS — API-driven renderer
+// ----------------------------------------------------------------------------
+// Inverters ka tree ab backend se aata hai (getInverterCategories()) aur har
+// node (brand ya sub-variant) apna slug khud leke aata hai — is liye
+// makeLinkedItemRenderer (jo slug client-side compute karta hai) ki zaroorat
+// nahi, seedha item.slug use karte hain.
+// ============================================================================
+const renderInverterBrandItems = (items, keyPrefix, opts = {}) => {
+  const { categorySlug, depth = 0 } = opts;
+  return items.map((item, index) => {
+    const key = `${keyPrefix}-${index}`;
+    const to = item.to || `/inverters/${categorySlug}/${item.slug}`;
+
+    return (
+      <li key={key} className="mega-item">
+        <Link to={to}>
+          {bulletFor(depth)} {item.name}
+        </Link>
+        {item.sub && item.sub.length > 0 && (
+          <ul className="mega-sublist">
+            {renderInverterBrandItems(item.sub, key, { categorySlug, depth: depth + 1 })}
+          </ul>
+        )}
+      </li>
+    );
+  });
+};
+
+// Har category ke brands ko itni columns mein taqseem karta hai (roughly
+// even) — column placement ab kisi API field se nahi aata, warna backend mein
+// naya brand add hone par bhi menu ka layout theek rehta hai.
+const chunkColumns = (items, columns) => {
+  if (items.length === 0) return [];
+  const size = Math.ceil(items.length / columns);
+  const chunks = [];
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size));
+  }
+  return chunks;
+};
+
+// "All Brands with Capacity (kW)" — koi brand nahi, sirf /inverters ka
+// shortcut link (backend response mein ye kabhi nahi aata, yahan add karte hain).
+const HYBRID_ALL_BRANDS_LINK = { name: "All Brands with Capacity (kW)", to: "/inverters" };
+
+// Fetched categories (API tree) ko renderMegaGroups/renderMobileGroups ke
+// groups/sections/columns shape mein dhalta hai (batteries/products jaisa hi
+// shape) — column count/grouping yahan frontend ka layout decision hai.
+const buildInverterGroups = (categories) => {
+  const bySlug = Object.fromEntries(categories.map((c) => [c.slug, c]));
+  const ongrid = bySlug["ongrid-inverters"];
+  const batteryless = bySlug["batteryless-pv-inverters"];
+  const hybrid = bySlug["hybrid-inverters"];
+
+  const groups = [];
+
+  const leftSections = [];
+  if (ongrid) {
+    leftSections.push({
+      heading: ongrid.name,
+      categorySlug: ongrid.slug,
+      columns: chunkColumns(ongrid.brands, 2),
+    });
+  }
+  if (batteryless) {
+    leftSections.push({
+      heading: batteryless.name,
+      categorySlug: batteryless.slug,
+      columns: [batteryless.brands],
+    });
+  }
+  if (leftSections.length) groups.push({ span: 1, sections: leftSections });
+
+  if (hybrid) {
+    groups.push({
+      span: 1,
+      sections: [
+        {
+          heading: hybrid.name,
+          categorySlug: hybrid.slug,
+          columns: chunkColumns([HYBRID_ALL_BRANDS_LINK, ...hybrid.brands], 3),
+        },
+      ],
+    });
+  }
+
+  return groups;
+};
 
 // Batteries ki filhaal ek hi category hai ("Batteries") aur uski page khud
 // /batteries hai — Inverters ki tarah alag category segment nahi banta. Is
@@ -252,6 +341,22 @@ const Navbar = () => {
       cancelled = true;
     };
   }, []);
+
+  // Inverters ka category/brand tree bhi ab backend se aata hai — Django admin
+  // mein naya brand/sub-variant add karte hi yahan bhi dikhna chahiye.
+  const [inverterCategories, setInverterCategories] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    getInverterCategories().then((categories) => {
+      if (!cancelled) setInverterCategories(categories);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const inverterGroups = buildInverterGroups(inverterCategories);
 
   // Mobile mega-menu ki section heading. Agar `to` diya ho (Ongrid / Hybrid /
   // Packages / VFDs ...) tou clickable link banti hai jo apni category page
@@ -452,7 +557,7 @@ const Navbar = () => {
                     <h3 className="mega-title">Inverters</h3>
                   </Link>
                   <div className="mega-grid mega-grid-inverters">
-                    {renderMegaGroups(invertersMenu, "inv", renderInverterItems, 2)}
+                    {renderMegaGroups(inverterGroups, "inv", renderInverterBrandItems, 2)}
                   </div>
                 </div>
               )}
@@ -694,7 +799,7 @@ const Navbar = () => {
             </div>
             {openMenu === "inverters" && (
               <ul className="mobile-dropdown">
-                {renderMobileGroups(invertersMenu, "m-inv", renderInverterItems)}
+                {renderMobileGroups(inverterGroups, "m-inv", renderInverterBrandItems)}
               </ul>
             )}
           </li>

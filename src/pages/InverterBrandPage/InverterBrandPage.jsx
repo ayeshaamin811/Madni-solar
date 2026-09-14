@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
-import inverterBrands from "../../data/inverterBrands";
-import inverterProducts from "../../data/inverterProducts";
+import { getInverterCategories, getInverterProducts } from "../../api/inverters";
 import { getInverterTrail, findCategoryForSlug } from "../../data/inverterMenu";
 import "./InverterBrandPage.css";
 
@@ -12,21 +11,59 @@ import "./InverterBrandPage.css";
 import heroBanner from "../../assets/hero-banner.webp";
 
 // Mirrors SolarPanelBrandPage, driven by the :brandSlug route param and the
-// inverter data files.
+// inverters API (categories tree for the breadcrumb/name, products filtered
+// by brand).
 //
 // `categorySlug` route se aata hai (/inverters/ongrid-inverters/canadian). Uski
 // wajah se breadcrumb poora banta hai aur product cards bhi category ke andar
 // hi rehte hain. Purane flat URL (/inverters/canadian) par categorySlug nahi
-// hota — us case mein pehli matching category dhoond lete hain.
+// hota — us case mein fetched categories mein pehli matching category dhoond
+// lete hain.
 function InverterBrandPage({ categorySlug }) {
   // URL se brandSlug nikalo, e.g. /inverters/ongrid-inverters/goodwe -> "goodwe"
   const { brandSlug } = useParams();
 
-  // Data file mein matching brand dhoondo
-  const brand = inverterBrands.find((b) => b.slug === brandSlug);
+  const [categories, setCategories] = useState([]);
+  const [brandProducts, setBrandProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    Promise.all([getInverterCategories(), getInverterProducts({ brand: brandSlug })])
+      .then(([categoriesData, products]) => {
+        if (cancelled) return;
+        setCategories(categoriesData);
+        setBrandProducts(products);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [brandSlug]);
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="brand-not-found">
+          <p>Loading...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Breadcrumb: Madni Solar / Inverters / <Category> / [<Parent brand> /] <Item>
+  const activeCategory = categorySlug || findCategoryForSlug(categories, brandSlug);
+  const trail = activeCategory ? getInverterTrail(categories, activeCategory, brandSlug) : null;
 
   // Agar brand na mile (galat slug), simple message dikhao
-  if (!brand) {
+  if (!trail) {
     return (
       <div>
         <Navbar />
@@ -38,34 +75,23 @@ function InverterBrandPage({ categorySlug }) {
     );
   }
 
-  // Sirf isi brand ke products nikalo
-  const brandProducts = inverterProducts.filter(
-    (product) => product.brandSlug === brand.slug
-  );
-
-  // Breadcrumb: Madni Solar / Inverters / <Category> / [<Parent brand> /] <Item>
-  const activeCategory = categorySlug || findCategoryForSlug(brand.slug);
-  const trail = getInverterTrail(activeCategory, brand.slug);
-
   const crumbs = [{ name: "Inverters", to: "/inverters" }];
-  if (trail) {
+  crumbs.push({
+    name: trail.category.name,
+    to: `/inverters/${trail.category.slug}`,
+  });
+  // Sub-variant (Single Phase, Krypton...) ho tou uska parent brand bhi dikhao
+  if (trail.parent) {
     crumbs.push({
-      name: trail.category.name,
-      to: `/inverters/${trail.category.slug}`,
+      name: trail.parent.name,
+      to: `/inverters/${trail.category.slug}/${trail.parent.slug}`,
     });
-    // Sub-variant (Single Phase, Krypton...) ho tou uska parent brand bhi dikhao
-    if (trail.parent) {
-      crumbs.push({
-        name: trail.parent.name,
-        to: `/inverters/${trail.category.slug}/${trail.parent.slug}`,
-      });
-    }
   }
 
   // Page ka title/current crumb: sub-variant ka chhota naam ("Single Phase")
   // dikhta hai, poora "Inverex Single Phase" nahi — kyunke parent upar hi hai.
-  const currentName = trail ? trail.item.name : brand.name;
-  const basePath = trail ? `/inverters/${trail.category.slug}` : "/inverters";
+  const currentName = trail.item.name;
+  const basePath = `/inverters/${trail.category.slug}`;
 
   return (
     <div>
@@ -90,7 +116,7 @@ function InverterBrandPage({ categorySlug }) {
                 {brandProducts.map((product) => (
                   <Link
                     key={product.slug}
-                    to={`${basePath}/${brand.slug}/${product.slug}`}
+                    to={`${basePath}/${trail.item.slug}/${product.slug}`}
                     className="product-card"
                   >
                     <img
@@ -108,7 +134,7 @@ function InverterBrandPage({ categorySlug }) {
             </>
           ) : (
             <p className="no-products-text">
-              No products found for {brand.name} yet.
+              No products found for {currentName} yet.
             </p>
           )}
         </div>

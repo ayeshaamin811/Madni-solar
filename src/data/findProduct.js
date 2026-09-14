@@ -3,27 +3,27 @@
 // poora product object (name, price, image) dono data files se dhoond leta hai —
 // isi liye page refresh ya shared link par bhi quote wala product zinda rehta hai.
 //
-// Solar panels ab backend se aate hain (src/api/solarPanels.js), baaki teenon
-// (inverter/battery/product) abhi bhi static data files hain — is liye unka
-// merge synchronous hai, aur solar panels ka fetch-once cache neeche.
-import inverterProducts from "./inverterProducts";
+// Solar panels aur inverters ab backend se aate hain (src/api/solarPanels.js,
+// src/api/inverters.js), baaki dono (battery/product) abhi bhi static data
+// files hain — is liye unka merge synchronous hai, aur backend waalon ke
+// fetch-once cache neeche.
 import batteryProducts from "./batteryProducts";
 import productItems from "./productItems";
 import { getSolarPanelProducts } from "../api/solarPanels";
+import { getInverterProducts } from "../api/inverters";
 
 // Har product ke saath uska type rakho taake quote page category dikha sake.
 // productItems ke slugs category ke saath prefixed hain ("packages-huawei") aur
 // batteryProducts ke "battery-" ke saath ("battery-huawei"), is liye ye kisi
 // inverter/panel slug se takrate nahi.
 const staticProducts = [
-  ...inverterProducts.map((product) => ({ ...product, type: "inverter" })),
   ...batteryProducts.map((product) => ({ ...product, type: "battery" })),
   ...productItems.map((product) => ({ ...product, type: "product" })),
 ];
 
-// Solar panel products ek dafa API se fetch karke cache ho jate hain — baar baar
-// request ki zaroorat nahi. Fetch fail ho jaye tou cache khaali reh jati hai aur
-// agli call phir se try karti hai.
+// Solar panel aur inverter products ek dafa API se fetch karke cache ho jate
+// hain — baar baar request ki zaroorat nahi. Fetch fail ho jaye tou cache
+// khaali reh jati hai aur agli call phir se try karti hai.
 let solarPanelProductsCache = null;
 let solarPanelProductsPromise = null;
 
@@ -44,6 +44,28 @@ function loadSolarPanelProducts() {
       });
   }
   return solarPanelProductsPromise;
+}
+
+let inverterProductsCache = null;
+let inverterProductsPromise = null;
+
+function loadInverterProducts() {
+  if (inverterProductsCache) return Promise.resolve(inverterProductsCache);
+  if (!inverterProductsPromise) {
+    inverterProductsPromise = getInverterProducts()
+      .then((products) => {
+        inverterProductsCache = products.map((product) => ({
+          ...product,
+          type: "inverter",
+        }));
+        return inverterProductsCache;
+      })
+      .catch(() => {
+        inverterProductsPromise = null;
+        return [];
+      });
+  }
+  return inverterProductsPromise;
 }
 
 // slug (aur agar diya ho to brandSlug) se matching product return karta hai.
@@ -89,16 +111,20 @@ export function buildCartQuoteLink(cartItems = []) {
 // Quote page yahan se apni item list banata hai. Pehle `items` (basket) dekhta
 // hai, warna single `product` param. Har entry: { product, quantity, lineTotal }.
 //
-// Async hai kyunke solar panel products ab API se aate hain (loadSolarPanelProducts) —
-// koi product/items param hi na ho tou ye fetch bhi nahi hota.
+// Async hai kyunke solar panel aur inverter products ab API se aate hain
+// (loadSolarPanelProducts / loadInverterProducts) — koi product/items param hi
+// na ho tou ye fetch bhi nahi hota.
 export async function parseQuoteItems(searchParams) {
   const itemsParam = searchParams.get("items");
   const productParam = searchParams.get("product");
 
   if (!itemsParam && !productParam) return [];
 
-  const solarPanelProducts = await loadSolarPanelProducts();
-  const allProducts = [...staticProducts, ...solarPanelProducts];
+  const [solarPanelProducts, inverterProducts] = await Promise.all([
+    loadSolarPanelProducts(),
+    loadInverterProducts(),
+  ]);
+  const allProducts = [...staticProducts, ...solarPanelProducts, ...inverterProducts];
 
   if (itemsParam) {
     return itemsParam

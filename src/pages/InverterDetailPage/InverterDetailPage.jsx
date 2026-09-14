@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import { useCart } from "../../context/CartContext";
-import inverterProducts from "../../data/inverterProducts";
+import { getInverterCategories, getInverterProduct } from "../../api/inverters";
 import { getInverterTrail, findCategoryForSlug } from "../../data/inverterMenu";
 import { buildQuoteLink } from "../../data/findProduct";
 import "./InverterDetailPage.css";
@@ -16,23 +16,59 @@ import heroBanner from "../../assets/hero-banner.webp";
 // WhatsApp contact number used for the enquiry button.
 const WHATSAPP_NUMBER = "923111666677";
 
-// Mirrors the Solar Panels ProductDetailPage exactly, but for inverter data.
+// Mirrors the Solar Panels ProductDetailPage, but for inverter data (categories
+// tree for the breadcrumb + a single product from the backend).
 // `categorySlug` route se aata hai, e.g.
 // /inverters/ongrid-inverters/inverex-single-phase/inverex-single-phase
 function InverterDetailPage({ categorySlug }) {
   // URL se brandSlug + productSlug nikalo
   const { brandSlug, productSlug } = useParams();
 
-  // Data file mein matching product dhoondo (brand + product dono match honi chahiye)
-  const product = inverterProducts.find(
-    (p) => p.slug === productSlug && p.brandSlug === brandSlug
-  );
+  const [categories, setCategories] = useState([]);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Product quantity (default 1)
   const [quantity, setQuantity] = useState(1);
 
   // Global cart helper for adding the current product to the basket
   const { addToBasket } = useCart();
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    Promise.all([getInverterCategories(), getInverterProduct(productSlug)])
+      .then(([categoriesData, data]) => {
+        if (cancelled) return;
+        setCategories(categoriesData);
+        // Brand bhi match honi chahiye — warna galat brand ke saath sahi
+        // productSlug hit karne par mismatched product dikh jayega.
+        setProduct(data && data.brandSlug === brandSlug ? data : null);
+      })
+      .catch(() => {
+        if (!cancelled) setProduct(null);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [brandSlug, productSlug]);
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <div className="product-not-found">
+          <p>Loading...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   // Agar product na mile (galat slug), simple message dikhao
   if (!product) {
@@ -48,8 +84,8 @@ function InverterDetailPage({ categorySlug }) {
   }
 
   // Breadcrumb: Madni Solar / Inverters / <Category> / [<Parent> /] <Item> / <Product>
-  const activeCategory = categorySlug || findCategoryForSlug(brandSlug);
-  const trail = getInverterTrail(activeCategory, brandSlug);
+  const activeCategory = categorySlug || findCategoryForSlug(categories, brandSlug);
+  const trail = activeCategory ? getInverterTrail(categories, activeCategory, brandSlug) : null;
 
   const crumbs = [{ name: "Inverters", to: "/inverters" }];
   if (trail) {
@@ -65,8 +101,6 @@ function InverterDetailPage({ categorySlug }) {
   }
 
   // Description ek hi block hai — bullets ki jagah paragraph(s) mein dikhti hai.
-  // Backend se aage ek single string aayegi, is liye string aur paragraphs ki
-  // array — dono chal jati hain.
   const descriptionParagraphs = Array.isArray(product.description)
     ? product.description
     : product.description
