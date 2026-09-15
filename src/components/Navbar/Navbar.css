@@ -247,9 +247,7 @@
   max-width: 1200px;
 }
 
-/* Products menu Inverters/Batteries se chhota hai (do columns) aur nav mein
-   thoda daayen hota hai — is liye isay nav item ke right edge se align karte
-   hain, taake screen se bahar na nikle. */
+
 .mega-menu-products {
   left: 0;
   right: 0;
