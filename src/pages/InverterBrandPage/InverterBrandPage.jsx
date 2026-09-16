@@ -98,7 +98,7 @@ function InverterBrandPage({ categorySlug }) {
       <Navbar />
 
       <PageBanner
-        image={heroBanner}
+        image={trail.item.image || heroBanner}
         title={currentName}
         trail={crumbs}
         currentPage={currentName}

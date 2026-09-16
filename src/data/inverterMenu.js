@@ -24,14 +24,17 @@ export const getInverterTrail = (categories, categorySlug, itemSlug) => {
 
   for (const brand of category.brands) {
     if (brand.slug === itemSlug) {
-      return { category: categoryInfo, item: { name: brand.name, slug: brand.slug } };
+      return {
+        category: categoryInfo,
+        item: { name: brand.name, slug: brand.slug, image: brand.image },
+      };
     }
     const sub = (brand.sub || []).find((s) => s.slug === itemSlug);
     if (sub) {
       return {
         category: categoryInfo,
         parent: { name: brand.name, slug: brand.slug },
-        item: { name: sub.name, slug: sub.slug },
+        item: { name: sub.name, slug: sub.slug, image: sub.image },
       };
     }
   }
