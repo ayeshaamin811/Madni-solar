@@ -86,6 +86,10 @@ export function CartProvider({ children }) {
     setCartItems((prevItems) => prevItems.filter((item) => item.slug !== slug));
   };
 
+  // Poora basket khali karo. Order successfully place hone ke baad checkout
+  // ye chalata hai — warna items localStorage mein hamesha ke liye pare rehte.
+  const clearBasket = () => setCartItems([]);
+
   const cartCount = computeCartCount(cartItems);
   const subtotal = computeSubtotal(cartItems);
 
@@ -97,6 +101,7 @@ export function CartProvider({ children }) {
         subtotal,
         addToBasket,
         removeFromBasket,
+        clearBasket,
       }}
     >
       {children}

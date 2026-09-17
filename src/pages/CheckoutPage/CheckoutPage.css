@@ -40,7 +40,7 @@
   background-color: #e06a10;
 }
 
-/* Success state (demo placeholder) */
+/* Success state */
 .checkout-success {
   text-align: center;
   padding: 60px 20px;
@@ -77,6 +77,50 @@
 
 .checkout-success-btn:hover {
   background-color: #e06a10;
+}
+
+/* Backend ka order number — customer isi ko phone par batata hai. */
+.checkout-order-number {
+  color: #0f172a;
+  font-size: 16px;
+  margin-bottom: 14px;
+  letter-spacing: 0.3px;
+}
+
+/* ===== Validation / API errors ===== */
+
+/* Form ke upar ek message: price badal gaye, item hat gaya, throttle waghera. */
+.checkout-form-error {
+  background: #fdecea;
+  border: 1px solid #f5c2bd;
+  border-radius: 4px;
+  color: #a3261a;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  margin: 0;
+}
+
+/* Form ke andar flex item ban jata hai (gap se spacing), summary ke andar
+   normal block — dono jagah apni line par. */
+.checkout-field-error {
+  display: block;
+  color: #c0392b;
+  font-size: 12.5px;
+  margin-top: -8px;
+}
+
+.checkout-summary .checkout-field-error {
+  margin-top: 4px;
+}
+
+.checkout-input[aria-invalid="true"] {
+  border-color: #c0392b;
+}
+
+.checkout-order-btn:disabled {
+  background-color: #e6b587;
+  cursor: not-allowed;
 }
 
 /* Two-column layout: form + summary */
