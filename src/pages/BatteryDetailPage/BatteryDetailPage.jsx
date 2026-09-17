@@ -13,6 +13,9 @@ import "./BatteryDetailPage.css";
 // Default fallback image used when a product has no image of its own.
 import heroBanner from "../../assets/hero-banner.webp";
 
+// Har product detail page ka banner ek hi rehta hai.
+import productsBanner from "../../assets/products-banner.webp";
+
 // WhatsApp contact number used for the enquiry button.
 const WHATSAPP_NUMBER = "923111666677";
 
@@ -107,7 +110,7 @@ function BatteryDetailPage() {
       <Navbar />
 
       <PageBanner
-        image={product.image || heroBanner}
+        image={productsBanner}
         title={product.name}
         trail={crumbs}
         currentPage={product.name}
