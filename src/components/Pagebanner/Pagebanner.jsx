@@ -7,7 +7,7 @@ import "./Pagebanner.css";
   bilkul same text jaye. Kabhi wording badle tou yahin badalni hai.
 */
 export const PRICE_NOTICE =
-  "⚡ Prices are indicative and subject to market changes — Rates may increase or decrease. Get a quote or place your order for the latest price.";
+  "⚡ Prices are indicative and subject to market changes — Rates may increase or decrease. Add a quote or place your order for the latest price.";
 
 /*
   Marquee seamless loop ke liye text ki copies chahiye: track ko aadha
