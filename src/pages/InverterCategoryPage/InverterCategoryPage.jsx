@@ -80,6 +80,7 @@ function InverterCategoryPage({ categorySlug }) {
       <Navbar />
 
       <PageBanner
+        priceNotice
         image={heroBanner}
         title={category.name}
         parent={{ name: "Inverters", to: "/inverters" }}

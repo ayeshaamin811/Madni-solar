@@ -41,7 +41,7 @@ function BatteriesPage() {
     <div>
       <Navbar />
 
-      <PageBanner image={heroBanner} title="Batteries" currentPage="Batteries" />
+      <PageBanner image={heroBanner} title="Batteries" currentPage="Batteries" priceNotice />
 
       <section className="batteries-content">
         <div className="container">

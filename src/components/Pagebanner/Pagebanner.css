@@ -89,3 +89,125 @@
     font-size: 12px;
   }
 }
+/* ===== Price notice strip (sirf product banners par) ===== */
+
+/*
+  Patti absolute hai, isliye banner ki height par asar nahi daalti. Content
+  beech me hi centered rehta hai - bas utna padding-top de dete hain jitni
+  patti ki height hai, warna title thora upar ki taraf dab jata hai.
+*/
+.page-banner--with-notice {
+  padding-top: 40px;
+}
+
+.page-banner-notice {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/*
+  Track chalta hai, text nahi. Copies duplicate hain tou -50% se 0 tak ka
+  safar bilkul seamless lagta hai (jahan khatam wahin se dobara shuru).
+  Direction left -> right hai, yani text baayen se aata hua daayen jata hai.
+*/
+.page-banner-notice-track {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 100%;
+  will-change: transform;
+  animation: page-banner-notice-scroll 32s linear infinite;
+}
+
+/* Hover par ruk jata hai taake parhne wala poora jumla parh sake */
+.page-banner-notice:hover .page-banner-notice-track {
+  animation-play-state: paused;
+}
+
+.page-banner-notice-text {
+  flex: 0 0 auto;
+  /* gap ki jagah padding, warna copies ka 50% wala hisaab bigar jata hai */
+  padding-right: 70px;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+@keyframes page-banner-notice-scroll {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Jin users ne motion band ki hui hai unke liye patti sthir rehti hai */
+@media (prefers-reduced-motion: reduce) {
+  .page-banner-notice-track {
+    animation: none;
+    transform: none;
+  }
+
+  .page-banner-notice-text {
+    white-space: normal;
+  }
+
+  /* Ruki hui halat me sirf pehli copy hi kaafi hai */
+  .page-banner-notice-text ~ .page-banner-notice-text {
+    display: none;
+  }
+
+  .page-banner-notice {
+    height: auto;
+    min-height: 40px;
+    padding: 8px 16px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .page-banner--with-notice {
+    padding-top: 36px;
+  }
+
+  .page-banner-notice {
+    height: 36px;
+  }
+
+  .page-banner-notice-text {
+    font-size: 13px;
+    padding-right: 55px;
+  }
+}
+
+/* Mobile - chhoti screen par jumla lamba lagta hai, isliye thora tez */
+@media (max-width: 576px) {
+  .page-banner--with-notice {
+    padding-top: 32px;
+  }
+
+  .page-banner-notice {
+    height: 32px;
+  }
+
+  .page-banner-notice-text {
+    font-size: 11.5px;
+    padding-right: 40px;
+  }
+
+  .page-banner-notice-track {
+    animation-duration: 24s;
+  }
+}

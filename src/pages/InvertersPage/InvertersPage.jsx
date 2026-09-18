@@ -34,7 +34,7 @@ function InvertersPage() {
     <div>
       <Navbar />
 
-      <PageBanner image={heroBanner} title="Inverters" currentPage="Inverters" />
+      <PageBanner image={heroBanner} title="Inverters" currentPage="Inverters" priceNotice />
 
       <section className="inverters-content">
         <div className="container">

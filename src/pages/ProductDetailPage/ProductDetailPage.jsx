@@ -94,6 +94,7 @@ function ProductDetailPage() {
       <Navbar />
 
       <PageBanner
+        priceNotice
         image={productsBanner}
         title={product.name}
         currentPage={product.name}

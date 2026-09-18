@@ -14,6 +14,7 @@ function ProductsPage() {
     <div>
       <Navbar/>
         <PageBanner
+          priceNotice
         image={ProductsBanner}
         title="Products"
         currentPage="Our Products"

@@ -115,6 +115,7 @@ function InverterDetailPage({ categorySlug }) {
       <Navbar />
 
       <PageBanner
+        priceNotice
         image={productsBanner}
         title={product.name}
         trail={crumbs}

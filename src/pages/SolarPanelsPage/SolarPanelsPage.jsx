@@ -35,6 +35,7 @@ function SolarPanelsPage() {
       <Navbar />
 
       <PageBanner
+        priceNotice
         image={heroBanner}
         title="Solar Panels"
         currentPage="Solar Panels"

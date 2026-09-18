@@ -68,6 +68,7 @@ function SolarPanelBrandPage() {
       <Navbar />
 
       <PageBanner
+        priceNotice
         image={bannerImage}
         title={brand.name}
         parent={{ name: "Solar Panels", to: "/solar-panels" }}

@@ -77,6 +77,7 @@ function ProductCategoryPage({ categorySlug }) {
       <Navbar />
 
       <PageBanner
+        priceNotice
         image={heroBanner}
         title={category.name}
         parent={{ name: "Products", to: "/products" }}

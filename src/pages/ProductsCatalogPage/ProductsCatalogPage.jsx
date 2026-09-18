@@ -44,7 +44,7 @@ function ProductsCatalogPage() {
     <div>
       <Navbar />
 
-      <PageBanner image={heroBanner} title="Products" currentPage="Products" />
+      <PageBanner image={heroBanner} title="Products" currentPage="Products" priceNotice />
 
       <section className="products-catalog-content">
         <div className="container">
