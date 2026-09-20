@@ -12,7 +12,7 @@ import heroBanner from "../../assets/hero-banner.webp";
 
 // Mirrors SolarPanelBrandPage, driven by the :brandSlug route param and the
 // inverters API (categories tree for the breadcrumb/name, products filtered
-// by brand).
+// by category + brand).
 //
 // `categorySlug` route se aata hai (/inverters/ongrid-inverters/canadian). Uski
 // wajah se breadcrumb poora banta hai aur product cards bhi category ke andar
@@ -31,7 +31,15 @@ function InverterBrandPage({ categorySlug }) {
     let cancelled = false;
     setLoading(true);
 
-    Promise.all([getInverterCategories(), getInverterProducts({ brand: brandSlug })])
+    // Dono filters saath jate hain: category route se, brand URL se. Ek hi brand
+    // (Chint, Goodwe, Fox...) do categories mein hota hai, is liye sirf brand
+    // bhejne se ongrid aur hybrid page bilkul same list dikhate the.
+    // Flat purane URL (/inverters/chint) par categorySlug undefined hota hai —
+    // api layer falsy param khud hata deti hai, tou wahan brand-only chalta hai.
+    Promise.all([
+      getInverterCategories(),
+      getInverterProducts({ category: categorySlug, brand: brandSlug }),
+    ])
       .then(([categoriesData, products]) => {
         if (cancelled) return;
         setCategories(categoriesData);
@@ -44,7 +52,7 @@ function InverterBrandPage({ categorySlug }) {
     return () => {
       cancelled = true;
     };
-  }, [brandSlug]);
+  }, [categorySlug, brandSlug]);
 
   if (loading) {
     return (
