@@ -7,6 +7,7 @@ import {
   FaLinkedinIn,
   FaInstagram,
   FaTiktok,
+  FaPhone,
 } from "react-icons/fa6";
 import { HiArrowRight } from "react-icons/hi2";
 import { Link } from "react-router-dom";
@@ -44,6 +45,22 @@ function Footer() {
             We also provide complete solar solutions such as system design,
             installation, net billing, and maintenance.
           </p>
+
+          {/* Contact numbers — dono par seedha call ho jata hai */}
+          <ul className="footer-contact-list">
+            <li>
+              <a href="tel:+923701622103">
+                <FaPhone className="footer-contact-icon" />
+                <span>0370 1622103</span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+924237900400">
+                <FaPhone className="footer-contact-icon" />
+                <span>042 37900400</span>
+              </a>
+            </li>
+          </ul>
 
           {/* Social icons */}
           <div className="footer-socials flex gap-3">

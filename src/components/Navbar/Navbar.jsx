@@ -544,8 +544,11 @@ const Navbar = () => {
       <div className={`top-bar ${isScrolled ? "top-bar-hidden" : ""}`}>
         <div className="container top-bar-inner flex items-center justify-between">
           <div className="top-bar-left flex items-center">
-            <a href="tel:+923111666677" className="top-bar-link">
-              <FaPhoneAlt className="top-bar-icon" /> +923 111 666 677
+            <a href="tel:+923701622103" className="top-bar-link">
+              <FaPhoneAlt className="top-bar-icon" /> 0370 1622103
+            </a>
+            <a href="tel:+924237900400" className="top-bar-link">
+              <FaPhoneAlt className="top-bar-icon" /> 042 37900400
             </a>
             <a href="mailto:info@madnisolar.com" className="top-bar-link">
               <FaEnvelope className="top-bar-icon" /> info@madnisolar.com
@@ -934,6 +937,9 @@ const Navbar = () => {
             <li><Link to="/blog">Blog</Link></li>
             <li><Link to="/our-projects">Projects</Link></li>
             <li><Link to="/calculator" onClick={() => setIsMobileMenuOpen(false)}>Calculator</Link></li>
+            {/* Login / Register mobile drawer se filhaal hata diya hai —
+                desktop ki account-btn se modal ab bhi khulta hai. Wapas
+                chahiye tou bas ye block uncomment kar dein.
             <li>
               <button
                 type="button"
@@ -946,6 +952,7 @@ const Navbar = () => {
                 <FaRegUser className="mobile-account-icon" /> Login / Register
               </button>
             </li>
+            */}
             <li><Link to="/request-quote">Request a Quote (Beta)</Link></li>
           </ul>
         )}

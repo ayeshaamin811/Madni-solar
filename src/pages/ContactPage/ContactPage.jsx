@@ -134,7 +134,12 @@ function ContactPage() {
             <div className="contact-card">
               <span className="contact-card-icon"><FaPhoneAlt /></span>
               <h3 className="contact-card-title">Call Us</h3>
-              <p className="contact-card-value">+923 111 666 677</p>
+              <p className="contact-card-value">
+                <a href="tel:+923701622103" className="contact-card-link">0370 1622103</a>
+              </p>
+              <p className="contact-card-value">
+                <a href="tel:+924237900400" className="contact-card-link">042 37900400</a>
+              </p>
               <p className="contact-card-label">Mon – Sat, 9AM –  ​6PM</p>
             </div>
             <div className="contact-card">

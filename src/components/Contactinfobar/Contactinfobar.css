@@ -170,3 +170,8 @@
     margin-bottom: 8px;
   }
 }
+/* Phone item mein do numbers aate hain — un ke darmiyan halka separator. */
+.contact-value-sep {
+  margin: 0 8px;
+  opacity: 0.5;
+}

@@ -623,3 +623,13 @@
   transform: none;
   box-shadow: none;
 }
+
+/* "Call Us" card ab do numbers dikhata hai — dono direct dialable hain. */
+.contact-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-card-link:hover {
+  color: var(--orange-dark);
+}
