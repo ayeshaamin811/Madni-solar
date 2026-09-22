@@ -43,8 +43,8 @@ const bulletFor = (depth) =>
   );
 
 // Recursively renders a list of items, supporting one or two levels of nesting.
-// Object items with a `to` property render as internal router links (e.g. the
-// "All Brands with Capacity (kW)" entry pointing to the Inverters page).
+// Object items with a `to` property render as internal router links (menus
+// jinke apne pages nahi hain, wahan nav-only shortcuts is tarah aate hain).
 const renderItems = (items, keyPrefix, opts = {}) => {
   const { depth = 0 } = opts;
   return items.map((item, index) => {
@@ -240,7 +240,7 @@ const renderInverterBrandItems = (items, keyPrefix, opts = {}) => {
   const { categorySlug, depth = 0 } = opts;
   return items.map((item, index) => {
     const key = `${keyPrefix}-${index}`;
-    const to = item.to || `/inverters/${categorySlug}/${item.slug}`;
+    const to = `/inverters/${categorySlug}/${item.slug}`;
 
     return (
       <li key={key} className="mega-item">
@@ -269,10 +269,6 @@ const chunkColumns = (items, columns) => {
   }
   return chunks;
 };
-
-// "All Brands with Capacity (kW)" — koi brand nahi, sirf /inverters ka
-// shortcut link (backend response mein ye kabhi nahi aata, yahan add karte hain).
-const HYBRID_ALL_BRANDS_LINK = { name: "All Brands with Capacity (kW)", to: "/inverters" };
 
 // Fetched categories (API tree) ko renderMegaGroups/renderMobileGroups ke
 // groups/sections/columns shape mein dhalta hai (batteries/products jaisa hi
@@ -309,7 +305,7 @@ const buildInverterGroups = (categories) => {
         {
           heading: hybrid.name,
           categorySlug: hybrid.slug,
-          columns: chunkColumns([HYBRID_ALL_BRANDS_LINK, ...hybrid.brands], 3),
+          columns: chunkColumns(hybrid.brands, 3),
         },
       ],
     });

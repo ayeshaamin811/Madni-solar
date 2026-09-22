@@ -25,7 +25,7 @@ What's currently in the mega menu (`src/data/inverterMenu.js`):
 
 Most brands have no sub-variants (`sub` is just empty). A brand that *does* have sub-variants is a parent-only node — it has no product of its own, the product lives on each sub-variant instead (e.g. the product is "Inverex Single Phase", not "Inverex"). This already matches `inverterProducts.js` today.
 
-One menu entry — "All Brands with Capacity (kW)" under Hybrid Inverters — is a nav-only shortcut to `/inverters` with no brand and no product behind it. **Leave it out of the API response entirely**; it stays a hardcoded link in `Navbar.jsx`.
+"All Brands with Capacity (kW)" under Hybrid Inverters is now a real brand in the backend and comes through `brands[]` like every other one (first in the list). It used to be a hardcoded nav-only link in `Navbar.jsx` — that has been removed, so the API response is the only source for it. Sub-variants, if any are added in the admin later, render automatically.
 
 Slugs are parent-prefixed, same rule as `slugifyInverter` in `inverterMenu.js` (lowercase, collapse whitespace — inverter names have no punctuation to worry about):
 - `inverex`, `inverex-single-phase`, `inverex-three-phase`
