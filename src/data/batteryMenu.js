@@ -41,3 +41,27 @@ export const getBatteryTrail = (brands, itemSlug) => {
 
   return walk(brands, []);
 };
+
+// Ek node ke saath uske andar (nested sub-nodes) ke saare slugs mila ke
+// lautaata hai (khud ka slug bhi shamil). Yaani BYD ke liye [byd, byd-hv,
+// byd-lv] milte hain. Brand page par "All" state mein isi set se products
+// filter kiye jaate hain, taake brand ke saare sub-variants (HV + LV) ke
+// products ek saath dikhen — bina kisi hardcoding ke, generic tree ke liye.
+export const getBatteryBranchSlugs = (node) => {
+  if (!node) return [];
+  return [
+    node.slug,
+    ...(node.sub || []).flatMap((child) => getBatteryBranchSlugs(child)),
+  ];
+};
+
+// Kisi slug ke andar waala top-level brand node dhoondta hai (brands tree ka
+// root item). Yahi wo brand hai jiske sub-variant chips (HV/LV) page par dikhne
+// hain — chahe hum brand par hon ya uski kisi sub-variant par. Na mile tou null.
+export const getBatteryBrandRoot = (brands, itemSlug) => {
+  if (!brands || !itemSlug) return null;
+  return (
+    brands.find((brand) => getBatteryBranchSlugs(brand).includes(itemSlug)) ||
+    null
+  );
+};

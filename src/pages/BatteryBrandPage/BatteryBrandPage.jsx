@@ -3,7 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
-import { getBatteryTrail, BATTERY_CATEGORY } from "../../data/batteryMenu";
+import {
+  getBatteryTrail,
+  getBatteryBranchSlugs,
+  getBatteryBrandRoot,
+  BATTERY_CATEGORY,
+} from "../../data/batteryMenu";
 import { getBatteryBrands, getBatteryProducts } from "../../api/batteries";
 import "./BatteryBrandPage.css";
 
@@ -28,18 +33,21 @@ function BatteryBrandPage() {
   const { brandSlug } = useParams();
 
   const [brands, setBrands] = useState([]);
-  const [brandProducts, setBrandProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
 
-    Promise.all([getBatteryBrands(), getBatteryProducts({ brand: brandSlug })])
+    // Saare battery products fetch karke client-side filter karte hain —
+    // kyunke backend sirf exact brandSlug match karta hai, aur brand page par
+    // uske sub-variants (HV/LV) ke products bhi ek saath dikhane hain.
+    Promise.all([getBatteryBrands(), getBatteryProducts()])
       .then(([brandsData, products]) => {
         if (cancelled) return;
         setBrands(brandsData);
-        setBrandProducts(products);
+        setAllProducts(products);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -82,6 +90,21 @@ function BatteryBrandPage() {
   // poora "Huawei HV" nahi — kyunke parent breadcrumb mein upar hi hai.
   const currentName = trail.item.name;
 
+  // Is item (aur uske andar ke saare sub-nodes) ke products. Brand par woo khud
+  // hi hai, is liye brand ke saare sub-variants (HV + LV) combine ho jaate hain;
+  // sub-variant par sirf us ke apne products rehte hain.
+  const branchSlugs = getBatteryBranchSlugs(trail.item);
+  const brandProducts = allProducts.filter((product) =>
+    branchSlugs.includes(product.brandSlug)
+  );
+
+  // Top-level brand node jiske andar ye item hai — iske sub-variant chips (HV/
+  // LV) page par dikhate hain, chahe hum brand par hon ya uski kisi sub-variant
+  // par. "All" chip brand par wapas le jata hai (saare products).
+  const brandRoot = getBatteryBrandRoot(brands, brandSlug);
+  const hasSubs = (brandRoot?.sub || []).length > 0;
+  const isAllState = trail.item.slug === brandRoot?.slug;
+
   // Breadcrumb: Madni Solar / Batteries / [<Parents> /] <Item>
   // Batteries ki ek hi category hai aur uski page /batteries hi hai, is liye
   // Inverters waala alag category crumb yahan nahi aata.
@@ -107,20 +130,37 @@ function BatteryBrandPage() {
 
       <section className="battery-brand-content">
         <div className="container">
-          {/* Is item ke andar ke sub-items (agar hon) */}
-          {trail.item.sub && trail.item.sub.length > 0 && (
+          {/* Brand ke sub-variants (HV/LV) — brand page par bhi, sub-variant
+            par bhi dikhte hain; active waala highlight hota hai aur "All"
+            brand ke saare products par le jata hai. */}
+          {hasSubs && (
             <div className="battery-brand-subs">
-              <h2 className="battery-brand-subs-title">In {currentName}</h2>
+              <h2 className="battery-brand-subs-title">In {brandRoot.name}</h2>
               <div className="battery-brand-subs-list">
-                {trail.item.sub.map((child) => (
-                  <Link
-                    key={child.slug}
-                    to={`/batteries/${child.slug}`}
-                    className="battery-brand-sub-chip"
-                  >
-                    {child.name}
-                  </Link>
-                ))}
+                <Link
+                  to={`/batteries/${brandRoot.slug}`}
+                  className={`battery-brand-sub-chip${
+                    isAllState ? " battery-brand-sub-chip-active" : ""
+                  }`}
+                >
+                  All
+                </Link>
+                {brandRoot.sub.map((child) => {
+                  const isActive = getBatteryBranchSlugs(child).includes(
+                    trail.item.slug
+                  );
+                  return (
+                    <Link
+                      key={child.slug}
+                      to={`/batteries/${child.slug}`}
+                      className={`battery-brand-sub-chip${
+                        isActive ? " battery-brand-sub-chip-active" : ""
+                      }`}
+                    >
+                      {child.name}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}

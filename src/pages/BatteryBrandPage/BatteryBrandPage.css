@@ -60,6 +60,14 @@
   color: #ffffff;
 }
 
+/* Active (selected) sub-variant chip — same visual as hover, stays highlighted */
+.battery-brand-sub-chip-active,
+.battery-brand-sub-chip-active:hover {
+  background-color: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
 /* ===== Product grid ===== */
 .battery-brand-product-grid {
   grid-template-columns: repeat(4, 1fr);
