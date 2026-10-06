@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PriceDisplay from "../../components/PriceDisplay/PriceDisplay";
 import { Link, useParams } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import Navbar from "../../components/Navbar/Navbar";
@@ -133,7 +134,7 @@ function BatteryDetailPage() {
               <h1 className="product-name">{product.name}</h1>
 
               <p className="product-price">
-                Rs{product.price.toLocaleString()}
+                <PriceDisplay price={product.price} />
               </p>
 
               <p className="product-short-description">

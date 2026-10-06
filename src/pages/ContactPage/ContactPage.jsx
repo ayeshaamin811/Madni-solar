@@ -38,9 +38,11 @@ function ContactPage() {
 
   // The office address - kept in one place so the text, map query,
   // and directions link always stay in sync
-  const officeAddress = "Johar Town, Lahore, Pakistan";
-  // Simple text query for the map - the most reliable embed format
-  const mapQueryAddress = "Johar Town, Lahore, Pakistan";
+const officeAddress =
+  "3rd Floor, Plaze 28, Hassan Commercial, Al Rehman Garden Phase II, Lahore";
+
+const mapQueryAddress =
+  "3rd Floor, Plaze 28, Hassan Commercial, Al Rehman Garden Phase II, Lahore, Pakistan";
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PriceDisplay from "../../components/PriceDisplay/PriceDisplay";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -159,7 +160,7 @@ function ProductItemPage({ categorySlug }) {
                       {product.name}
                     </h3>
                     <p className="product-item-product-card-price">
-                      Rs{product.price.toLocaleString()}
+                      <PriceDisplay price={product.price} inCard />
                     </p>
                   </Link>
                 ))}

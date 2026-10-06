@@ -2,6 +2,10 @@ import React from "react";
 import "./Contactinfobar.css";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
+const officeAddress =
+  "3rd Floor, Plaze 28, Hassan Commercial, Al Rehman Garden Phase II, Lahore";
+const mapQueryAddress = `${officeAddress}, Pakistan`;
+
 // Simple reusable item for each contact info block
 function ContactItem({ icon, label, href, children }) {
   const content = href ? (
@@ -26,10 +30,10 @@ function ContactItem({ icon, label, href, children }) {
 function ContactInfoBar() {
   return (
     <div className="contact-bar">
-      <div className="container flex items-center justify-between flex-wrap gap-6">
+      <div className="container contact-bar-inner">
 
-        {/* Contact details */}
-        <div className="contact-details flex items-center flex-wrap gap-5">
+        {/* Left: contact details */}
+        <div className="contact-details">
           {/* Do numbers hain, is liye ContactItem ka apna href use nahi karte —
               dono numbers apna apna tel: link leke aate hain. */}
           <ContactItem icon={<FaPhoneAlt />} label="Phone Number">
@@ -45,10 +49,23 @@ function ContactInfoBar() {
           <ContactItem
             icon={<FaMapMarkerAlt />}
             label="Office Address"
-            href="https://www.google.com/maps/search/?api=1&query=3rd+Floor+Plaze+28+Hassan+Commercial+Al+Rehman+Garden+Phase+II+Lahore"
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQueryAddress)}`}
           >
-            3rd Floor, Plaze 28, Hassan Commercial, Al Rehman Garden Phase II, Lahore
+            {officeAddress}
           </ContactItem>
+        </div>
+
+        {/* Right: map */}
+        <div className="contact-bar-map">
+          <iframe
+            title="Madni Solar Location Map"
+            src={`https://www.google.com/maps?q=${encodeURIComponent(mapQueryAddress)}&output=embed`}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            loading="lazy"
+            allowFullScreen
+          ></iframe>
         </div>
       </div>
     </div>

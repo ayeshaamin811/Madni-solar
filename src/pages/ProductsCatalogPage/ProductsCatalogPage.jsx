@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PriceDisplay from "../../components/PriceDisplay/PriceDisplay";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -93,7 +94,7 @@ function ProductsCatalogPage() {
                       {categoryNameBySlug[product.categorySlug]}
                     </p>
                     <p className="products-catalog-product-card-price">
-                      Rs{product.price.toLocaleString()}
+                      <PriceDisplay price={product.price} inCard />
                     </p>
                   </Link>
                 ))}

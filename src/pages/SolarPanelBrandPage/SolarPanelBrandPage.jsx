@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PriceDisplay from "../../components/PriceDisplay/PriceDisplay";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -97,7 +98,7 @@ function SolarPanelBrandPage() {
                     />
                     <h3 className="product-card-title">{product.name}</h3>
                     <p className="product-card-price">
-                      Rs{product.price.toLocaleString()}
+                      <PriceDisplay price={product.price} inCard />
                     </p>
                   </Link>
                 ))}
