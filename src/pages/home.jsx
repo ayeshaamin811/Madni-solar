@@ -23,7 +23,7 @@ function home() {
       <SolarServices/>
       <SolarTrustSection/>
       <Testimonials/>
-      <MeetOurTeam/>
+      {/* <MeetOurTeam/> */}
       <Faq/>
       <ContactInfoBar/>
       <Footer/>
