@@ -11,8 +11,7 @@ import { getBatteryBrands } from "../../api/batteries";
 import { getProductCategories } from "../../api/products";
 
 // Professional icon set from react-icons (install: npm i react-icons)
-import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaLinkedinIn, FaInstagram, FaYoutube, FaTiktok, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaBolt, FaMinus, FaRegUser } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaInstagram, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaBolt, FaMinus, FaRegUser } from "react-icons/fa";
 
 // ===== Dropdown data =====
 // Plain strings are simple links. Objects { name, sub } have a nested sub-list.
@@ -556,11 +555,7 @@ const Navbar = () => {
           </div>
           <div className="top-bar-right flex items-center">
             <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-            <a href="#" aria-label="Twitter"><FaXTwitter /></a>
-            <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
             <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="YouTube"><FaYoutube /></a>
-            <a href="#" aria-label="TikTok"><FaTiktok /></a>
           </div>
         </div>
       </div>

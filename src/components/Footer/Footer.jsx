@@ -2,11 +2,7 @@ import React from "react";
 import "./Footer.css";
 import {
   FaFacebookF,
-  FaXTwitter,
-  FaYoutube,
-  FaLinkedinIn,
   FaInstagram,
-  FaTiktok,
   FaPhone,
 } from "react-icons/fa6";
 import { HiArrowRight } from "react-icons/hi2";
@@ -68,19 +64,7 @@ function Footer() {
               <FaFacebookF />
             </a>
             <a href="#" className="social-icon">
-              <FaXTwitter />
-            </a>
-            <a href="#" className="social-icon">
-              <FaYoutube />
-            </a>
-            <a href="#" className="social-icon">
-              <FaLinkedinIn />
-            </a>
-            <a href="#" className="social-icon">
               <FaInstagram />
-            </a>
-            <a href="#" className="social-icon">
-              <FaTiktok />
             </a>
           </div>
         </div>
@@ -112,7 +96,7 @@ function Footer() {
         </div>
 
         {/* Column 4: YouTube Channel */}
-        <div className="footer-column">
+        <div className="footer-column youtube">
           <h3 className="footer-heading">YouTube Channel</h3>
 
           {/* Video thumbnail */}

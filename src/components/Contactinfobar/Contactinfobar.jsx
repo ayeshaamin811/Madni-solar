@@ -4,7 +4,10 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 const officeAddress =
   "3rd Floor, Plaze 28, Hassan Commercial, Al Rehman Garden Phase II, Lahore";
-const mapQueryAddress = `${officeAddress}, Pakistan`;
+
+// Google Maps se copy kiya hua exact pin wala embed link
+const mapSrc =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3398.432189777448!2d74.4494564750724!3d31.59461524347112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39191034c9d415f5%3A0x6ae1cb2a458e057b!2sHFV2%2BVR3%20Hassan%20Commercial%20Gate%2C%2004%20Al-Rehman%20Garden%20Ln%2C%204%2F56%20Phase%203%20Al%20Rehman%20Garden%2C%20Lahore%2C%20Pakistan!5e0!3m2!1sen!2s!4v1791287889527!5m2!1sen!2s";
 
 // Simple reusable item for each contact info block
 function ContactItem({ icon, label, href, children }) {
@@ -34,8 +37,6 @@ function ContactInfoBar() {
 
         {/* Left: contact details */}
         <div className="contact-details">
-          {/* Do numbers hain, is liye ContactItem ka apna href use nahi karte —
-              dono numbers apna apna tel: link leke aate hain. */}
           <ContactItem icon={<FaPhoneAlt />} label="Phone Number">
             <a href="tel:+923701622103" className="contact-link">0370 1622103</a>
             <span className="contact-value-sep">|</span>
@@ -46,11 +47,8 @@ function ContactInfoBar() {
             info@madnisolar.com
           </ContactItem>
 
-          <ContactItem
-            icon={<FaMapMarkerAlt />}
-            label="Office Address"
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQueryAddress)}`}
-          >
+          {/* No href: address sirf text hai */}
+          <ContactItem icon={<FaMapMarkerAlt />} label="Office Address">
             {officeAddress}
           </ContactItem>
         </div>
@@ -59,12 +57,13 @@ function ContactInfoBar() {
         <div className="contact-bar-map">
           <iframe
             title="Madni Solar Location Map"
-            src={`https://www.google.com/maps?q=${encodeURIComponent(mapQueryAddress)}&output=embed`}
+            src={mapSrc}
             width="100%"
             height="100%"
             style={{ border: 0 }}
             loading="lazy"
             allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
           ></iframe>
         </div>
       </div>

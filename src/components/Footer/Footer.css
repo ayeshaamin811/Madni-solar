@@ -96,6 +96,9 @@
   color: var(--navy);
   flex-shrink: 0;
 }
+.youtube {
+  display: none;
+}
 
 /* ===== YouTube video thumbnail ===== */
 .footer-video-thumb {
