@@ -337,7 +337,7 @@
 /* Ek section ke items ki columns — --mega-cols inline style se aata hai */
 .mega-section-columns {
   display: grid;
-  grid-template-columns: repeat(var(--mega-cols, 1), minmax(0, 1fr));
+  grid-template-columns: repeat(var(--mega-cols, 1), minmax(0, 1.5fr));
   gap: 0 30px;
   align-items: start;
 }
