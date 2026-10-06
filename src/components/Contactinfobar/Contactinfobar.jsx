@@ -28,7 +28,6 @@ function ContactInfoBar() {
     <div className="contact-bar">
       <div className="container flex items-center justify-between flex-wrap gap-6">
 
-
         {/* Contact details */}
         <div className="contact-details flex items-center flex-wrap gap-5">
           {/* Do numbers hain, is liye ContactItem ka apna href use nahi karte —
@@ -53,10 +52,10 @@ function ContactInfoBar() {
 
           <ContactItem
             icon={<FaMapMarkerAlt />}
-            label="Warehouse Address"
-            href="https://www.google.com/maps/search/?api=1&query=Defence+Road+adjacent+to+US+Apparel+Lahore"
+            label="Branch Address"
+            href="https://www.google.com/maps/search/?api=1&query=3rd+Floor+Plaze+28+Hassan+Commercial+Al+Rehman+Garden+Phase+II+Lahore"
           >
-            Defence Road, adjacent to US Apparel, Lahore
+            3rd Floor, Plaze 28, Hassan Commercial, Al Rehman Garden Phase II, Lahore
           </ContactItem>
         </div>
       </div>
@@ -64,4 +63,4 @@ function ContactInfoBar() {
   );
 }
 
-export default ContactInfoBar;
+export default ContactInfoBar;  
