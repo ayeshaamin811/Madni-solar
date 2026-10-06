@@ -45,14 +45,6 @@ function ContactInfoBar() {
           <ContactItem
             icon={<FaMapMarkerAlt />}
             label="Office Address"
-            href="https://www.google.com/maps/search/?api=1&query=502-C+Jubilee+Town+Canal+Bank+Lahore+Pakistan"
-          >
-            502-C Jubilee Town, Canal Bank Lahore Pakistan.
-          </ContactItem>
-
-          <ContactItem
-            icon={<FaMapMarkerAlt />}
-            label="Branch Address"
             href="https://www.google.com/maps/search/?api=1&query=3rd+Floor+Plaze+28+Hassan+Commercial+Al+Rehman+Garden+Phase+II+Lahore"
           >
             3rd Floor, Plaze 28, Hassan Commercial, Al Rehman Garden Phase II, Lahore
@@ -63,4 +55,4 @@ function ContactInfoBar() {
   );
 }
 
-export default ContactInfoBar;  
+export default ContactInfoBar;
