@@ -7,6 +7,7 @@ import Testimonials from '../../components/Testimonials/Testimonials';
 import ContactInfoBar from '../../components/Contactinfobar/Contactinfobar';
 import TeamBanner from '../../assets/hero-banner.webp';
 import './TeamPage.css';
+import TeamPages from '../../components/TeamMemberPage/TeamPages';
 
 function TeamPage() {
   return (
@@ -22,6 +23,7 @@ function TeamPage() {
 
       {/* ===== Meet our team section ===== */}
       <MeetOurTeam />
+      <TeamPages/>
 
       {/* ===== Clients testimonials ===== */}
       <Testimonials />
