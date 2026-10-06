@@ -64,10 +64,20 @@ function Footer() {
 
   {/* Social icons */}
   <div className="footer-socials flex gap-3">
-    <a href="#" className="social-icon">
+    <a
+      href="https://www.facebook.com/photo/?fbid=122103711669417835&set=a.122103693741417835"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="social-icon"
+    >
       <FaFacebookF />
     </a>
-    <a href="#" className="social-icon">
+    <a
+      href="https://www.instagram.com/madni.solar/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="social-icon"
+    >
       <FaInstagram />
     </a>
   </div>

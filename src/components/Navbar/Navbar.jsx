@@ -524,8 +524,22 @@ const Navbar = () => {
             </a>
           </div>
           <div className="top-bar-right flex items-center">
-            <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
+            <a
+              href="https://www.facebook.com/photo/?fbid=122103711669417835&set=a.122103693741417835"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <FaFacebookF />
+            </a>
+            <a
+              href="https://www.instagram.com/madni.solar/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <FaInstagram />
+            </a>
           </div>
         </div>
       </div>
