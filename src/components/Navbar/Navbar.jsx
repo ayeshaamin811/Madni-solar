@@ -13,27 +13,10 @@ import { getProductCategories } from "../../api/products";
 // Professional icon set from react-icons (install: npm i react-icons)
 import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaInstagram, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown, FaBolt, FaMinus, FaRegUser } from "react-icons/fa";
 
-// ===== Dropdown data =====
-// Plain strings are simple links. Objects { name, sub } have a nested sub-list.
-// This mirrors the multi-column mega menus shown in the real site.
 
 const aboutMenu = ["About", "Policy Trading", "Our Team", "Careers"];
 
-// ===== Mega menu shape (Inverters + Products + Batteries) =====
-// Teenon menus ki tree ab backend se fetch hoti hai (src/api/inverters.js,
-// src/api/products.js, src/api/batteries.js) — Navbar, category/brand pages
-// aur breadcrumbs sab isi ek API response se banti hain, is liye menu aur
-// pages kabhi alag nahi ho sakte.
-//
-//   group   -> ek category ka block; `span` = menu grid ki kitni tracks leta hai
-//              (1 = apni jagah, 2 = poori width); groups ke darmiyan divider.
-//   section -> heading + uski categorySlug, jo heading ko us category ki page
-//              se link kar deta hai.
-//   columns -> us section ke items, jitni columns mein baantna ho.
 
-// Bullet icon: top-level brand par lightning (bolt), aur sub-items (phases /
-// HV-LV / models) par dash icon — is se ek nazar mein pata chal jata hai ke ye
-// kisi brand ke andar ka option hai, apna alag brand nahi. `depth` 0 = top level.
 const bulletFor = (depth) =>
   depth === 0 ? (
     <FaBolt className="bullet-icon" />
@@ -41,9 +24,6 @@ const bulletFor = (depth) =>
     <FaMinus className="sub-bullet-icon" aria-hidden="true" />
   );
 
-// Recursively renders a list of items, supporting one or two levels of nesting.
-// Object items with a `to` property render as internal router links (menus
-// jinke apne pages nahi hain, wahan nav-only shortcuts is tarah aate hain).
 const renderItems = (items, keyPrefix, opts = {}) => {
   const { depth = 0 } = opts;
   return items.map((item, index) => {
@@ -75,17 +55,7 @@ const renderItems = (items, keyPrefix, opts = {}) => {
   });
 };
 
-// ============================================================================
-// GROUPED MEGA MENU RENDERERS (Inverters + Batteries)
-// ----------------------------------------------------------------------------
-// Ek group = ek category ka block (heading + uske items ki columns). Groups ke
-// darmiyan vertical divider aata hai, aur group `span` ke mutabiq menu grid ki
-// columns leta hai. `renderer` batata hai ke items kaise banenge —
-// renderInverterItems / renderProductItems (apne apne pages ke links) ya
-// renderItems (baaki menus).
-// ============================================================================
 
-// Section heading: `to` ho tou clickable link, warna plain text.
 const renderMegaHeading = (heading, to, spaced) => (
   <h4 className={`mega-heading${spaced ? " mega-heading-spaced" : ""}`}>
     {to ? (

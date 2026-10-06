@@ -233,7 +233,7 @@
   left: -130%;
   /* transform: translateX(-50%); */
   background-color: var(--theme-color);
-  padding: 30px;
+  padding: 20px;
   min-width: 1100px;
   max-width: 1200px;
   box-shadow: var(--shadow);
@@ -271,7 +271,7 @@
 .mega-title {
   font-size: 26px;
   font-weight: 700;
-  margin: 0 0 20px 0;
+  margin: 0 0 8px 0;
   text-decoration: underline;
 }
 .mega-grid {
@@ -344,6 +344,7 @@
 
 .mega-heading {
   color: var(--orange-dark);
+  display: none;
   font-size: 18px;
   font-weight: 700;
   margin: 0 0 10px 0;
