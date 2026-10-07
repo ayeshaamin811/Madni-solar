@@ -30,7 +30,7 @@
   position: relative;
   width: 14px;
   height: 14px;
-  border: 2px solid #d4147f;
+  border: 2px solid #ff5c00;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -42,7 +42,7 @@
   left: 50%;
   width: 6px;
   height: 6px;
-  background: #d4147f;
+  background: #ff5c00;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   animation: designed-blink 1.2s ease-in-out infinite;
@@ -51,7 +51,7 @@
 @keyframes designed-blink {
   0%, 100% {
     opacity: 1;
-    box-shadow: 0 0 8px #d4147f;
+    box-shadow: 0 0 8px #ff5c00;
   }
   50% {
     opacity: 0.15;
@@ -65,13 +65,9 @@
 }
 
 .designed-link {
-  color: #d4147f;
+  color: #ff5c00;
   font-weight: 700;
   transition: color 0.3s ease;
-}
-
-.designed-badge:hover .designed-link {
-  color: #ff3fa4;
 }
 
 /* ===== Footer logo ===== */
