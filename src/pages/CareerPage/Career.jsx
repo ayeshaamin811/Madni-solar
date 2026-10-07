@@ -4,7 +4,7 @@ import Footer from '../../components/Footer/Footer'
 import ContactInfoBar from '../../components/Contactinfobar/Contactinfobar'
 import CareerContent from '../../components/CareerContent/CareerContent'
 import PageBanner from './../../components/Pagebanner/Pagebanner';
-import CareerBanner from "../../assets/hero-banner.webp";
+import CareerBanner from "../../assets/inner-banner.jpg";
 
 
 function Career() {

@@ -5,7 +5,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
 import ContactInfoBar from "../../components/Contactinfobar/Contactinfobar";
-import PolicyBanner from "../../assets/hero-banner.webp";
+import PolicyBanner from "../../assets/inner-banner.jpg";
 
 import {
   FaFileSignature,

@@ -147,17 +147,16 @@ function Footer() {
       <div className="footer-bottom">
         <div className="container flex flex-wrap justify-between gap-2">
           <p>Copyright © Madni Solar LLP 2026 All Rights Reserved.</p>
-          <p>
-            Made by{" "}
-            <a
-              href="https://www.twocoreglobal.com/"
-              target="_blank"
-              rel="noreferrer"
-              className="twocore-link"
-            >
-              <span className="company_link"> twocoreglobal </span>
-            </a>
-          </p>
+          <a
+            href="https://www.twocoreglobal.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="designed-badge"
+          >
+            <span className="designed-dot"></span>
+            <span className="designed-text">Designed by</span>
+            <span className="designed-link">twocoreglobal.com</span>
+          </a>
         </div>
       </div>
     </footer>

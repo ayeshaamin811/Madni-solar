@@ -4,8 +4,8 @@ import { FaInstagram, FaFacebookF, FaTwitter } from "react-icons/fa";
 
 // Images imported from the assets folder
 import team1 from "../../assets/teams/team.jpg";
-import team2 from "../../assets/teams/team.jpg";
-import team3 from "../../assets/teams/team.jpg";
+import team2 from "../../assets/teams/rafay.jpg";
+import team3 from "../../assets/teams/waleed.png";
 import team4 from "../../assets/teams/team.jpg";
 
 function MeetOurTeam() {
@@ -21,24 +21,20 @@ function MeetOurTeam() {
   const teamData = [
     {
       image: team1,
-      name: "Rehman Shahid",
-      role: "CEO madni solar",
+      name: "Safdar Hussain",
+      role: "CEO",
     },
     {
       image: team2,
-      name: "Engr. Adeel Gilani",
-      role: "Project Manager",
+      name: "Abdul Raffay",
+      role: "Director",
     },
     {
       image: team3,
-      name: "Engr. Mujahid Hussan",
-      role: "Head of Sales",
+      name: "Waleed Hussain",
+      role: "Director",
     },
-    {
-      image: team4,
-      name: "Atifa Yaseen",
-      role: "Social Media Manager",
-    },
+ 
   ];
 
   // Social media icons shown on card hover

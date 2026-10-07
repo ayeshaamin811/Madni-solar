@@ -5,7 +5,7 @@ import PageBanner from '../../components/Pagebanner/Pagebanner';
 import MeetOurTeam from '../../components/Meetourteam/Meetourteam';
 import Testimonials from '../../components/Testimonials/Testimonials';
 import ContactInfoBar from '../../components/Contactinfobar/Contactinfobar';
-import TeamBanner from '../../assets/hero-banner.webp';
+import TeamBanner from '../../assets/inner-banner.jpg';
 import './TeamPage.css';
 import TeamPages from '../../components/TeamMemberPage/TeamPages';
 

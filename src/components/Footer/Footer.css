@@ -13,6 +13,66 @@
 .company_link {
   color: #7cff00;
 }
+/* ===== Designed by badge (blinking dot) ===== */
+.designed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
+/* Dot with outer ring */
+.designed-dot {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #d4147f;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.designed-dot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: #d4147f;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: designed-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes designed-blink {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 8px #d4147f;
+  }
+  50% {
+    opacity: 0.15;
+    box-shadow: none;
+  }
+}
+
+.designed-text {
+  color: #a8a8b3;
+  font-weight: 500;
+}
+
+.designed-link {
+  color: #d4147f;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.designed-badge:hover .designed-link {
+  color: #ff3fa4;
+}
 
 /* ===== Footer logo ===== */
 .footer-logo {

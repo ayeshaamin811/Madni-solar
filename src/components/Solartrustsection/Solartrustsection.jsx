@@ -101,7 +101,7 @@ export default function SolarTrustSection() {
             <span className="penel  text-[#1a0d02] px-3.5 py-1.5 rounded-full">
               Customer
             </span>
-            <span className="text-[#ffb648] px-0.5 py-1.5">Testimonials</span>
+            <span className="text-[#ff5c00] px-0.5 py-1.5">Testimonials</span>
           </div>
 
           <h1 className="font-sora font-bold leading-[1.12] tracking-tight text-[2rem] sm:text-[2.4rem] lg:text-[2.9rem] max-w-[14ch]">

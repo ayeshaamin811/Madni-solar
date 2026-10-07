@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import PageBanner from "../../components/Pagebanner/Pagebanner";
-import ContactBannerImg from "../../assets/hero-banner.webp";
+import ContactBannerImg from "../../assets/inner-banner.jpg";
 import { sendContactMessage, parseContactError } from "../../api/contact";
 import "../ContactPage/ContactPage.css"
 import {
