@@ -343,7 +343,7 @@
 
 .mega-heading {
   color: var(--orange-dark);
-  display: none;
+  /* display: none; */
   font-size: 18px;
   font-weight: 700;
   margin: 0 0 10px 0;
