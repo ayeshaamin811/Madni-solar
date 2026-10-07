@@ -3,6 +3,7 @@
   background: linear-gradient(180deg, #f6f7f9 0%, #eef1f5 100%);
   padding: 80px 0;
   font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  display: none;
 }
 
 .container {

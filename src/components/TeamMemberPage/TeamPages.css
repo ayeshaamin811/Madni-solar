@@ -19,6 +19,7 @@
 
 .team-content {
   flex: 1 1 58%;
+  padding: 24px;
 }
 
 /* ===== Tag + role ===== */
@@ -75,6 +76,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  justify-content: center;
 }
 
 .team-image-box {

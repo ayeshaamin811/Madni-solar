@@ -12,8 +12,7 @@ const teamMembers = [
     heading: "CEO Message",
     name: "Safdar Hussain",
     paragraphs: [
-      "At Madni Solar, our vision is to create a sustainable future by making solar energy affordable, reliable, and accessible across Pakistan. We work tirelessly to provide high quality solar solutions for homes, businesses, industries, and agriculture, helping people reduce electricity costs and achieve energy independence.",
-      "Looking ahead, we aim to expand our reach and make solar system installation seamless for every customer. We are committed to innovative solar technologies, hybrid energy solutions, and eco friendly power alternatives that contribute to a greener Pakistan.",
+      "At Madni Solar, our vision is to create a sustainable future by making solar energy affordable, reliable, and accessible across Pakistan. We work tirelessly to provide high quality solar solutions for homes, businesses, industries, and agriculture, helping people reduce electricity costs and achieve energy independence. Looking ahead, we aim to expand our reach and make solar system installation seamless for every customer. We are committed to innovative solar technologies, hybrid energy solutions, and eco friendly power alternatives that contribute to a greener Pakistan.",
     ],
     image: team1,
     imageLabel: "CEO Message",
@@ -25,8 +24,7 @@ const teamMembers = [
     heading: "Director Message",
     name: "Abdul Raffay",
     paragraphs: [
-      "Our team is dedicated to delivering Tier-1 solar panels, inverters, batteries, and accessories backed by honest advice and dependable after-sales support. Every project we take on is designed around the customer's real energy needs and budget.",
-      "From system design and installation to net billing and maintenance, we make sure each customer gets maximum efficiency and long term savings. Together, let's move towards a clean, cost effective, and energy secure future.",
+      "Our team is dedicated to delivering Tier-1 solar panels, inverters, batteries, and accessories backed by honest advice and dependable after-sales support. Every project we take on is designed around the customer's real energy needs and budget. From system design and installation to net billing and maintenance, we make sure each customer gets maximum efficiency and long term savings. Together, let's move towards a clean, cost effective, and energy secure future",
     ],
     image: team2,
     imageLabel: "Director Message",
@@ -38,8 +36,7 @@ const teamMembers = [
     heading: "Director Message",
     name: "Waleed Hussain",
     paragraphs: [
-      "We firmly believe in putting the customer first at every stage of their solar journey. Our committed professionals guide clients from the very first consultation to installation, ensuring transparency, quality workmanship, and complete satisfaction.",
-      "By combining the latest technology with practical expertise, we are building long lasting relationships and helping communities across Pakistan embrace clean, affordable, and sustainable energy solutions.",
+      "We firmly believe in putting the customer first at every stage of their solar journey. Our committed professionals guide clients from the very first consultation to installation, ensuring transparency, quality workmanship, and complete satisfaction. By combining the latest technology with practical expertise, we are building long lasting relationships and helping communities across Pakistan embrace clean, affordable, and sustainable energy solutions.",
     ],
     image: team3,
     imageLabel: "Director Message",
