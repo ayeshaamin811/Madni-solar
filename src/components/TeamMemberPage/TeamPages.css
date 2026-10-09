@@ -48,7 +48,7 @@
 /* ===== Text ===== */
 .single {
   margin: 0 0 14px 0;
-  font-size: 48px;
+  font-size: 18px;
   font-weight: 800;
   line-height: 1.1;
   color: #1c1c24;
@@ -57,7 +57,7 @@
 
 .team-name {
   margin: 0 0 18px 0;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   color: #5b5f6b;
 }
