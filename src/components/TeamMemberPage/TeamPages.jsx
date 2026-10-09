@@ -27,7 +27,7 @@ const teamMembers = [
     // heading: "About",
     name: "Abdul Raffay",
     paragraphs: [
-      "We supply Tier-1 solar panels, inverters, batteries, and accessories, always paired with honest guidance and reliable after-sales support. Each project starts with the customer's actual energy needs and budget, and we shape the solution around them. From design and installation to net metering and ongoing maintenance, our focus is maximum efficiency and long-term savings for every client.",
+      "Our Director leads the company with a clear vision of making solar energy accessible, reliable, and affordable for both domestic and industrial customers. With a focus on quality, innovation, and long-term sustainability, they oversee the delivery of solar installation projects that meet the unique energy needs of every client. Their commitment to high standards and customer satisfaction drives the company forward.",
     ],
     image: rafay,
     imageLabel: "About",
@@ -39,8 +39,9 @@ const teamMembers = [
     // heading: "About",
     name: "Waleed Hussain",
       paragraphs: [
-      "Our customers come first at every step of their solar journey. From the initial consultation through to installation, our team provides clear advice, quality workmanship, and support you can count on. By pairing modern technology with hands-on expertise, we build lasting relationships and help communities across Pakistan switch to clean, affordable energy.",
-    ],
+      "Dedicated to delivering effective renewable energy solutions, our Director plays a key role in business development, project planning, and operational excellence. From residential solar systems to large-scale industrial installations, they help ensure every project is approached with care, professionalism, and attention to detail. Their goal is to help customers make smarter energy choices while contributing to a more sustainable future.",
+
+      ],
     image: waleed,
     imageLabel: "About",
   },
@@ -52,7 +53,7 @@ const teamMembers = [
     // TODO: replace with the account manager's full name.
     name: "Account Manager",
     paragraphs: [
-      "Our accounts team keeps your project running smoothly from the first quotation to final handover. We handle quotations, net metering paperwork, and payment coordination, and keep every account organised and current. With clear communication and prompt responses, you always know where your project stands, making the whole process simple and stress-free.",
+      "Our Account Manager is the main point of contact for clients, ensuring clear communication and a smooth experience throughout every stage of their solar installation journey. From understanding individual requirements to coordinating with the technical team and providing project updates, they focus on building strong client relationships. Whether supporting homeowners or industrial businesses, they are committed to providing responsive service and tailored solar energy solutions.",
     ],
     image: accountManager,
     imageLabel: "About",
